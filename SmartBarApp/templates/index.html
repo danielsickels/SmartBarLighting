@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Head section remains the same -->
+  </head>
+  <body>
+    <h1>Select a Bottle</h1>
+    <button class="button" onclick="selectBottle(0)">Bottle 1</button>
+    <button class="button" onclick="selectBottle(1)">Bottle 2</button>
+    <button class="button" onclick="selectBottle(2)">Bottle 3</button>
+    <div id="message"></div>
+    <!-- New div element to display the message -->
+    <script>
+      async function selectBottle(id) {
+        const response = await fetch("/select_bottle", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ id }),
+        });
+        const data = await response.json();
+        document.getElementById("message").innerText = data.message; // Update the content of the message div
+      }
+    </script>
+  </body>
+</html>
