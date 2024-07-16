@@ -1,13 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <!-- Head section remains the same -->
+    <meta charset="UTF-8" />
+    <title>Select a Bottle</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../static/style.css" />
   </head>
   <body>
-    <h1>Select a Bottle</h1>
-    <button class="button" onclick="selectBottle(0)">Bottle 1</button>
-    <button class="button" onclick="selectBottle(1)">Bottle 2</button>
-    <button class="button" onclick="selectBottle(2)">Bottle 3</button>
+    <header>
+      <h1>Select A Bottle</h1>
+    </header>
+    <div class="gallery">
+      <figure class="card" onclick="selectBottle(0)">
+        <img src="static/images/lakeview-elegance.png" alt="Bottle 1" />
+        <figcaption>Bottle 1</figcaption>
+      </figure>
+      <figure class="card" onclick="selectBottle(1)">
+        <img src="static/images/skyline-oasis.png" alt="Bottle 2" />
+        <figcaption>Bottle 2</figcaption>
+      </figure>
+      <figure class="card" onclick="selectBottle(2)">
+        <img src="static/images/villa-verde.png" alt="Bottle 3" />
+        <figcaption>Bottle 3</figcaption>
+      </figure>
+      <figure class="card" onclick="selectBottle(3)">
+        <img src="static/images/vista-paradiso.png" alt="Bottle 4" />
+        <figcaption>Bottle 4</figcaption>
+      </figure>
+      <figure class="card" onclick="selectBottle(4)">
+        <img src="static/images/lakeview-elegance.png" alt="Bottle 5" />
+        <figcaption>Bottle 5</figcaption>
+      </figure>
+      <figure class="card" onclick="selectBottle(5)">
+        <img src="static/images/skyline-oasis.png" alt="Bottle 6" />
+        <figcaption>Bottle 6</figcaption>
+      </figure>
+      <figure class="card" onclick="selectBottle(6)">
+        <img src="static/images/villa-verde.png" alt="Bottle 7" />
+        <figcaption>Bottle 7</figcaption>
+      </figure>
+      <figure class="card" onclick="selectBottle(7)">
+        <img src="static/images/vista-paradiso.png" alt="Bottle 8" />
+        <figcaption>Bottle 8</figcaption>
+      </figure>
+    </div>
     <div id="message"></div>
     <!-- New div element to display the message -->
     <script>
