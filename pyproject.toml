@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "fastapi-poetry"
+version = "0.1.0"
+description = "A FastAPI app to manage bottles"
+authors = ["Your Name <your-email@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.100.0" # Use a FastAPI version compatible with Pydantic 2.x
+uvicorn = "^0.20.0"
+pydantic = "^2.0.0"
+pydantic-settings = "^2.0.0"
+sqlalchemy = "^1.4.47"
+
+[tool.poetry.dev-dependencies]
+pytest = "^7.0"
