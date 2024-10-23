@@ -1,3 +1,5 @@
+# Contains the API endpoints (routes) that handle requests such as creating, updating, and deleting bottles
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
