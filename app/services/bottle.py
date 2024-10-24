@@ -20,19 +20,23 @@ class BottleService:
         return db.query(Bottle).filter(Bottle.id == bottle_id).first()
 
     @staticmethod
+    def get_bottle_by_name(db: Session, name: str):
+        return db.query(Bottle).filter(Bottle.name.ilike(f"%{name}%")).first()  # Case-insensitive search
+
+    @staticmethod
     def update_bottle(db: Session, bottle_id: int, bottle_in: BottleUpdate):
-        db_bottle = db.query(Bottle).filter(Bottle.id == bottle_id).first()
-        if not db_bottle:
+        bottle = db.query(Bottle).filter(Bottle.id == bottle_id).first()
+        if not bottle:
             return None
-        for key, value in bottle_in.dict().items():
-            setattr(db_bottle, key, value)
+        for field, value in bottle_in.dict(exclude_unset=True).items():
+            setattr(bottle, field, value)
         db.commit()
-        db.refresh(db_bottle)
-        return db_bottle
+        db.refresh(bottle)
+        return bottle
 
     @staticmethod
     def delete_bottle(db: Session, bottle_id: int):
-        db_bottle = db.query(Bottle).filter(Bottle.id == bottle_id).first()
-        if db_bottle:
-            db.delete(db_bottle)
+        bottle = db.query(Bottle).filter(Bottle.id == bottle_id).first()
+        if bottle:
+            db.delete(bottle)
             db.commit()

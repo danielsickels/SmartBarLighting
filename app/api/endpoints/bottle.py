@@ -1,8 +1,6 @@
-# Contains the API endpoints (routes) that handle requests such as creating, updating, and deleting bottles
-
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
-from typing import List
+from typing import List, Optional
 
 from app.db.session import get_db
 from app.schemas.bottle import BottleCreate, BottleUpdate, BottleResponse
@@ -15,7 +13,14 @@ def create_bottle(bottle: BottleCreate, db: Session = Depends(get_db)):
     return BottleService.create_bottle(db=db, bottle_in=bottle)
 
 @router.get("/", response_model=List[BottleResponse])
-def get_bottles(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+def get_bottles(skip: int = 0, limit: int = 10, name: Optional[str] = Query(None), db: Session = Depends(get_db)):
+    if name:
+        # Fetch bottle by name if the name query parameter is provided
+        bottle = BottleService.get_bottle_by_name(db=db, name=name)
+        if not bottle:
+            raise HTTPException(status_code=404, detail="Bottle not found")
+        return [bottle]  # Return the found bottle in a list to match the response model
+    # Otherwise, return the list of bottles with pagination
     return BottleService.get_bottles(db=db, skip=skip, limit=limit)
 
 @router.get("/{bottle_id}", response_model=BottleResponse)
