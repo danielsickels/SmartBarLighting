@@ -35,3 +35,27 @@ export const fetchBottleByName = async (name: string): Promise<Bottle[] | null> 
     return null;
   }
 };
+
+import { Bottle } from './bottleService';
+
+export const addBottle = async (bottle: Partial<Bottle>): Promise<Bottle> => {
+  try {
+    const res = await fetch('http://localhost:8000/bottles', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(bottle),
+    });
+    
+    if (!res.ok) {
+      throw new Error('Failed to add bottle');
+    }
+    
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error('Error adding bottle:', error);
+    throw error;
+  }
+};

@@ -82,6 +82,7 @@ const FetchBottleButton = () => {
           {bottles.map((bottle) => (
             <BottleDetails
               key={bottle.id}
+              id={bottle.id}
               name={bottle.name}
               material={bottle.material}
               capacity_ml={bottle.capacity_ml}
