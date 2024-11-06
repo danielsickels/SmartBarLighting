@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import BottleDetails from './BottleDetails';
 import LoadingSpinner from './LoadingSpinner';
-import { fetchBottle, fetchBottleByName, Bottle } from '../services/bottleService'; // Import fetchBottleByName here
+import { fetchBottle, fetchBottleByName, deleteBottle, Bottle } from '../services/bottleService';
 
 const FetchBottleButton = () => {
-  const [bottles, setBottles] = useState<Bottle[] | null>(null); // Handle array of bottles
+  const [bottles, setBottles] = useState<Bottle[] | null>(null); // Array of bottles
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [bottleId, setBottleId] = useState<number | null>(null); // For entering bottle ID
@@ -43,15 +43,24 @@ const FetchBottleButton = () => {
     }
   };
 
+  const handleDelete = async (id: number) => {
+    try {
+      await deleteBottle(id); // Call delete function from bottleService
+      setBottles(bottles?.filter(bottle => bottle.id !== id) || null); // Remove bottle from local state
+    } catch (error) {
+      setError('Failed to delete the bottle.');
+    }
+  };
+
   return (
     <div className="flex flex-col items-center">
-      <div className="flex items-center mb-4">
+      <div className="flex items-center">
         <input
           type="number"
           value={bottleId !== null ? bottleId : ''} // Ensure the field doesn't show "null"
           onChange={(e) => setBottleId(Number(e.target.value))}
           placeholder="Enter Bottle ID"
-          className="border border-gray-300 rounded-lg px-3 py-1 mr-4 w-40"
+          className="border border-gray-300 rounded-lg px-1 py-1 w-40"
         />
 
         <span className="mx-4">or</span>
@@ -61,7 +70,7 @@ const FetchBottleButton = () => {
           value={bottleName}
           onChange={(e) => setBottleName(e.target.value)}
           placeholder="Enter Bottle Name"
-          className="border border-gray-300 rounded-lg px-3 py-1 w-40"
+          className="border border-gray-300 rounded-lg px-1 py-1 w-40"
         />
 
         <button
@@ -76,7 +85,7 @@ const FetchBottleButton = () => {
 
       {error && <div className="text-red-500 mt-4">{error}</div>}
 
-      {/* If bottles exist, render the first bottle */}
+      {/* If bottles exist, render each bottle with a delete button */}
       {bottles && bottles.length > 0 && (
         <div className="mt-8">
           {bottles.map((bottle) => (
@@ -86,6 +95,7 @@ const FetchBottleButton = () => {
               name={bottle.name}
               material={bottle.material}
               capacity_ml={bottle.capacity_ml}
+              onDelete={() => handleDelete(bottle.id)} // Pass delete handler as prop
             />
           ))}
         </div>

@@ -36,9 +36,7 @@ export const fetchBottleByName = async (name: string): Promise<Bottle[] | null> 
   }
 };
 
-import { Bottle } from './bottleService';
-
-export const addBottle = async (bottle: Partial<Bottle>): Promise<Bottle> => {
+  export const addBottle = async (bottle: Partial<Bottle>): Promise<Bottle> => {
   try {
     const res = await fetch('http://localhost:8000/bottles', {
       method: 'POST',
@@ -56,6 +54,22 @@ export const addBottle = async (bottle: Partial<Bottle>): Promise<Bottle> => {
     return data;
   } catch (error) {
     console.error('Error adding bottle:', error);
+    throw error;
+  }
+};
+
+export const deleteBottle = async (id: number): Promise<void> => {
+  try {
+    const res = await fetch(`http://localhost:8000/bottles/${id}`, {
+      method: 'DELETE',
+    });
+
+    if (!res.ok) {
+      console.log (res)
+      throw new Error('Failed to delete bottle');
+    }
+  } catch (error) {
+    console.error('Error deleting bottle:', error);
     throw error;
   }
 };

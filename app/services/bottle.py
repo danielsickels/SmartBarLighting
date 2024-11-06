@@ -40,3 +40,5 @@ class BottleService:
         if bottle:
             db.delete(bottle)
             db.commit()
+            return True
+        return False

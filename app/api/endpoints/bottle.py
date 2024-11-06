@@ -36,5 +36,7 @@ def update_bottle(bottle_id: int, bottle: BottleUpdate, db: Session = Depends(ge
 
 @router.delete("/{bottle_id}")
 def delete_bottle(bottle_id: int, db: Session = Depends(get_db)):
-    BottleService.delete_bottle(db=db, bottle_id=bottle_id)
-    return {"message": "Bottle deleted"}
+    success = BottleService.delete_bottle(db=db, bottle_id=bottle_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Bottle not found")
+    return {"message": "Bottle deleted successfully"}
