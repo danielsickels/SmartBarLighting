@@ -12,7 +12,7 @@ class BottleService:
         return bottle
 
     @staticmethod
-    def get_bottles(db: Session, skip: int = 0, limit: int = 10):
+    def get_bottles(db: Session, skip: int = 0, limit: int = 25):
         return db.query(Bottle).offset(skip).limit(limit).all()
 
     @staticmethod

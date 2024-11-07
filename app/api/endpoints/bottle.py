@@ -13,7 +13,7 @@ def create_bottle(bottle: BottleCreate, db: Session = Depends(get_db)):
     return BottleService.create_bottle(db=db, bottle_in=bottle)
 
 @router.get("/", response_model=List[BottleResponse])
-def get_bottles(skip: int = 0, limit: int = 10, name: Optional[str] = Query(None), db: Session = Depends(get_db)):
+def get_bottles(skip: int = 0, limit: int = 25, name: Optional[str] = Query(None), db: Session = Depends(get_db)):
     if name:
         # Fetch bottle by name if the name query parameter is provided
         bottle = BottleService.get_bottle_by_name(db=db, name=name)
@@ -40,3 +40,7 @@ def delete_bottle(bottle_id: int, db: Session = Depends(get_db)):
     if not success:
         raise HTTPException(status_code=404, detail="Bottle not found")
     return {"message": "Bottle deleted successfully"}
+
+@router.get("/bottles")
+def list_bottles(skip: int = 0, limit: int = 25, db: Session = Depends(get_db)):
+    return BottleService.get_bottles(db=db, skip=skip, limit=limit)

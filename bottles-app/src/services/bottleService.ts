@@ -11,6 +11,7 @@ export const fetchBottle = async (id: number): Promise<Bottle | null> => {
   try {
     const res = await fetch(`http://localhost:8000/bottles/${id}`);
     if (!res.ok) {
+      console.log (res)
       throw new Error('Bottle not found');
     }
     const data = await res.json();
@@ -26,6 +27,7 @@ export const fetchBottleByName = async (name: string): Promise<Bottle[] | null> 
   try {
     const res = await fetch(`http://localhost:8000/bottles?name=${encodeURIComponent(name.trim())}`);
     if (!res.ok) {
+      console.log (res)
       throw new Error('Bottle not found');
     }
     const data = await res.json();
@@ -70,6 +72,20 @@ export const deleteBottle = async (id: number): Promise<void> => {
     }
   } catch (error) {
     console.error('Error deleting bottle:', error);
+    throw error;
+  }
+};
+
+export const fetchAllBottles = async (): Promise<Bottle[]> => {
+  try {
+    const res = await fetch('http://localhost:8000/bottles?skip=0&limit=1000');
+    if (!res.ok) {
+      throw new Error('Failed to fetch bottles');
+    }
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching all bottles:', error);
     throw error;
   }
 };
