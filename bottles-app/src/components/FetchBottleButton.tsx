@@ -53,29 +53,27 @@ const FetchBottleButton = () => {
   };
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="flex items-center">
+    <div className="flex flex-col items-center space-y-4">
+      <div className="flex flex-col space-y-2">
         <input
           type="number"
           value={bottleId !== null ? bottleId : ''} // Ensure the field doesn't show "null"
           onChange={(e) => setBottleId(Number(e.target.value))}
           placeholder="Enter Bottle ID"
-          className="border border-gray-300 rounded-lg px-1 py-1 w-40"
+          className="border border-gray-300 rounded-lg px-3 py-2 w-40"
         />
-
-        <span className="mx-4">or</span>
 
         <input
           type="text"
           value={bottleName}
           onChange={(e) => setBottleName(e.target.value)}
           placeholder="Enter Bottle Name"
-          className="border border-gray-300 rounded-lg px-1 py-1 w-40"
+          className="border border-gray-300 rounded-lg px-3 py-2 w-40"
         />
 
         <button
           onClick={handleFetchBottle}
-          className="bg-blue-600 text-white px-4 py-2 ml-4 rounded-lg hover:bg-blue-700"
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
         >
           Fetch Bottle
         </button>

@@ -2,26 +2,23 @@
 
 import FetchBottleButton from '../components/FetchBottleButton';
 import AddBottleButton from '../components/AddBottleButton';
-import FetchAllBottlesButton from '../components/FetchAllBottlesButton'; // Import the new component
+import FetchAllBottlesButton from '../components/FetchAllBottlesButton';
 
 export default function Home() {
   return (
-    <div className="flex flex-col items-center">
-      <h1 className="text-2xl font-bold mb-8">Bottle Management</h1>
-      
-      {/* Fetch Single Bottle Section */}
-      <div className="mb-8 text-center">
+    <div className="flex h-screen">
+      {/* Sidebar for buttons */}
+      <div className="w-1/4 bg-gray-100 p-8 space-y-4">
+        <h1 className="text-2xl font-bold mb-8 text-center">Actions</h1>
         <FetchBottleButton />
-      </div>
-
-      {/* Fetch All Bottles Section */}
-      <div className="mb-8 text-center">
         <FetchAllBottlesButton />
+        <AddBottleButton />
       </div>
 
-      {/* Add Bottle Section */}
-      <div className="text-center">
-        <AddBottleButton />
+      {/* Main content area */}
+      <div className="flex-grow p-8">
+        <h1 className="text-2xl font-bold mb-8 text-center">Bottle Management</h1>
+        {/* Any other main content will be displayed here */}
       </div>
     </div>
   );
