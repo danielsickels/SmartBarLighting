@@ -1,28 +1,34 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import BottleDetails from './BottleDetails';
 import LoadingSpinner from './LoadingSpinner';
+import SearchBar from './SearchBar';
 import { fetchAllBottles, deleteBottle, Bottle } from '../services/bottleService';
 
 const FetchAllBottlesButton = () => {
-  const [bottles, setBottles] = useState<Bottle[] | null>(null);
+  const [bottles, setBottles] = useState<Bottle[]>([]);
+  const [filteredBottles, setFilteredBottles] = useState<Bottle[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [isVisible, setIsVisible] = useState(false); // Track visibility of the fetched bottles
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showBottles, setShowBottles] = useState(false);
 
-  const handleFetchAllBottles = async () => {
-    if (isVisible) {
-      // If already visible, toggle off to close
-      setIsVisible(false);
-      setBottles(null); // Clear bottles from state
+  // Toggle function to fetch and display bottles or hide them
+  const handleToggleBottles = async () => {
+    if (showBottles) {
+      // If bottles are currently shown, hide them
+      setShowBottles(false);
+      setBottles([]);
+      setFilteredBottles([]);
     } else {
-      // Fetch bottles and display them
+      // Fetch bottles if not currently shown
       setLoading(true);
       setError(null);
-      setIsVisible(true);
 
       try {
         const allBottles = await fetchAllBottles();
         setBottles(allBottles);
+        setFilteredBottles(allBottles); // Set filtered list initially to all bottles
+        setShowBottles(true); // Show bottles after fetching
       } catch (err) {
         setError('Failed to fetch bottles');
       } finally {
@@ -31,40 +37,62 @@ const FetchAllBottlesButton = () => {
     }
   };
 
+  // Delete a specific bottle and update the displayed lists
   const handleDelete = async (id: number) => {
     try {
       await deleteBottle(id);
-      setBottles((prevBottles) => prevBottles?.filter(bottle => bottle.id !== id) || null);
+      setBottles((prevBottles) => prevBottles.filter(bottle => bottle.id !== id));
+      setFilteredBottles((prevFiltered) => prevFiltered.filter(bottle => bottle.id !== id));
     } catch (error) {
       setError('Failed to delete the bottle');
     }
   };
 
+  // Update the filtered list of bottles based on the search query with regex
+  useEffect(() => {
+    const regex = new RegExp(searchQuery, 'i'); // Create a case-insensitive regex
+    const filtered = bottles.filter((bottle) => regex.test(bottle.name));
+    setFilteredBottles(filtered);
+  }, [searchQuery, bottles]);
+
   return (
     <div className="flex flex-col items-center">
+      {/* Toggle button for fetching or hiding bottles */}
       <button
-        onClick={handleFetchAllBottles}
-        className="bg-green-600 text-white px-4 py-2 mb-4 rounded-lg hover:bg-green-700"
+        onClick={handleToggleBottles}
+        className={`px-4 py-2 mb-4 rounded-lg ${showBottles ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'} text-white`}
       >
-        {isVisible ? 'Close' : 'Fetch All Bottles'}
+        {showBottles ? 'Hide Bottles' : 'Fetch All Bottles'}
       </button>
+
+      {/* Search Bar for filtering bottles */}
+      {showBottles && (
+        <div className="w-full mb-4">
+          <SearchBar value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+        </div>
+      )}
 
       {loading && <LoadingSpinner />}
 
       {error && <div className="text-red-500 mt-4">{error}</div>}
 
-      {isVisible && bottles && bottles.length > 0 && (
-        <div className="mt-8">
-          {bottles.map((bottle) => (
-            <BottleDetails
-              key={bottle.id}
-              id={bottle.id}
-              name={bottle.name}
-              material={bottle.material}
-              capacity_ml={bottle.capacity_ml}
-              onDelete={() => handleDelete(bottle.id)}
-            />
-          ))}
+      {/* Display list of filtered bottles */}
+      {showBottles && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4 w-full">
+          {filteredBottles.length > 0 ? (
+            filteredBottles.map((bottle) => (
+              <BottleDetails
+                key={bottle.id}
+                id={bottle.id}
+                name={bottle.name}
+                material={bottle.material}
+                capacity_ml={bottle.capacity_ml}
+                onDelete={() => handleDelete(bottle.id)} // Pass delete handler
+              />
+            ))
+          ) : (
+            <p className="text-center col-span-full">No bottles found.</p>
+          )}
         </div>
       )}
     </div>

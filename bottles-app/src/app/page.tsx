@@ -1,4 +1,6 @@
-"use client"; 
+// bottles-app/src/app/page.tsx
+
+"use client";
 
 import FetchBottleButton from '../components/FetchBottleButton';
 import AddBottleButton from '../components/AddBottleButton';
