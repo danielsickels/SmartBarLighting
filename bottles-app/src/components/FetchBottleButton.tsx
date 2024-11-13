@@ -1,3 +1,5 @@
+// bottles-app/src/components/FetchBottleButton.tsx
+
 import { useState } from 'react';
 import BottleDetails from './BottleDetails';
 import LoadingSpinner from './LoadingSpinner';
@@ -91,7 +93,8 @@ const FetchBottleButton = () => {
               key={bottle.id}
               id={bottle.id}
               name={bottle.name}
-              material={bottle.material}
+              brand={bottle.brand}                // Updated field
+              flavor_profile={bottle.flavor_profile} // Updated field
               capacity_ml={bottle.capacity_ml}
               onDelete={() => handleDelete(bottle.id)} // Pass delete handler as prop
             />

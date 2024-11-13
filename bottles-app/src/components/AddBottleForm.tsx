@@ -1,4 +1,4 @@
-// bottles-app/src/components/AddBottleForm.tsx (Rename AddBottleButton to AddBottleForm for clarity)
+// bottles-app/src/components/AddBottleForm.tsx
 
 import { useState } from 'react';
 import { Bottle } from '../services/bottleService';
@@ -6,20 +6,22 @@ import { addBottle } from '../services/bottleService';
 
 const AddBottleForm = () => {
   const [name, setName] = useState('');
-  const [material, setMaterial] = useState('');
+  const [brand, setBrand] = useState(''); // New field for brand
+  const [flavorProfile, setFlavorProfile] = useState(''); // New field for flavor profile
   const [capacity, setCapacity] = useState<number | ''>('');
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleAddBottle = async () => {
-    if (!name || !material || !capacity) {
+    if (!name || !brand || !flavorProfile || !capacity) {
       setErrorMessage('Please fill all fields');
       return;
     }
 
     const newBottle: Partial<Bottle> = {
       name,
-      material,
+      brand, // Include brand in the new bottle
+      flavor_profile: flavorProfile, // Include flavor profile in the new bottle
       capacity_ml: Number(capacity),
     };
 
@@ -27,7 +29,8 @@ const AddBottleForm = () => {
       await addBottle(newBottle);
       setSuccessMessage('Bottle added successfully');
       setName('');
-      setMaterial('');
+      setBrand(''); // Clear brand field
+      setFlavorProfile(''); // Clear flavor profile field
       setCapacity('');
     } catch (error) {
       setErrorMessage('Failed to add bottle');
@@ -49,9 +52,16 @@ const AddBottleForm = () => {
       />
       <input
         type="text"
-        value={material}
-        onChange={(e) => setMaterial(e.target.value)}
-        placeholder="Enter Material"
+        value={brand}
+        onChange={(e) => setBrand(e.target.value)}
+        placeholder="Enter Brand"
+        className="border border-gray-300 rounded-lg px-3 py-1 my-2 w-64"
+      />
+      <input
+        type="text"
+        value={flavorProfile}
+        onChange={(e) => setFlavorProfile(e.target.value)}
+        placeholder="Enter Flavor Profile"
         className="border border-gray-300 rounded-lg px-3 py-1 my-2 w-64"
       />
       <input

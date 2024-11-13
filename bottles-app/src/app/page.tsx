@@ -61,10 +61,15 @@ export default function Home() {
         </button>
       </div>
 
-      {/* Main content area, adjusted to accommodate the sidebar width */}
-      <div className="flex-grow p-8 ml-[25%] overflow-y-auto pt-20 pb-12">
-        <h1 className="text-2xl font-bold mb-8 text-center">Bottle Management</h1>
-        {renderMainContent()}
+      {/* Main content area */}
+      <div className="flex-grow ml-[25%] overflow-y-auto pt-20 pb-12 relative">
+        {/* Fixed header for main content */}
+        {/* <header className="fixed top-20 left-[25%] right-0 z-10 p-4">
+          <h1 className="text-2xl font-bold text-center">Bottle Management</h1>
+        </header> */}
+
+        {/* Scrollable content area, with padding to account for fixed header */}
+        <div className="mt-24 p-4">{renderMainContent()}</div>
       </div>
     </div>
   );

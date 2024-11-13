@@ -32,7 +32,10 @@ def get_bottle(bottle_id: int, db: Session = Depends(get_db)):
 
 @router.put("/{bottle_id}", response_model=BottleResponse)
 def update_bottle(bottle_id: int, bottle: BottleUpdate, db: Session = Depends(get_db)):
-    return BottleService.update_bottle(db=db, bottle_id=bottle_id, bottle_in=bottle)
+    updated_bottle = BottleService.update_bottle(db=db, bottle_id=bottle_id, bottle_in=bottle)
+    if not updated_bottle:
+        raise HTTPException(status_code=404, detail="Bottle not found")
+    return updated_bottle
 
 @router.delete("/{bottle_id}")
 def delete_bottle(bottle_id: int, db: Session = Depends(get_db)):
@@ -40,7 +43,3 @@ def delete_bottle(bottle_id: int, db: Session = Depends(get_db)):
     if not success:
         raise HTTPException(status_code=404, detail="Bottle not found")
     return {"message": "Bottle deleted successfully"}
-
-@router.get("/bottles")
-def list_bottles(skip: int = 0, limit: int = 25, db: Session = Depends(get_db)):
-    return BottleService.get_bottles(db=db, skip=skip, limit=limit)

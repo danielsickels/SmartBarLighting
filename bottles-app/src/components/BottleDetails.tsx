@@ -1,11 +1,13 @@
+// bottles-app/src/components/BottleDetails.tsx
+
 import { Bottle } from '../services/bottleService';
 import { useState } from 'react';
 
-interface BottleDetailsProps extends Bottle {
+interface BottleDetailsProps extends Omit<Bottle, 'material'> { // Omit material from BottleDetailsProps
   onDelete: () => Promise<void>; // Ensure onDelete returns a Promise
 }
 
-const BottleDetails = ({ id, name, material, capacity_ml, onDelete }: BottleDetailsProps) => {
+const BottleDetails = ({ id, name, brand, flavor_profile, capacity_ml, onDelete }: BottleDetailsProps) => {
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null); // Track delete errors
 
@@ -26,7 +28,8 @@ const BottleDetails = ({ id, name, material, capacity_ml, onDelete }: BottleDeta
       {/* Bottle Information */}
       <div className="flex-grow">
         <p><strong>Name:</strong> {name}</p>
-        <p><strong>Material:</strong> {material}</p>
+        <p><strong>Brand:</strong> {brand}</p>
+        <p><strong>Flavor Profile:</strong> {flavor_profile}</p>
         <p><strong>Capacity:</strong> {capacity_ml} ml</p>
       </div>
 
@@ -37,7 +40,7 @@ const BottleDetails = ({ id, name, material, capacity_ml, onDelete }: BottleDeta
       <button
         onClick={handleDelete}
         disabled={deleting}
-        className="bg-red-600 text-white px-4 py-.5 rounded-lg hover:bg-red-700 mt-4 w-full"
+        className="bg-red-600 text-white px-4 py-1 rounded-lg hover:bg-red-700 mt-4 w-full"
       >
         {deleting ? "Deleting..." : "Delete"}
       </button>

@@ -1,9 +1,14 @@
+# app/schemas/bottle.py
+
 from pydantic import BaseModel
+from typing import Optional
 
 class BottleBase(BaseModel):
     name: str
-    material: str
-    capacity_ml: int
+    brand: Optional[str] = None  # New field for brand
+    flavor_profile: Optional[str] = None  # New field for flavor profile
+    material: Optional[str] = None
+    capacity_ml: Optional[int] = None
 
 class BottleCreate(BottleBase):
     pass

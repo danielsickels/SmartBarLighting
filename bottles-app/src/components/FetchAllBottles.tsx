@@ -36,7 +36,7 @@ const FetchAllBottles = () => {
   // Filter bottles based on search query
   useEffect(() => {
     const regex = new RegExp(searchQuery, 'i');
-    const filtered = bottles.filter((bottle) => regex.test(bottle.name));
+    const filtered = bottles.filter((bottle) => regex.test(bottle.name) || regex.test(bottle.brand || '') || regex.test(bottle.flavor_profile || ''));
     setFilteredBottles(filtered);
   }, [searchQuery, bottles]);
 
@@ -71,7 +71,8 @@ const FetchAllBottles = () => {
               key={bottle.id}
               id={bottle.id}
               name={bottle.name}
-              material={bottle.material}
+              brand={bottle.brand}  // Added brand
+              flavor_profile={bottle.flavor_profile}  // Added flavor profile
               capacity_ml={bottle.capacity_ml}
               onDelete={() => handleDelete(bottle.id)}
             />
