@@ -3,7 +3,7 @@
 import { Bottle } from '../services/bottleService';
 import { useState } from 'react';
 
-interface BottleDetailsProps extends Omit<Bottle, 'material'> { // Omit material from BottleDetailsProps
+interface BottleDetailsProps extends Omit<Bottle, 'spirit_type'> { // Omit spirit_type from BottleDetailsProps
   onDelete: () => Promise<void>; // Ensure onDelete returns a Promise
 }
 

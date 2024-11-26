@@ -21,7 +21,7 @@ class BottleService:
 
     @staticmethod
     def get_bottle_by_name(db: Session, name: str):
-        return db.query(Bottle).filter(Bottle.name.ilike(f"%{name}%")).first()  # Case-insensitive search
+        return db.query(Bottle).filter(Bottle.name.ilike(f"%{name}%")).first()
 
     @staticmethod
     def update_bottle(db: Session, bottle_id: int, bottle_in: BottleUpdate):

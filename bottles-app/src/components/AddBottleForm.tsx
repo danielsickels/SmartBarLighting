@@ -1,27 +1,27 @@
-// bottles-app/src/components/AddBottleForm.tsx
-
 import { useState } from 'react';
 import { Bottle } from '../services/bottleService';
 import { addBottle } from '../services/bottleService';
 
 const AddBottleForm = () => {
   const [name, setName] = useState('');
-  const [brand, setBrand] = useState(''); // New field for brand
-  const [flavorProfile, setFlavorProfile] = useState(''); // New field for flavor profile
+  const [brand, setBrand] = useState('');
+  const [flavorProfile, setFlavorProfile] = useState('');
+  const [spiritType, setSpiritType] = useState(''); // Updated field
   const [capacity, setCapacity] = useState<number | ''>('');
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleAddBottle = async () => {
-    if (!name || !brand || !flavorProfile || !capacity) {
-      setErrorMessage('Please fill all fields');
+    if (!name || !spiritType || !capacity) {
+      setErrorMessage('Please fill all required fields');
       return;
     }
 
     const newBottle: Partial<Bottle> = {
       name,
-      brand, // Include brand in the new bottle
-      flavor_profile: flavorProfile, // Include flavor profile in the new bottle
+      brand,
+      flavor_profile: flavorProfile,
+      spirit_type: spiritType, // Updated field
       capacity_ml: Number(capacity),
     };
 
@@ -29,8 +29,9 @@ const AddBottleForm = () => {
       await addBottle(newBottle);
       setSuccessMessage('Bottle added successfully');
       setName('');
-      setBrand(''); // Clear brand field
-      setFlavorProfile(''); // Clear flavor profile field
+      setBrand('');
+      setFlavorProfile('');
+      setSpiritType(''); // Updated field
       setCapacity('');
     } catch (error) {
       setErrorMessage('Failed to add bottle');
@@ -62,6 +63,13 @@ const AddBottleForm = () => {
         value={flavorProfile}
         onChange={(e) => setFlavorProfile(e.target.value)}
         placeholder="Enter Flavor Profile"
+        className="border border-gray-300 rounded-lg px-3 py-1 my-2 w-64"
+      />
+      <input
+        type="text"
+        value={spiritType}
+        onChange={(e) => setSpiritType(e.target.value)}
+        placeholder="Enter Spirit Type (e.g. Whiskey)"
         className="border border-gray-300 rounded-lg px-3 py-1 my-2 w-64"
       />
       <input

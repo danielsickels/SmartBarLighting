@@ -1,11 +1,11 @@
-// bottles-app/src/app/page.tsx
-
 "use client";
 
 import { useState } from 'react';
 import FetchBottleButton from '../components/FetchBottleButton';
 import AddBottleForm from '../components/AddBottleForm';
 import FetchAllBottles from '../components/FetchAllBottles';
+import FetchAllRecipes from '../components/FetchAllRecipes'; // New import
+import AddRecipeForm from '../components/AddRecipeForm'; // New import
 
 export default function Home() {
   const [activeContent, setActiveContent] = useState<string | null>(null);
@@ -20,8 +20,12 @@ export default function Home() {
         return <FetchAllBottles />;
       case "fetchSingle":
         return <FetchBottleButton />;
-      case "add":
+      case "addBottle":
         return <AddBottleForm />;
+      case "fetchAllRecipes": // New case
+        return <FetchAllRecipes />;
+      case "addRecipe": // New case
+        return <AddRecipeForm />;
       default:
         return <p className="text-center">Select an action to display its content here.</p>;
     }
@@ -52,23 +56,35 @@ export default function Home() {
         </button>
 
         <button
-          onClick={() => toggleContent("add")}
-          className={`w-full px-4 py-2 rounded-lg ${
-            activeContent === "add" ? "bg-gray-700 text-white" : "bg-gray-600 text-white hover:bg-gray-700"
+          onClick={() => toggleContent("addBottle")}
+          className={`w-full px-4 py-2 rounded-lg mb-2 ${
+            activeContent === "addBottle" ? "bg-gray-700 text-white" : "bg-gray-600 text-white hover:bg-gray-700"
           }`}
         >
           Add Bottle
+        </button>
+
+        <button
+          onClick={() => toggleContent("fetchAllRecipes")} // New button for fetching all recipes
+          className={`w-full px-4 py-2 rounded-lg mb-2 ${
+            activeContent === "fetchAllRecipes" ? "bg-purple-700 text-white" : "bg-purple-600 text-white hover:bg-purple-700"
+          }`}
+        >
+          Fetch All Recipes
+        </button>
+
+        <button
+          onClick={() => toggleContent("addRecipe")} // New button for adding a recipe
+          className={`w-full px-4 py-2 rounded-lg ${
+            activeContent === "addRecipe" ? "bg-red-700 text-white" : "bg-red-600 text-white hover:bg-red-700"
+          }`}
+        >
+          Add Recipe
         </button>
       </div>
 
       {/* Main content area */}
       <div className="flex-grow ml-[25%] overflow-y-auto pt-20 pb-12 relative">
-        {/* Fixed header for main content */}
-        {/* <header className="fixed top-20 left-[25%] right-0 z-10 p-4">
-          <h1 className="text-2xl font-bold text-center">Bottle Management</h1>
-        </header> */}
-
-        {/* Scrollable content area, with padding to account for fixed header */}
         <div className="mt-24 p-4">{renderMainContent()}</div>
       </div>
     </div>

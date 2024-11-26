@@ -1,11 +1,9 @@
-// bottleService.ts
-
 export interface Bottle {
   id: number;
   name: string;
-  brand: string; // New field for brand
-  flavor_profile: string; // New field for flavor profile
-  material: string;
+  brand: string;
+  flavor_profile: string;
+  spirit_type: string; // Updated field
   capacity_ml: number;
 }
 
@@ -15,8 +13,7 @@ export const fetchBottle = async (id: number): Promise<Bottle | null> => {
     if (!res.ok) {
       throw new Error('Bottle not found');
     }
-    const data = await res.json();
-    return data;
+    return await res.json();
   } catch (error) {
     console.error('Error fetching bottle by ID:', error);
     return null;
@@ -29,8 +26,7 @@ export const fetchBottleByName = async (name: string): Promise<Bottle[] | null> 
     if (!res.ok) {
       throw new Error('Bottle not found');
     }
-    const data = await res.json();
-    return data; 
+    return await res.json();
   } catch (error) {
     console.error('Error fetching bottle by name:', error);
     return null;
@@ -46,13 +42,12 @@ export const addBottle = async (bottle: Partial<Bottle>): Promise<Bottle> => {
       },
       body: JSON.stringify(bottle),
     });
-    
+
     if (!res.ok) {
       throw new Error('Failed to add bottle');
     }
-    
-    const data = await res.json();
-    return data;
+
+    return await res.json();
   } catch (error) {
     console.error('Error adding bottle:', error);
     throw error;
@@ -80,8 +75,7 @@ export const fetchAllBottles = async (): Promise<Bottle[]> => {
     if (!res.ok) {
       throw new Error('Failed to fetch bottles');
     }
-    const data = await res.json();
-    return data;
+    return await res.json();
   } catch (error) {
     console.error('Error fetching all bottles:', error);
     throw error;

@@ -7,7 +7,7 @@ class BottleBase(BaseModel):
     name: str
     brand: Optional[str] = None  # New field for brand
     flavor_profile: Optional[str] = None  # New field for flavor profile
-    material: Optional[str] = None
+    spirit_type: Optional[str] = None
     capacity_ml: Optional[int] = None
 
 class BottleCreate(BottleBase):
