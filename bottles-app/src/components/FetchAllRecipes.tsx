@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import LoadingSpinner from './LoadingSpinner';
 import SearchBar from './SearchBar';
 import RecipeDetails from './RecipeDetails'; // New RecipeDetails component
-import { fetchAllRecipes } from '../services/recipeService'; // Recipe service
+import { fetchAllRecipes, deleteRecipe } from '../services/recipeService'; // Recipe service
 
 interface Recipe {
   id: number;
@@ -27,6 +27,7 @@ const FetchAllRecipes = () => {
         setRecipes(data);
         setFilteredRecipes(data);
       } catch (err) {
+        console.error("Error fetching recipes:", err);
         setError('Failed to fetch recipes');
       } finally {
         setLoading(false);
@@ -41,6 +42,18 @@ const FetchAllRecipes = () => {
     const filtered = recipes.filter((recipe) => regex.test(recipe.name));
     setFilteredRecipes(filtered);
   }, [searchQuery, recipes]);
+
+  const handleDelete = async (id: number) => {
+    try {
+      await deleteRecipe(id);
+      // Remove the deleted recipe from state
+      setRecipes((prev) => prev.filter((recipe) => recipe.id !== id));
+      setFilteredRecipes((prev) => prev.filter((recipe) => recipe.id !== id));
+    } catch (err) {
+      console.error('Error deleting recipe:', err);
+      setError('Failed to delete recipe');
+    }
+  };
 
   return (
     <div className="flex flex-col items-center">
@@ -62,6 +75,7 @@ const FetchAllRecipes = () => {
               name={recipe.name}
               instructions={recipe.instructions}
               ingredients={recipe.ingredients}
+              onDelete={() => handleDelete(recipe.id)} // Pass delete handler
             />
           ))
         ) : (

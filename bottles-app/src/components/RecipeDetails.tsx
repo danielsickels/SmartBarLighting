@@ -1,22 +1,25 @@
 interface RecipeDetailsProps {
-    id: number;
-    name: string;
-    instructions: string;
-    ingredients: string;
-  }
-  
-  const RecipeDetails = ({ id, name, instructions, ingredients }: RecipeDetailsProps) => {
-    return (
-      <div className="border p-4 rounded-lg shadow-md flex flex-col items-start w-full max-w-md mb-4">
-        <h3 className="text-lg font-bold">{name}</h3>
-        <p>
-          <strong>Instructions:</strong> {instructions}
-        </p>
-        <p>
-          <strong>Ingredients:</strong> {ingredients}
-        </p>
-      </div>
-    );
-  };
-  
-  export default RecipeDetails;
+  id: number;
+  name: string;
+  instructions: string;
+  ingredients: string;
+  onDelete: () => void; // Callback for delete functionality
+}
+
+const RecipeDetails = ({ id, name, instructions, ingredients, onDelete }: RecipeDetailsProps) => {
+  return (
+    <div className="border p-4 rounded-lg shadow-md">
+      <h3 className="font-bold text-lg">{name}</h3>
+      <p><strong>Instructions:</strong> {instructions}</p>
+      <p><strong>Ingredients:</strong> {ingredients}</p>
+      <button
+        onClick={onDelete}
+        className="mt-2 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
+      >
+        Delete
+      </button>
+    </div>
+  );
+};
+
+export default RecipeDetails;

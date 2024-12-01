@@ -31,3 +31,11 @@ def get_recipe(recipe_id: int, db: Session = Depends(get_db)):
         return recipe
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Error retrieving recipe: {str(e)}")
+    
+@router.delete("/{recipe_id}")
+def delete_recipe(recipe_id: int, db: Session = Depends(get_db)):
+    success = RecipeService.delete_recipe(db=db, recipe_id=recipe_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Recipe not found")
+    return {"message": "Recipe deleted successfully"}
+
