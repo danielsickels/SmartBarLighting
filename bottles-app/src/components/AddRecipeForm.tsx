@@ -5,10 +5,12 @@ import { fetchAllBottles, Bottle } from '../services/bottleService';
 const AddRecipeForm = () => {
   const [name, setName] = useState('');
   const [instructions, setInstructions] = useState('');
-  const [ingredients, setIngredients] = useState<Bottle[]>([]); // Selected bottles for ingredients
+  const [ingredients, setIngredients] = useState<{ bottle: Bottle; measurement: string }[]>([]); // Bottles with measurements
+  const [customIngredients, setCustomIngredients] = useState<{ name: string; measurement: string }[]>([]); // Custom ingredients with measurements
+  const [newCustomIngredient, setNewCustomIngredient] = useState(''); // Input for new custom ingredient
   const [allBottles, setAllBottles] = useState<Bottle[]>([]); // All available bottles
   const [filteredBottles, setFilteredBottles] = useState<Bottle[]>([]); // Filtered bottles for search
-  const [searchQuery, setSearchQuery] = useState(''); // Search query
+  const [searchQuery, setSearchQuery] = useState(''); // Search query for bottles
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -17,7 +19,7 @@ const AddRecipeForm = () => {
       try {
         const bottles = await fetchAllBottles();
         setAllBottles(bottles);
-        setFilteredBottles(bottles); // Initialize filtered list
+        setFilteredBottles(bottles); // Initialize filtered bottles
       } catch (error) {
         console.error('Error fetching bottles:', error);
         setErrorMessage('Error fetching bottles.');
@@ -27,30 +29,44 @@ const AddRecipeForm = () => {
     fetchBottles();
   }, []);
 
-  // Filter bottles based on search query
+  // Filter bottles when the search query changes
   useEffect(() => {
     const regex = new RegExp(searchQuery, 'i');
     const filtered = allBottles.filter((bottle) => regex.test(bottle.name));
     setFilteredBottles(filtered);
   }, [searchQuery, allBottles]);
 
+  const handleAddCustomIngredient = () => {
+    if (newCustomIngredient.trim()) {
+      setCustomIngredients((prev) => [...prev, { name: newCustomIngredient.trim(), measurement: '' }]);
+      setNewCustomIngredient('');
+    }
+  };
+
+  const handleRemoveCustomIngredient = (ingredientName: string) => {
+    setCustomIngredients((prev) => prev.filter((item) => item.name !== ingredientName));
+  };
+
   const handleAddRecipe = async () => {
     setSuccessMessage(null);
     setErrorMessage(null);
 
-    if (!name || !instructions || ingredients.length === 0) {
-      setErrorMessage('Please fill all fields');
+    if (!name || !instructions || (ingredients.length === 0 && customIngredients.length === 0)) {
+      setErrorMessage('Please fill all fields and add at least one ingredient.');
       return;
     }
 
-    // Collect the bottle IDs from the selected bottles
-    const bottleIds = ingredients.map((bottle) => bottle.id);
+    // Combine selected bottles and custom ingredients into a single ingredients string
+    const ingredientStrings = [
+      ...ingredients.map((item) => `${item.bottle.name} - ${item.measurement}`),
+      ...customIngredients.map((item) => `${item.name} - ${item.measurement}`),
+    ];
 
     const payload = {
       name,
       instructions,
-      ingredients: ingredients.map((bottle) => bottle.name).join(', '), // Combine names into a single string
-      bottle_ids: bottleIds,
+      ingredients: ingredientStrings.join(', '),
+      bottle_ids: ingredients.map((item) => item.bottle.id), // Only send IDs of selected bottles
     };
 
     console.log('Data being sent:', payload);
@@ -62,7 +78,7 @@ const AddRecipeForm = () => {
       setName('');
       setInstructions('');
       setIngredients([]);
-      setSearchQuery('');
+      setCustomIngredients([]);
     } catch (error) {
       console.error('Error adding recipe:', error);
       setErrorMessage('Error adding recipe. Please try again');
@@ -89,38 +105,107 @@ const AddRecipeForm = () => {
         className="border border-gray-300 rounded-lg px-3 py-1 my-2 w-64 h-24"
       />
 
-      {/* Ingredient selection */}
+      {/* Bottle selection */}
       <div className="w-64 border border-gray-300 rounded-lg px-3 py-1 my-2">
         <p className="font-bold">Select Bottles:</p>
-        {/* Search input for filtering bottles */}
         <input
           type="text"
+          placeholder="Search bottles..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search Bottles"
-          className="border border-gray-300 rounded-lg px-2 py-1 mb-2 w-full"
+          className="border border-gray-300 rounded-lg px-2 py-1 my-2 w-full"
         />
-        {/* Scrollable container for bottles */}
-        <div className="max-h-40 overflow-y-auto">
-          {filteredBottles.map((bottle) => (
-            <div key={bottle.id} className="flex items-center">
-              <input
-                type="checkbox"
-                checked={ingredients.some((selectedBottle) => selectedBottle.id === bottle.id)}
-                onChange={(e) => {
-                  if (e.target.checked) {
-                    setIngredients((prev) => [...prev, bottle]);
-                  } else {
-                    setIngredients((prev) =>
-                      prev.filter((selectedBottle) => selectedBottle.id !== bottle.id)
-                    );
-                  }
-                }}
-              />
-              <label className="ml-2">{bottle.name}</label>
-            </div>
-          ))}
+        <div className="max-h-48 overflow-y-auto">
+          {filteredBottles.map((bottle) => {
+            const isSelected = ingredients.some((item) => item.bottle.id === bottle.id);
+            return (
+              <div key={bottle.id} className="flex items-center mb-1">
+                <input
+                  type="checkbox"
+                  value={bottle.id}
+                  checked={isSelected}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setIngredients((prev) => [...prev, { bottle, measurement: '' }]);
+                    } else {
+                      setIngredients((prev) =>
+                        prev.filter((item) => item.bottle.id !== bottle.id)
+                      );
+                    }
+                  }}
+                />
+                <label className="ml-2 flex-grow">{bottle.name}</label>
+                {isSelected && (
+                  <input
+                    type="text"
+                    placeholder="Measurement"
+                    className="border border-gray-300 rounded-lg px-2 py-1 ml-2 w-24"
+                    value={ingredients.find((item) => item.bottle.id === bottle.id)?.measurement || ''}
+                    onChange={(e) =>
+                      setIngredients((prev) =>
+                        prev.map((item) =>
+                          item.bottle.id === bottle.id
+                            ? { ...item, measurement: e.target.value }
+                            : item
+                        )
+                      )
+                    }
+                  />
+                )}
+              </div>
+            );
+          })}
         </div>
+      </div>
+
+      {/* Custom ingredient input */}
+      <div className="w-64 border border-gray-300 rounded-lg px-3 py-1 my-2">
+        <p className="font-bold">Add Custom Ingredients:</p>
+        <div className="flex items-center space-x-2">
+          <input
+            type="text"
+            value={newCustomIngredient}
+            onChange={(e) => setNewCustomIngredient(e.target.value)}
+            placeholder="Enter custom ingredient"
+            className="border border-gray-300 rounded-lg px-2 py-1 flex-grow"
+          />
+          <button
+            onClick={handleAddCustomIngredient}
+            className="bg-green-500 text-white px-2 py-1 rounded-lg"
+          >
+            Add
+          </button>
+        </div>
+        <ul className="mt-2">
+          {customIngredients.map((item, index) => (
+            <li key={index} className="flex justify-between items-center">
+              <div className="flex items-center flex-grow">
+                {item.name}
+                <input
+                  type="text"
+                  placeholder="Measurement"
+                  className="border border-gray-300 rounded-lg px-2 py-1 ml-2 w-24"
+                  value={item.measurement}
+                  onChange={(e) =>
+                    setCustomIngredients((prev) =>
+                      prev.map((ingredient) =>
+                        ingredient.name === item.name
+                          ? { ...ingredient, measurement: e.target.value }
+                          : ingredient
+                      )
+                    )
+                  }
+                />
+              </div>
+              <button
+                onClick={() => handleRemoveCustomIngredient(item.name)}
+                className="text-red-500 hover:text-red-700 ml-2"
+              >
+                Remove
+              </button>
+            </li>
+          ))}
+        </ul>
       </div>
 
       <button
