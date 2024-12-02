@@ -1,6 +1,8 @@
 from pydantic import BaseModel
 from typing import List, Optional
 
+from app.schemas.bottle import BottleBase
+
 class RecipeBase(BaseModel):
     name: str
     instructions: str
@@ -11,6 +13,8 @@ class RecipeCreate(RecipeBase):
 
 class RecipeResponse(RecipeBase):
     id: int
+    bottles: List[BottleBase]  
 
     class Config:
         orm_mode = True
+

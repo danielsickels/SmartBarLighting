@@ -1,58 +1,85 @@
 import { useState, useEffect } from 'react';
 import LoadingSpinner from './LoadingSpinner';
 import SearchBar from './SearchBar';
-import RecipeDetails from './RecipeDetails'; // New RecipeDetails component
-import { fetchAllRecipes, deleteRecipe } from '../services/recipeService'; // Recipe service
+import RecipeDetails from './RecipeDetails';
+import { fetchAllRecipes, deleteRecipe } from '../services/recipeService';
+import { Bottle, fetchAllBottles } from '../services/bottleService';
 
 interface Recipe {
   id: number;
   name: string;
   instructions: string;
   ingredients: string;
+  bottles: Bottle[];
 }
 
-const FetchAllRecipes = () => {
+interface Props {
+  showAllRecipes: boolean;
+}
+
+const FetchAllRecipes = ({ showAllRecipes }: Props) => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>([]);
+  const [availableBottleIds, setAvailableBottleIds] = useState<number[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    const fetchRecipes = async () => {
+    const fetchRecipesAndBottles = async () => {
       setLoading(true);
       setError(null);
       try {
-        const data = await fetchAllRecipes();
-        setRecipes(data);
-        setFilteredRecipes(data);
+        const [recipesData, bottlesData] = await Promise.all([fetchAllRecipes(), fetchAllBottles()]);
+
+        const transformedRecipes: Recipe[] = recipesData.map((recipe) => ({
+          ...recipe,
+          bottles: recipe.bottles || [],
+        }));
+
+        console.log('Transformed Recipes:', transformedRecipes);
+        console.log('Fetched Bottles:', bottlesData);
+
+        setRecipes(transformedRecipes);
+        setAvailableBottleIds(bottlesData.map((bottle) => bottle.id));
+        setFilteredRecipes(transformedRecipes); // Show all recipes by default
       } catch (err) {
-        console.error("Error fetching recipes:", err);
-        setError('Failed to fetch recipes');
+        console.error('Error fetching data:', err);
+        setError('Failed to fetch recipes or bottles');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchRecipes();
+    fetchRecipesAndBottles();
   }, []);
 
   useEffect(() => {
-    const regex = new RegExp(searchQuery, 'i');
-    const filtered = recipes.filter((recipe) => regex.test(recipe.name));
-    setFilteredRecipes(filtered);
+    if (searchQuery === '') {
+      setFilteredRecipes(recipes); // Show all recipes when search query is empty
+    } else {
+      const regex = new RegExp(searchQuery, 'i');
+      const filtered = recipes.filter((recipe) => regex.test(recipe.name));
+      setFilteredRecipes(filtered);
+    }
   }, [searchQuery, recipes]);
 
-  const handleDelete = async (id: number) => {
+  const handleDeleteRecipe = async (id: number) => {
     try {
       await deleteRecipe(id);
-      // Remove the deleted recipe from state
-      setRecipes((prev) => prev.filter((recipe) => recipe.id !== id));
-      setFilteredRecipes((prev) => prev.filter((recipe) => recipe.id !== id));
-    } catch (err) {
-      console.error('Error deleting recipe:', err);
+      setRecipes((prevRecipes) => prevRecipes.filter((recipe) => recipe.id !== id));
+      setFilteredRecipes((prevRecipes) => prevRecipes.filter((recipe) => recipe.id !== id));
+    } catch (error) {
+      console.error('Error deleting recipe:', error);
       setError('Failed to delete recipe');
     }
+  };
+
+  const getCardClassName = (recipe: Recipe) => {
+    const allAvailable = recipe.bottles.every((bottle) =>
+      availableBottleIds.includes(bottle.id)
+    );
+    return allAvailable ? 'border-green-600' : 'border-red-600';
   };
 
   return (
@@ -69,14 +96,18 @@ const FetchAllRecipes = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4 w-full">
         {filteredRecipes.length > 0 ? (
           filteredRecipes.map((recipe) => (
-            <RecipeDetails
+            <div
               key={recipe.id}
-              id={recipe.id}
-              name={recipe.name}
-              instructions={recipe.instructions}
-              ingredients={recipe.ingredients}
-              onDelete={() => handleDelete(recipe.id)} // Pass delete handler
-            />
+              className={`border-4 p-4 rounded-lg ${getCardClassName(recipe)}`}
+            >
+              <RecipeDetails
+                id={recipe.id}
+                name={recipe.name}
+                instructions={recipe.instructions}
+                ingredients={recipe.ingredients}
+                onDelete={() => handleDeleteRecipe(recipe.id)}
+              />
+            </div>
           ))
         ) : (
           <p className="text-center col-span-full">No recipes found.</p>

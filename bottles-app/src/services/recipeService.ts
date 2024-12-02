@@ -1,8 +1,10 @@
 export interface Recipe {
+  bottles: never[];
   id: number;
   name: string;
   instructions: string;
   ingredients: string; // Bottles are now part of the ingredients string
+  bottle_ids: number[];
 }
 
 export const addRecipe = async (recipe: Omit<Recipe, 'id'>): Promise<Recipe> => {
