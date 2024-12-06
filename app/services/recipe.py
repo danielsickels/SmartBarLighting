@@ -1,24 +1,26 @@
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from app.db.models.recipe import Recipe
-from app.db.models.bottle import Bottle
+from app.db.models.spirit_type import SpiritType
 from app.schemas.recipe import RecipeCreate
 
 class RecipeService:
     @staticmethod
     def create_recipe(db: Session, recipe_in: RecipeCreate) -> Recipe:
-        # Validate that all provided bottle_ids exist in the database
-        bottles = db.query(Bottle).filter(Bottle.id.in_(recipe_in.bottle_ids)).all()
-        if len(bottles) != len(recipe_in.bottle_ids):
-            raise ValueError("Some bottle IDs do not exist in the database.")
+        # Fetch the SpiritType object(s)
+        spirit_types = db.query(SpiritType).filter(SpiritType.id.in_(recipe_in.spirit_type_ids)).all()
+        if len(spirit_types) != len(recipe_in.spirit_type_ids):
+            raise ValueError("Some spirit type IDs do not exist in the database.")
 
-        # Create a new Recipe instance
+        # Create the Recipe object
         recipe = Recipe(
             name=recipe_in.name,
             instructions=recipe_in.instructions,
             ingredients=recipe_in.ingredients,
-            bottles=bottles,  # Associate bottles with the recipe
+            spirit_types=spirit_types,  # Associating spirit type(s)
         )
+
+        # Save to the database
         db.add(recipe)
         db.commit()
         db.refresh(recipe)

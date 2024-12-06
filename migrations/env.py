@@ -13,6 +13,8 @@ if config.config_file_name is not None:
 from app.db.base import Base  # Ensure this points to the correct Base class
 from app.db.models.bottle import Bottle  # Import all models
 from app.db.models.recipe import Recipe  # Import Recipe model
+from app.db.models.spirit_type import SpiritType  # Import SpiritType model
+from app.db.models.shared_table import recipes_to_spirits
 
 target_metadata = Base.metadata
 

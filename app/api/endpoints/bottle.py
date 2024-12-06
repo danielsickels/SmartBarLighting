@@ -8,21 +8,36 @@ from app.services.bottle import BottleService
 
 router = APIRouter()
 
-@router.post("/", response_model=BottleResponse)
+@router.post("", response_model=BottleResponse)
 def create_bottle(bottle: BottleCreate, db: Session = Depends(get_db)):
-    return BottleService.create_bottle(db=db, bottle_in=bottle)
+    try:
+        return BottleService.create_bottle(db=db, bottle_in=bottle)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error creating bottle: {str(e)}")
 
-@router.get("/", response_model=List[BottleResponse])
-def get_bottles(skip: int = 0, limit: int = 25, name: Optional[str] = Query(None), db: Session = Depends(get_db)):
-    if name:
-        # Fetch bottle by name if the name query parameter is provided
-        bottle = BottleService.get_bottle_by_name(db=db, name=name)
-        if not bottle:
-            raise HTTPException(status_code=404, detail="Bottle not found")
-        return [bottle]  # Return the found bottle in a list to match the response model
-    # Otherwise, return the list of bottles with pagination
-    return BottleService.get_bottles(db=db, skip=skip, limit=limit)
-
+@router.get("", response_model=List[BottleResponse])
+def get_bottles(
+    skip: int = 0,
+    limit: int = 25,
+    spirit_type_id: Optional[int] = None,
+    name: Optional[str] = None,
+    db: Session = Depends(get_db)
+):
+    """
+    Fetch bottles with optional filters for spirit_type_id and name.
+    Supports pagination with skip and limit.
+    """
+    try:
+        return BottleService.get_bottles(
+            db=db,
+            skip=skip,
+            limit=limit,
+            spirit_type_id=spirit_type_id,
+            name=name  # Pass the name filter to the service
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error retrieving bottles: {str(e)}")
+    
 @router.get("/{bottle_id}", response_model=BottleResponse)
 def get_bottle(bottle_id: int, db: Session = Depends(get_db)):
     db_bottle = BottleService.get_bottle(db=db, bottle_id=bottle_id)

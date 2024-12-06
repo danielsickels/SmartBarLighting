@@ -1,23 +1,19 @@
-from sqlalchemy import Column, Integer, String, Table, ForeignKey
+from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
-from app.db.base import Base  # This defines the base for all models.
+from app.db.base import Base
+from app.db.models.shared_table import recipes_to_spirits
 
-# Association table for many-to-many relationship between recipes and bottles.
-recipe_bottle = Table(
-    "recipe_bottle",  # Table name in the database
-    Base.metadata,  # Links it to the database metadata
-    Column("recipe_id", Integer, ForeignKey("recipes.id"), primary_key=True),
-    Column("bottle_id", Integer, ForeignKey("bottles.id"), primary_key=True),
-)
-
-# Recipe model
 class Recipe(Base):
-    __tablename__ = "recipes"  # Table name in the database
+    __tablename__ = "recipes"
 
-    id = Column(Integer, primary_key=True, index=True)  # Primary key
-    name = Column(String, nullable=False)  # Recipe name
-    instructions = Column(String, nullable=False)  # Recipe instructions
-    ingredients = Column(String, nullable=True)  # Optional list of ingredients
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False)
+    instructions = Column(String, nullable=False)
+    ingredients = Column(String, nullable=True)
 
-    # Many-to-many relationship with bottles
-    bottles = relationship("Bottle", secondary=recipe_bottle, back_populates="recipes")
+    # Many-to-many relationship with SpiritType
+    spirit_types = relationship(
+        "SpiritType",
+        secondary=recipes_to_spirits,
+        back_populates="recipes",
+    )

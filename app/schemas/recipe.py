@@ -1,20 +1,20 @@
 from pydantic import BaseModel
 from typing import List, Optional
 
-from app.schemas.bottle import BottleBase
+from app.schemas.bottle import BottleResponse
+from app.schemas.spirit_type import SpiritTypeResponse
 
 class RecipeBase(BaseModel):
     name: str
     instructions: str
-    ingredients: Optional[str]  # A list or string representation of ingredients
+    ingredients: Optional[str] = None  # Optional list of ingredients as a string or JSON
 
 class RecipeCreate(RecipeBase):
-    bottle_ids: List[int]  # List of related bottle IDs
+    spirit_type_ids: List[int]  # List of spirit type IDs
 
 class RecipeResponse(RecipeBase):
     id: int
-    bottles: List[BottleBase]  
+    spirit_types: List[SpiritTypeResponse]  # Many-to-many relationship with spirit types
 
     class Config:
         orm_mode = True
-

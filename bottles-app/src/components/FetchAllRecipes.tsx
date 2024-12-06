@@ -32,10 +32,11 @@ const FetchAllRecipes = ({ showAllRecipes }: Props) => {
       try {
         const [recipesData, bottlesData] = await Promise.all([fetchAllRecipes(), fetchAllBottles()]);
 
-        const transformedRecipes: Recipe[] = recipesData.map((recipe) => ({
-          ...recipe,
-          bottles: recipe.bottles || [],
-        }));
+        // const transformedRecipes: Recipe[] = recipesData.map((recipe) => ({
+        //   ...recipe,
+        //   bottles: recipe.bottles || [],
+        // }));
+        const transformedRecipes: Recipe[] = recipesData
 
         console.log('Transformed Recipes:', transformedRecipes);
         console.log('Fetched Bottles:', bottlesData);
@@ -76,11 +77,22 @@ const FetchAllRecipes = ({ showAllRecipes }: Props) => {
   };
 
   const getCardClassName = (recipe: Recipe) => {
-    const allAvailable = recipe.bottles.every((bottle) =>
-      availableBottleIds.includes(bottle.id)
-    );
+    console.log(availableBottleIds);
+    
+    // Check if the bottles array is empty
+    if (recipe.bottles.length === 0) {
+        console.log('Bottles array is empty');
+        return 'border-red-600';
+    }
+    
+    // Check if all bottle IDs are available
+    const allAvailable = recipe.bottles.every((bottle) => {
+        console.log(bottle.id); // Log the ID
+        return bottle.id && availableBottleIds.includes(bottle.id); // Ensure bottle.id exists and is included
+    });
+
     return allAvailable ? 'border-green-600' : 'border-red-600';
-  };
+};
 
   return (
     <div className="flex flex-col items-center">
