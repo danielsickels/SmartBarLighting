@@ -1,27 +1,31 @@
 import { useState } from 'react';
-import { Bottle } from '../services/bottleService';
 import { addBottle } from '../services/bottleService';
+import SpiritTypeSelect from './SpiritTypeSelect';
+import { SpiritType } from '../services/spiritTypeService';
 
 const AddBottleForm = () => {
   const [name, setName] = useState('');
   const [brand, setBrand] = useState('');
   const [flavorProfile, setFlavorProfile] = useState('');
-  const [spiritType, setSpiritType] = useState(''); // Updated field
+  const [spiritType, setSpiritType] = useState<SpiritType | null>(null);
   const [capacity, setCapacity] = useState<number | ''>('');
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleAddBottle = async () => {
+    setSuccessMessage(null);
+    setErrorMessage(null);
+
     if (!name || !spiritType || !capacity) {
       setErrorMessage('Please fill all required fields');
       return;
     }
 
-    const newBottle: Partial<Bottle> = {
+    const newBottle = {
       name,
-      brand,
-      flavor_profile: flavorProfile,
-      spirit_type: spiritType, // Updated field
+      brand: brand || '',
+      flavor_profile: flavorProfile || '',
+      spirit_type_id: spiritType.id,
       capacity_ml: Number(capacity),
     };
 
@@ -31,9 +35,10 @@ const AddBottleForm = () => {
       setName('');
       setBrand('');
       setFlavorProfile('');
-      setSpiritType(''); // Updated field
+      setSpiritType(null);
       setCapacity('');
     } catch (error) {
+      console.error('Error adding bottle:', error);
       setErrorMessage('Failed to add bottle');
     }
   };
@@ -65,12 +70,9 @@ const AddBottleForm = () => {
         placeholder="Enter Flavor Profile"
         className="border border-gray-300 rounded-lg px-3 py-1 my-2 w-64"
       />
-      <input
-        type="text"
-        value={spiritType}
-        onChange={(e) => setSpiritType(e.target.value)}
-        placeholder="Enter Spirit Type (e.g. Whiskey)"
-        className="border border-gray-300 rounded-lg px-3 py-1 my-2 w-64"
+      <SpiritTypeSelect
+        selectedSpiritType={spiritType}
+        onSpiritTypeChange={setSpiritType}
       />
       <input
         type="number"

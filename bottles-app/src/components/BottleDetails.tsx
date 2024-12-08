@@ -1,23 +1,30 @@
-// bottles-app/src/components/BottleDetails.tsx
-
 import { Bottle } from '../services/bottleService';
 import { useState } from 'react';
 
-interface BottleDetailsProps extends Omit<Bottle, 'spirit_type'> { // Omit spirit_type from BottleDetailsProps
-  onDelete: () => Promise<void>; // Ensure onDelete returns a Promise
+interface BottleDetailsProps extends Omit<Bottle, 'spirit_type' | 'spirit_type_id'> {
+  spirit_type: string;
+  onDelete: () => Promise<void>;
 }
 
-const BottleDetails = ({ id, name, brand, flavor_profile, capacity_ml, onDelete }: BottleDetailsProps) => {
+const BottleDetails = ({
+  id,
+  name,
+  brand,
+  flavor_profile,
+  capacity_ml,
+  spirit_type, // Added for display
+  onDelete,
+}: BottleDetailsProps) => {
   const [deleting, setDeleting] = useState(false);
-  const [error, setError] = useState<string | null>(null); // Track delete errors
+  const [error, setError] = useState<string | null>(null);
 
   const handleDelete = async () => {
     setDeleting(true);
-    setError(null); // Clear any previous errors
+    setError(null);
     try {
-      await onDelete(); // Await onDelete to complete
+      await onDelete();
     } catch {
-      setError('Failed to delete bottle'); // Show error only if deletion actually fails
+      setError('Failed to delete bottle');
     } finally {
       setDeleting(false);
     }
@@ -25,24 +32,32 @@ const BottleDetails = ({ id, name, brand, flavor_profile, capacity_ml, onDelete 
 
   return (
     <div className="border p-4 rounded-lg shadow-md flex flex-col items-start w-full max-w-md mb-4">
-      {/* Bottle Information */}
       <div className="flex-grow">
-        <p><strong>Name:</strong> {name}</p>
-        <p><strong>Brand:</strong> {brand}</p>
-        <p><strong>Flavor Profile:</strong> {flavor_profile}</p>
-        <p><strong>Capacity:</strong> {capacity_ml} ml</p>
+        <p>
+          <strong>Name:</strong> {name}
+        </p>
+        <p>
+          <strong>Brand:</strong> {brand || 'N/A'}
+        </p>
+        <p>
+          <strong>Flavor Profile:</strong> {flavor_profile || 'N/A'}
+        </p>
+        <p>
+          <strong>Spirit Type:</strong> {spirit_type || 'Unknown'}
+        </p>
+        <p>
+          <strong>Capacity:</strong> {capacity_ml} ml
+        </p>
       </div>
 
-      {/* Error Message */}
       {error && <div className="text-red-500 mt-2">{error}</div>}
 
-      {/* Delete Button at the Bottom */}
       <button
         onClick={handleDelete}
         disabled={deleting}
         className="bg-red-600 text-white px-4 py-1 rounded-lg hover:bg-red-700 mt-4 w-full"
       >
-        {deleting ? "Deleting..." : "Delete"}
+        {deleting ? 'Deleting...' : 'Delete'}
       </button>
     </div>
   );

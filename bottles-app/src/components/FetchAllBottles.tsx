@@ -1,5 +1,3 @@
-// bottles-app/src/components/FetchAllBottles.tsx
-
 import { useState, useEffect } from 'react';
 import BottleDetails from './BottleDetails';
 import LoadingSpinner from './LoadingSpinner';
@@ -13,7 +11,6 @@ const FetchAllBottles = () => {
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Fetch bottles on component mount
   useEffect(() => {
     const fetchBottles = async () => {
       setLoading(true);
@@ -33,10 +30,15 @@ const FetchAllBottles = () => {
     fetchBottles();
   }, []);
 
-  // Filter bottles based on search query
   useEffect(() => {
     const regex = new RegExp(searchQuery, 'i');
-    const filtered = bottles.filter((bottle) => regex.test(bottle.name) || regex.test(bottle.brand || '') || regex.test(bottle.flavor_profile || ''));
+    const filtered = bottles.filter(
+      (bottle) =>
+        regex.test(bottle.name) ||
+        regex.test(bottle.brand || '') ||
+        regex.test(bottle.flavor_profile || '') ||
+        regex.test(bottle.spirit_type?.name || '') 
+    );
     setFilteredBottles(filtered);
   }, [searchQuery, bottles]);
 
@@ -71,8 +73,9 @@ const FetchAllBottles = () => {
               key={bottle.id}
               id={bottle.id}
               name={bottle.name}
-              brand={bottle.brand}  // Added brand
-              flavor_profile={bottle.flavor_profile}  // Added flavor profile
+              brand={bottle.brand || 'N/A'} // Display 'N/A' if brand is missing
+              flavor_profile={bottle.flavor_profile || 'N/A'} // Display 'N/A' if flavor profile is missing
+              spirit_type={bottle.spirit_type?.name || 'Unknown'} // Display spirit type name or 'Unknown'
               capacity_ml={bottle.capacity_ml}
               onDelete={() => handleDelete(bottle.id)}
             />

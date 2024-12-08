@@ -3,14 +3,20 @@ import LoadingSpinner from './LoadingSpinner';
 import SearchBar from './SearchBar';
 import RecipeDetails from './RecipeDetails';
 import { fetchAllRecipes, deleteRecipe } from '../services/recipeService';
-import { Bottle, fetchAllBottles } from '../services/bottleService';
+import { fetchAllSpiritTypes, SpiritType } from '../services/spiritTypeService';
+import { fetchAllBottles } from '../services/bottleService';
 
 interface Recipe {
   id: number;
   name: string;
   instructions: string;
   ingredients: string;
-  bottles: Bottle[];
+  spirit_types: { id: number; name: string }[];
+}
+
+interface Bottle {
+  id: number;
+  spirit_type_id: number; // Link between bottles and spirit types
 }
 
 interface Props {
@@ -20,30 +26,24 @@ interface Props {
 const FetchAllRecipes = ({ showAllRecipes }: Props) => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>([]);
-  const [availableBottleIds, setAvailableBottleIds] = useState<number[]>([]);
+  const [bottles, setBottles] = useState<Bottle[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    const fetchRecipesAndBottles = async () => {
+    const fetchRecipesAndData = async () => {
       setLoading(true);
       setError(null);
       try {
-        const [recipesData, bottlesData] = await Promise.all([fetchAllRecipes(), fetchAllBottles()]);
+        const [recipesData, bottlesData] = await Promise.all([
+          fetchAllRecipes(),
+          fetchAllBottles(),
+        ]);
 
-        // const transformedRecipes: Recipe[] = recipesData.map((recipe) => ({
-        //   ...recipe,
-        //   bottles: recipe.bottles || [],
-        // }));
-        const transformedRecipes: Recipe[] = recipesData
-
-        console.log('Transformed Recipes:', transformedRecipes);
-        console.log('Fetched Bottles:', bottlesData);
-
-        setRecipes(transformedRecipes);
-        setAvailableBottleIds(bottlesData.map((bottle) => bottle.id));
-        setFilteredRecipes(transformedRecipes); // Show all recipes by default
+        setRecipes(recipesData);
+        setBottles(bottlesData);
+        setFilteredRecipes(recipesData); // Show all recipes by default
       } catch (err) {
         console.error('Error fetching data:', err);
         setError('Failed to fetch recipes or bottles');
@@ -52,7 +52,7 @@ const FetchAllRecipes = ({ showAllRecipes }: Props) => {
       }
     };
 
-    fetchRecipesAndBottles();
+    fetchRecipesAndData();
   }, []);
 
   useEffect(() => {
@@ -60,7 +60,11 @@ const FetchAllRecipes = ({ showAllRecipes }: Props) => {
       setFilteredRecipes(recipes); // Show all recipes when search query is empty
     } else {
       const regex = new RegExp(searchQuery, 'i');
-      const filtered = recipes.filter((recipe) => regex.test(recipe.name));
+      const filtered = recipes.filter(
+        (recipe) =>
+          regex.test(recipe.name) ||
+          recipe.spirit_types.some((spirit) => regex.test(spirit.name)) // Filter by spirit type
+      );
       setFilteredRecipes(filtered);
     }
   }, [searchQuery, recipes]);
@@ -77,22 +81,13 @@ const FetchAllRecipes = ({ showAllRecipes }: Props) => {
   };
 
   const getCardClassName = (recipe: Recipe) => {
-    console.log(availableBottleIds);
-    
-    // Check if the bottles array is empty
-    if (recipe.bottles.length === 0) {
-        console.log('Bottles array is empty');
-        return 'border-red-600';
-    }
-    
-    // Check if all bottle IDs are available
-    const allAvailable = recipe.bottles.every((bottle) => {
-        console.log(bottle.id); // Log the ID
-        return bottle.id && availableBottleIds.includes(bottle.id); // Ensure bottle.id exists and is included
-    });
+    // Check if any bottles are associated with the recipe's spirit types
+    const allAvailable = (recipe.spirit_types || []).every((spirit) =>
+      bottles.some((bottle) => bottle.spirit_type_id === spirit.id)
+    );
 
     return allAvailable ? 'border-green-600' : 'border-red-600';
-};
+  };
 
   return (
     <div className="flex flex-col items-center">
@@ -117,6 +112,7 @@ const FetchAllRecipes = ({ showAllRecipes }: Props) => {
                 name={recipe.name}
                 instructions={recipe.instructions}
                 ingredients={recipe.ingredients}
+                spirit_types={recipe.spirit_types}
                 onDelete={() => handleDeleteRecipe(recipe.id)}
               />
             </div>

@@ -1,5 +1,3 @@
-// bottles-app/src/components/FetchBottleButton.tsx
-
 import { useState } from 'react';
 import BottleDetails from './BottleDetails';
 import LoadingSpinner from './LoadingSpinner';
@@ -87,14 +85,15 @@ const FetchBottleButton = () => {
 
       {/* If bottles exist, render each bottle with a delete button */}
       {bottles && bottles.length > 0 && (
-        <div className="mt-8">
+        <div className="mt-8 space-y-4">
           {bottles.map((bottle) => (
             <BottleDetails
               key={bottle.id}
               id={bottle.id}
               name={bottle.name}
-              brand={bottle.brand}                // Updated field
-              flavor_profile={bottle.flavor_profile} // Updated field
+              brand={bottle.brand || 'N/A'} // Default if brand is null
+              flavor_profile={bottle.flavor_profile || 'N/A'} // Default if flavor profile is null
+              spirit_type={bottle.spirit_type?.name || 'Unknown'} // Display spirit type name if available
               capacity_ml={bottle.capacity_ml}
               onDelete={() => handleDelete(bottle.id)} // Pass delete handler as prop
             />

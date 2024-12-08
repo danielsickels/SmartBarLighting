@@ -1,6 +1,13 @@
 from pydantic import BaseModel
 from typing import Optional
 
+class SpiritTypeResponse(BaseModel):
+    id: int
+    name: str
+
+    class Config:
+        orm_mode = True
+
 class BottleBase(BaseModel):
     name: str
     brand: Optional[str] = None  # Brand of the bottle
@@ -17,9 +24,10 @@ class BottleUpdate(BottleBase):
     flavor_profile: Optional[str] = None
     capacity_ml: Optional[int] = None
     spirit_type_id: Optional[int] = None
-    
+
 class BottleResponse(BottleBase):
     id: int
+    spirit_type: Optional[SpiritTypeResponse]  # Include nested spirit type object
 
     class Config:
         orm_mode = True

@@ -1,13 +1,21 @@
 export interface Recipe {
-  bottles: never[];
   id: number;
   name: string;
   instructions: string;
-  ingredients: string; // Bottles are now part of the ingredients string
-  bottle_ids: number[];
+  ingredients: string; 
+  spirit_type_ids: number[]; 
+  spirit_types: { id: number; name: string }[]; 
+  bottles: { id: number; name: string }[]; 
 }
 
-export const addRecipe = async (recipe: Omit<Recipe, 'id'>): Promise<Recipe> => {
+export interface RecipeCreate {
+  name: string;
+  instructions: string;
+  ingredients: string;
+  spirit_type_ids: number[];
+}
+
+export const addRecipe = async (recipe: RecipeCreate): Promise<Recipe> => {
   try {
     const res = await fetch('http://localhost:8000/recipes', {
       method: 'POST',
@@ -35,6 +43,7 @@ export const fetchAllRecipes = async (): Promise<Recipe[]> => {
     if (!res.ok) {
       throw new Error('Failed to fetch recipes');
     }
+
     const data = await res.json();
     return data;
   } catch (error) {
@@ -49,6 +58,7 @@ export const fetchRecipe = async (id: number): Promise<Recipe | null> => {
     if (!res.ok) {
       throw new Error('Recipe not found');
     }
+
     const data = await res.json();
     return data;
   } catch (error) {
