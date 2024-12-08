@@ -45,7 +45,7 @@ const AddBottleForm = () => {
 
   return (
     <div className="flex flex-col items-center">
-      <h2 className="text-xl font-bold mb-4">Add New Bottle</h2>
+      <h2 className="text-2xl font-bold mb-10 text-center">Add New Bottle</h2>
       {successMessage && <p className="text-green-500 mb-2">{successMessage}</p>}
       {errorMessage && <p className="text-red-500 mb-2">{errorMessage}</p>}
 
@@ -54,21 +54,21 @@ const AddBottleForm = () => {
         value={name}
         onChange={(e) => setName(e.target.value)}
         placeholder="Enter Bottle Name"
-        className="border border-gray-300 rounded-lg px-3 py-1 my-2 w-64"
+        className="border border-gray-300 rounded-lg px-4 py-2 my-2 w-full"
       />
       <input
         type="text"
         value={brand}
         onChange={(e) => setBrand(e.target.value)}
         placeholder="Enter Brand"
-        className="border border-gray-300 rounded-lg px-3 py-1 my-2 w-64"
+        className="border border-gray-300 rounded-lg px-4 py-2 my-2 w-full"
       />
       <input
         type="text"
         value={flavorProfile}
         onChange={(e) => setFlavorProfile(e.target.value)}
         placeholder="Enter Flavor Profile"
-        className="border border-gray-300 rounded-lg px-3 py-1 my-2 w-64"
+        className="border border-gray-300 rounded-lg px-4 py-2 my-2 w-full"
       />
       <SpiritTypeSelect
         selectedSpiritType={spiritType}
@@ -79,7 +79,7 @@ const AddBottleForm = () => {
         value={capacity}
         onChange={(e) => setCapacity(e.target.value ? Number(e.target.value) : '')}
         placeholder="Enter Capacity (ml)"
-        className="border border-gray-300 rounded-lg px-3 py-1 my-2 w-64"
+        className="border border-gray-300 rounded-lg px-4 py-2 my-2 w-full"
       />
       <button
         onClick={handleAddBottle}

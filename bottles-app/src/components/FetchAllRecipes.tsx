@@ -23,7 +23,7 @@ interface Props {
   showAllRecipes: boolean;
 }
 
-const FetchAllRecipes = ({ showAllRecipes }: Props) => {
+const FetchAllRecipes = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>([]);
   const [bottles, setBottles] = useState<Bottle[]>([]);
@@ -91,7 +91,7 @@ const FetchAllRecipes = ({ showAllRecipes }: Props) => {
 
   return (
     <div className="flex flex-col items-center">
-      <h2 className="text-xl font-bold mb-4">All Recipes</h2>
+      <h2 className="text-2xl font-bold mt-4 mb-12 text-center">All Recipes</h2>
 
       <div className="w-full mb-4">
         <SearchBar value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />

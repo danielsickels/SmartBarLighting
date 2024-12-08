@@ -55,7 +55,7 @@ const FetchAllBottles = () => {
 
   return (
     <div className="flex flex-col items-center">
-      <h2 className="text-xl font-bold mb-4">All Bottles</h2>
+      <h2 className="text-2xl font-bold mt-4 mb-12 text-center">All Bottles</h2>
 
       {/* Search Bar for filtering bottles */}
       <div className="w-full mb-4">
