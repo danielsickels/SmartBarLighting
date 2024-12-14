@@ -13,3 +13,6 @@ class Bottle(Base):
 
     spirit_type_id = Column(Integer, ForeignKey("spirit_types.id"), nullable=True)
     spirit_type = relationship("SpiritType")
+
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    user = relationship("User", back_populates="bottles")

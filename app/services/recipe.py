@@ -6,9 +6,9 @@ from app.schemas.recipe import RecipeCreate
 
 class RecipeService:
     @staticmethod
-    def create_recipe(db: Session, recipe_in: RecipeCreate) -> Recipe:
+    def create_recipe(db: Session, recipe_in: RecipeCreate, user_id: int) -> Recipe:
         # Fetch the SpiritType object(s)
-        spirit_types = db.query(SpiritType).filter(SpiritType.id.in_(recipe_in.spirit_type_ids)).all()
+        spirit_types = db.query(SpiritType).filter(SpiritType.id.in_(recipe_in.spirit_type_ids), SpiritType.user_id == user_id).all()
         if len(spirit_types) != len(recipe_in.spirit_type_ids):
             raise ValueError("Some spirit type IDs do not exist in the database.")
 
@@ -18,6 +18,7 @@ class RecipeService:
             instructions=recipe_in.instructions,
             ingredients=recipe_in.ingredients,
             spirit_types=spirit_types,  # Associating spirit type(s)
+            user_id=user_id,
         )
 
         # Save to the database
@@ -27,16 +28,17 @@ class RecipeService:
         return recipe
 
     @staticmethod
-    def get_recipes(db: Session, skip: int = 0, limit: int = 25) -> List[Recipe]:
-        return db.query(Recipe).offset(skip).limit(limit).all()
+    def get_recipes(db: Session, user_id: int) -> List[Recipe]:
+        recipes = db.query(Recipe).filter(Recipe.user_id == user_id).all()
+        return recipes
 
     @staticmethod
-    def get_recipe(db: Session, recipe_id: int) -> Optional[Recipe]:
-        return db.query(Recipe).filter(Recipe.id == recipe_id).first()
+    def get_recipe(db: Session, recipe_id: int, user_id: int) -> Optional[Recipe]:
+        return db.query(Recipe).filter(Recipe.id == recipe_id, Recipe.user_id == user_id).first()
 
     @staticmethod
-    def delete_recipe(db: Session, recipe_id: int) -> bool:
-        recipe = db.query(Recipe).filter(Recipe.id == recipe_id).first()
+    def delete_recipe(db: Session, recipe_id: int, user_id: int) -> bool:
+        recipe = db.query(Recipe).filter(Recipe.id == recipe_id, Recipe.user_id == user_id).first()
         if recipe:
             db.delete(recipe)
             db.commit()

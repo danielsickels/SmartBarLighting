@@ -15,6 +15,7 @@ from app.db.models.bottle import Bottle  # Import all models
 from app.db.models.recipe import Recipe  # Import Recipe model
 from app.db.models.spirit_type import SpiritType  # Import SpiritType model
 from app.db.models.shared_table import recipes_to_spirits
+from app.db.models.user import User
 
 target_metadata = Base.metadata
 

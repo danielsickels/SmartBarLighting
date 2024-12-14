@@ -4,9 +4,9 @@ from app.schemas.spirit_type import SpiritTypeCreate
 
 class SpiritTypeService:
     @staticmethod
-    def create_spirit_type(db: Session, spirit_type_in: SpiritTypeCreate) -> SpiritType:
-        spirit_type = SpiritType(**spirit_type_in.dict())
-        existing = db.query(SpiritType).filter(SpiritType.name.ilike(spirit_type_in.name)).first()
+    def create_spirit_type(db: Session, spirit_type_in: SpiritTypeCreate, user_id: int) -> SpiritType:
+        spirit_type = SpiritType(**spirit_type_in.dict(), user_id=user_id)
+        existing = db.query(SpiritType).filter(SpiritType.name.ilike(spirit_type_in.name), SpiritType.user_id == user_id).first()
         if existing:
             raise ValueError(f"Spirit type '{spirit_type_in.name}' already exists.")
         db.add(spirit_type)
@@ -15,21 +15,24 @@ class SpiritTypeService:
         return spirit_type
 
     @staticmethod
-    def get_spirit_types(db: Session, skip: int = 0, limit: int = 25):
-        return db.query(SpiritType).offset(skip).limit(limit).all()
+    def get_spirit_types(db: Session, user_id: int = None):
+        query = db.query(SpiritType)
+        if user_id:
+            query = query.filter(SpiritType.user_id == user_id)
+        return query.all()
 
     @staticmethod
-    def get_spirit_type(db: Session, spirit_type_id: int):
-        return db.query(SpiritType).filter(SpiritType.id == spirit_type_id).first()
+    def get_spirit_type(db: Session, spirit_type_id: int, user_id: int):
+        return db.query(SpiritType).filter(SpiritType.id == spirit_type_id, SpiritType.user_id == user_id).first()
 
     @staticmethod
-    def update_spirit_type(db: Session, spirit_type_id: int, name: str):
+    def update_spirit_type(db: Session, spirit_type_id: int, name: str, user_id: int):
         print(f"Attempting to update SpiritType ID {spirit_type_id} to name '{name}'")  # Debug log
-        spirit_type = db.query(SpiritType).filter(SpiritType.id == spirit_type_id).first()
+        spirit_type = db.query(SpiritType).filter(SpiritType.id == spirit_type_id, SpiritType.user_id == user_id).first()
         if not spirit_type:
             raise ValueError(f"Spirit type with ID {spirit_type_id} does not exist.")
 
-        existing = db.query(SpiritType).filter(SpiritType.name.ilike(name), SpiritType.id != spirit_type_id).first()
+        existing = db.query(SpiritType).filter(SpiritType.name.ilike(name), SpiritType.id != spirit_type_id, SpiritType.user_id == user_id).first()
         if existing:
             raise ValueError(f"Spirit type '{name}' already exists.")
 
@@ -41,8 +44,8 @@ class SpiritTypeService:
         return spirit_type
 
     @staticmethod
-    def delete_spirit_type(db: Session, spirit_type_id: int) -> bool:
-        spirit_type = db.query(SpiritType).filter(SpiritType.id == spirit_type_id).first()
+    def delete_spirit_type(db: Session, spirit_type_id: int, user_id: int) -> bool:
+        spirit_type = db.query(SpiritType).filter(SpiritType.id == spirit_type_id, SpiritType.user_id == user_id).first()
         if spirit_type:
             db.delete(spirit_type)
             db.commit()

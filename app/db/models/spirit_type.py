@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from app.db.base import Base
 from app.db.models.shared_table import recipes_to_spirits
@@ -15,3 +15,6 @@ class SpiritType(Base):
         secondary=recipes_to_spirits,
         back_populates="spirit_types",
     )
+
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    user = relationship("User", back_populates="spirit_types")
