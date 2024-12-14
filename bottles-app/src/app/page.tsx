@@ -7,6 +7,7 @@ import AddBottleForm from "../components/AddBottleForm";
 import FetchAllBottles from "../components/FetchAllBottles";
 import FetchAllRecipes from "../components/FetchAllRecipes";
 import AddRecipeForm from "../components/AddRecipeForm";
+import LogoutButton from "@/components/LogoutButton";
 
 export default function Home() {
   const [activeContent, setActiveContent] = useState<string | null>(null);
@@ -92,6 +93,9 @@ export default function Home() {
           >
             Add Recipe
           </button>
+          <div className="fixed bottom-4 left-4">
+            <LogoutButton />
+          </div>
         </div>
 
         {/* Main content */}
