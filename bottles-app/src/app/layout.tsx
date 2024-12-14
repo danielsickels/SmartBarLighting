@@ -5,6 +5,11 @@ interface LayoutProps {
   children: ReactNode;
 }
 
+export const metadata = {
+  title: "Smart Bar",
+  description: "An intuitive app to manage bottles and recipes for your coctails!",
+};
+
 export default function Layout({ children }: LayoutProps) {
   return (
     <html lang="en">

@@ -16,6 +16,7 @@ export default function Home() {
     setActiveContent((prevContent) => (prevContent === contentType ? null : contentType));
     setSidebarOpen(false);
   };
+  
 
   const renderMainContent = () => {
     switch (activeContent) {
