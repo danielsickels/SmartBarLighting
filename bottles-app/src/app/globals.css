@@ -4,6 +4,8 @@
 
 /* Custom global styles */
 body {
+  margin: 0;
+  padding: 0;
   @apply bg-gray-100 text-gray-800;
 }
 

@@ -10,17 +10,17 @@ import AddRecipeForm from "../components/AddRecipeForm";
 
 export default function Home() {
   const [activeContent, setActiveContent] = useState<string | null>(null);
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
 
   const toggleContent = (contentType: string) => {
     setActiveContent((prevContent) => (prevContent === contentType ? null : contentType));
+    setSidebarOpen(false);
   };
 
   const renderMainContent = () => {
     switch (activeContent) {
       case "fetchAll":
         return <FetchAllBottles />;
-      case "fetchSingle":
-        return <FetchBottleButton />;
       case "addBottle":
         return (
           <div className="max-w-full mx-auto p-4">
@@ -42,9 +42,21 @@ export default function Home() {
 
   return (
     <AuthGuard>
-      <div className="flex h-screen overflow-auto scrollbar-hide">
+      <div className="flex h-screen overflow-auto">
+        <div className="md:hidden bg-gray-100 p-0">
+          <button
+            onClick={() => setSidebarOpen(!isSidebarOpen)}
+            className="md:hidden fixed top-4 left-4 bg-blue-600 text-white py-2 px-4 rounded-lg z-50"
+          >
+            {isSidebarOpen ? "Close Menu" : "Open Menu"}
+          </button>
+        </div>
+
         {/* Sidebar */}
-        <div className="w-1/4 bg-gray-100 p-8 space-y-4 fixed overflow-y-auto pt-28">
+        <div
+          className={`fixed top-0 bottom-0 left-0 bg-gray-100 p-8 space-y-4 transition-transform duration-300 z-40 
+          ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 md:w-1/4 overflow-y-auto pt-28`}
+        >
           <h1 className="text-2xl font-bold mb-8 text-center">Actions</h1>
           {/* Buttons */}
           <button
@@ -82,7 +94,7 @@ export default function Home() {
         </div>
 
         {/* Main content */}
-        <div className="flex-grow ml-[25%] pt-20 pb-12 relative">
+        <div className={`flex-grow pt-20 pb-12 transition-all ${isSidebarOpen ? "ml-0" : "md:ml-[25%]"}`}>
           <div className="p-4">{renderMainContent()}</div>
         </div>
       </div>
