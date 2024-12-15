@@ -61,7 +61,7 @@ const BottleDetails = ({
       <button
         onClick={handleDelete}
         disabled={deleting}
-        className="bg-rose-700 text-white px-3 py-1 text-sm rounded hover:bg-rose-800 mt-2 w-full disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-amber-500"
+        className="mt-2 bg-rose-700 text-white px-3 py-1 text-sm rounded hover:bg-rose-800 focus:outline-none focus:ring-2 focus:ring-amber-500"
       >
         {deleting ? "Deleting..." : "Delete"}
       </button>

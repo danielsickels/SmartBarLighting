@@ -63,7 +63,7 @@ const FetchAllBottles = () => {
 
   return (
     <div className="flex flex-col items-center min-h-screen">
-      <h2 className="text-4xl font-bold mt-4 mb-12 text-center text-amber-500">
+      <h2 className="text-4xl font-bold mt-6 mb-8 text-center text-amber-500">
         <span className="glow-charcoal">All Bottles</span>
       </h2>
 

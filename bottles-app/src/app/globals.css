@@ -24,3 +24,26 @@ body {
     /* Second layer: Larger glow */ 0 0 36px #1f2937,
     /* Third layer: Even larger glow */ 0 0 48px #1f2937; /* Fourth layer: Most diffuse glow */
 }
+
+.text-glow-charcoal {
+  text-shadow: 0 0 20px #000000,
+    /* First layer: Medium-sized glow */ 0 0 40px #000000,
+    /* Second layer: Larger glow */ 0 0 60px #000000,
+    /* Third layer: Even larger glow */ 0 0 80px #000000; /* Charcoal glow */
+}
+
+.text-container-success {
+  background: rgba(31, 41, 55, 0.9); /* Charcoal background with opacity */
+  color: #4caf50; /* Success green */
+  padding: 12px;
+  border-radius: 8px;
+  text-shadow: none; /* Remove any shadow */
+}
+
+.text-container-error {
+  background: rgba(31, 41, 55, 0.9); /* Charcoal background with opacity */
+  color: #f44336; /* Error red */
+  padding: 12px;
+  border-radius: 8px;
+  text-shadow: none; /* Remove any shadow */
+}
