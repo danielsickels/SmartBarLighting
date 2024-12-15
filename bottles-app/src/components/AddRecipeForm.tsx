@@ -193,7 +193,7 @@ const AddRecipeForm = () => {
             value={newCustomIngredient}
             onChange={(e) => setNewCustomIngredient(e.target.value)}
             placeholder="Ingredient Name"
-            className="border border-amber-500 rounded-lg px-2 py-1 flex-grow bg-gray-900 text-white placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:outline-none shadow-[0_0_10px_2px_rgba(255,191,0,0.5)]"
+            className="border border-amber-500 rounded-lg px-2 py-1 flex-grow bg-gray-900 text-white placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:outline-none shadow-[0_0_5px_2px_rgba(255,191,0,0.5)]"
           />
           <button
             onClick={handleAddCustomIngredient}

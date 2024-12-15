@@ -56,10 +56,10 @@ export default function Home() {
           backgroundSize: "auto",
         }}
       >
-        <div className="md:hidden bg-gray-100 p-0">
+        <div className="md:hidden bg-gray-900 p-0">
           <button
             onClick={() => setSidebarOpen(!isSidebarOpen)}
-            className="md:hidden fixed top-4 left-4 bg-blue-600 text-white py-2 px-4 rounded-lg z-50"
+            className="md:hidden fixed top-4 left-4 bg-emerald-700 text-white py-2 px-4 rounded-lg z-50 hover:bg-emerald-800"
           >
             {isSidebarOpen ? "Close Menu" : "Open Menu"}
           </button>
@@ -67,53 +67,55 @@ export default function Home() {
 
         {/* Sidebar */}
         <div
-          className={`fixed top-0 bottom-0 left-0 bg-gray-100 p-8 space-y-4 transition-transform duration-300 z-40 
-          ${
-            isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-          } md:translate-x-0 md:w-1/4 overflow-y-auto pt-28`}
+          className={`fixed top-0 bottom-0 left-0 bg-gray-800 p-8 space-y-4 transition-transform duration-300 z-40 
+  ${
+    isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+  } md:translate-x-0 md:w-1/4 overflow-y-auto pt-28`}
           style={{
-            backgroundImage: "url('/manybarrels.webp')", // Set the gunmetal background for the sidebar
-            backgroundRepeat: "repeat", // Make the background repeat
-            backgroundSize: "auto", // Shrink the tile size for the sidebar
+            backgroundImage: "url('/manybarrels.webp')",
+            backgroundRepeat: "repeat",
+            backgroundSize: "auto",
           }}
         >
-          <h1 className="text-2xl font-bold mb-8 text-center">Actions</h1>
+          <h1 className="text-2xl font-bold mb-8 text-center text-amber-500">
+            Actions
+          </h1>
           <button
             onClick={() => toggleContent("fetchAll")}
-            className={`w-full px-4 py-2 rounded-lg mb-2 ${
+            className={`w-full px-4 py-2 rounded-lg mb-2 bg-gray-900 text-amber-500 font-bold shadow-[0_0_5px_1px_rgba(153,102,0,0.3)] transition-all ${
               activeContent === "fetchAll"
-                ? "bg-green-700 text-white"
-                : "bg-green-600 text-white hover:bg-green-700"
+                ? "shadow-[0_0_20px_4px_rgba(153,102,0,0.8)]"
+                : "hover:shadow-[0_0_20px_4px_rgba(153,102,0,0.8)]"
             }`}
           >
             Fetch All Bottles
           </button>
           <button
             onClick={() => toggleContent("addBottle")}
-            className={`w-full px-4 py-2 rounded-lg mb-2 ${
+            className={`w-full px-4 py-2 rounded-lg mb-2 bg-gray-900 text-amber-500 font-bold shadow-[0_0_5px_1px_rgba(153,102,0,0.3)] transition-all ${
               activeContent === "addBottle"
-                ? "bg-gray-700 text-white"
-                : "bg-gray-600 text-white hover:bg-gray-700"
+                ? "shadow-[0_0_20px_4px_rgba(153,102,0,0.8)]"
+                : "hover:shadow-[0_0_20px_4px_rgba(153,102,0,0.8)]"
             }`}
           >
             Add Bottle
           </button>
           <button
             onClick={() => toggleContent("fetchAllRecipes")}
-            className={`w-full px-4 py-2 rounded-lg mb-2 ${
+            className={`w-full px-4 py-2 rounded-lg mb-2 bg-gray-900 text-amber-500 font-bold shadow-[0_0_5px_1px_rgba(153,102,0,0.3)] transition-all ${
               activeContent === "fetchAllRecipes"
-                ? "bg-purple-700 text-white"
-                : "bg-purple-600 text-white hover:bg-purple-700"
+                ? "shadow-[0_0_20px_4px_rgba(153,102,0,0.8)]"
+                : "hover:shadow-[0_0_20px_4px_rgba(153,102,0,0.8)]"
             }`}
           >
             Fetch All Recipes
           </button>
           <button
             onClick={() => toggleContent("addRecipe")}
-            className={`w-full px-4 py-2 rounded-lg ${
+            className={`w-full px-4 py-2 rounded-lg bg-gray-900 text-amber-500 font-bold shadow-[0_0_5px_1px_rgba(153,102,0,0.3)] transition-all ${
               activeContent === "addRecipe"
-                ? "bg-red-700 text-white"
-                : "bg-red-600 text-white hover:bg-red-700"
+                ? "shadow-[0_0_20px_4px_rgba(153,102,0,0.8)]"
+                : "hover:shadow-[0_0_20px_4px_rgba(153,102,0,0.8)]"
             }`}
           >
             Add Recipe
