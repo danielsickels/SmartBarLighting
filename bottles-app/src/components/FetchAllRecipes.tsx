@@ -90,8 +90,8 @@ const FetchAllRecipes = () => {
     );
 
     return allAvailable
-      ? "border-4 border-emerald-500 shadow-[0_0_10px_2px_rgba(52,211,153,0.5)]" // Muted green with glow
-      : "border-4 border-rose-700 shadow-[0_0_10px_2px_rgba(225,29,72,0.5)]"; // Dark red with glow
+      ? "border-4 border-emerald-500 shadow-[0_0_10px_2px_rgba(52,211,153,0.5)]"
+      : "border-4 border-rose-700 shadow-[0_0_10px_2px_rgba(225,29,72,0.5)]";
   };
 
   return (

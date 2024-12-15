@@ -18,7 +18,9 @@ const RecipeDetails = ({
   return (
     <div className="border border-brown-500 p-4 rounded-lg shadow-md bg-gray-900 flex flex-col items-start w-full max-w-md mb-4">
       <div className="flex-grow text-white">
-        <h3 className="font-bold text-lg text-amber-300 mb-2">{name}</h3>
+        <h3 className="font-bold text-center text-lg text-amber-300 mb-2">
+          {name}
+        </h3>
         <p>
           <strong className="text-amber-600">Instructions:</strong>{" "}
           <span className="text-amber-300">{instructions}</span>
