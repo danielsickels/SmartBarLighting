@@ -17,3 +17,10 @@ body {
   -ms-overflow-style: none; /* For Internet Explorer and Edge */
   scrollbar-width: none; /* For Firefox */
 }
+
+.glow-charcoal {
+  text-shadow: 0 0 12px #000000,
+    /* First layer: Medium-sized glow */ 0 0 24px #000000,
+    /* Second layer: Larger glow */ 0 0 36px #1f2937,
+    /* Third layer: Even larger glow */ 0 0 48px #1f2937; /* Fourth layer: Most diffuse glow */
+}

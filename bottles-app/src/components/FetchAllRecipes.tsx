@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
-import LoadingSpinner from './LoadingSpinner';
-import SearchBar from './SearchBar';
-import RecipeDetails from './RecipeDetails';
-import { fetchAllRecipes, deleteRecipe } from '../services/recipeService';
-import { fetchAllSpiritTypes, SpiritType } from '../services/spiritTypeService';
-import { fetchAllBottles } from '../services/bottleService';
+import { useState, useEffect } from "react";
+import LoadingSpinner from "./LoadingSpinner";
+import SearchBar from "./SearchBar";
+import RecipeDetails from "./RecipeDetails";
+import { fetchAllRecipes, deleteRecipe } from "../services/recipeService";
+import { fetchAllSpiritTypes, SpiritType } from "../services/spiritTypeService";
+import { fetchAllBottles } from "../services/bottleService";
 
 interface Recipe {
   id: number;
@@ -29,7 +29,7 @@ const FetchAllRecipes = () => {
   const [bottles, setBottles] = useState<Bottle[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const fetchRecipesAndData = async () => {
@@ -45,8 +45,8 @@ const FetchAllRecipes = () => {
         setBottles(bottlesData);
         setFilteredRecipes(recipesData); // Show all recipes by default
       } catch (err) {
-        console.error('Error fetching data:', err);
-        setError('Failed to fetch recipes or bottles');
+        console.error("Error fetching data:", err);
+        setError("Failed to fetch recipes or bottles");
       } finally {
         setLoading(false);
       }
@@ -56,10 +56,10 @@ const FetchAllRecipes = () => {
   }, []);
 
   useEffect(() => {
-    if (searchQuery === '') {
+    if (searchQuery === "") {
       setFilteredRecipes(recipes); // Show all recipes when search query is empty
     } else {
-      const regex = new RegExp(searchQuery, 'i');
+      const regex = new RegExp(searchQuery, "i");
       const filtered = recipes.filter(
         (recipe) =>
           regex.test(recipe.name) ||
@@ -72,29 +72,39 @@ const FetchAllRecipes = () => {
   const handleDeleteRecipe = async (id: number) => {
     try {
       await deleteRecipe(id);
-      setRecipes((prevRecipes) => prevRecipes.filter((recipe) => recipe.id !== id));
-      setFilteredRecipes((prevRecipes) => prevRecipes.filter((recipe) => recipe.id !== id));
+      setRecipes((prevRecipes) =>
+        prevRecipes.filter((recipe) => recipe.id !== id)
+      );
+      setFilteredRecipes((prevRecipes) =>
+        prevRecipes.filter((recipe) => recipe.id !== id)
+      );
     } catch (error) {
-      console.error('Error deleting recipe:', error);
-      setError('Failed to delete recipe');
+      console.error("Error deleting recipe:", error);
+      setError("Failed to delete recipe");
     }
   };
 
   const getCardClassName = (recipe: Recipe) => {
-    // Check if any bottles are associated with the recipe's spirit types
     const allAvailable = (recipe.spirit_types || []).every((spirit) =>
       bottles.some((bottle) => bottle.spirit_type_id === spirit.id)
     );
 
-    return allAvailable ? 'border-green-600' : 'border-red-600';
+    return allAvailable
+      ? "border-4 border-emerald-500 shadow-[0_0_10px_2px_rgba(52,211,153,0.5)]" // Muted green with glow
+      : "border-4 border-rose-700 shadow-[0_0_10px_2px_rgba(225,29,72,0.5)]"; // Dark red with glow
   };
 
   return (
-    <div className="flex flex-col items-center">
-      <h2 className="text-2xl font-bold mt-4 mb-12 text-center">All Recipes</h2>
+    <div className="flex flex-col items-center min-h-screen text-white">
+      <h2 className="text-4xl font-bold mt-4 mb-12 text-center text-amber-500">
+        <span className="glow-charcoal">All Recipes</span>
+      </h2>
 
       <div className="w-full mb-4">
-        <SearchBar value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+        <SearchBar
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
       </div>
 
       {loading && <LoadingSpinner />}
@@ -105,7 +115,9 @@ const FetchAllRecipes = () => {
           filteredRecipes.map((recipe) => (
             <div
               key={recipe.id}
-              className={`border-4 p-4 rounded-lg ${getCardClassName(recipe)}`}
+              className={`border-4 p-4 rounded-lg bg-gray-800 shadow-md ${getCardClassName(
+                recipe
+              )}`}
             >
               <RecipeDetails
                 id={recipe.id}
@@ -118,7 +130,9 @@ const FetchAllRecipes = () => {
             </div>
           ))
         ) : (
-          <p className="text-center col-span-full">No recipes found.</p>
+          <p className="text-2xl font-bold text-center col-span-full text-amber-600">
+            <span className="glow-charcoal">No Recipes Found</span>
+          </p>
         )}
       </div>
     </div>

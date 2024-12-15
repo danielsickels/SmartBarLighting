@@ -1,7 +1,8 @@
-import { Bottle } from '../services/bottleService';
-import { useState } from 'react';
+import { Bottle } from "../services/bottleService";
+import { useState } from "react";
 
-interface BottleDetailsProps extends Omit<Bottle, 'spirit_type' | 'spirit_type_id'> {
+interface BottleDetailsProps
+  extends Omit<Bottle, "spirit_type" | "spirit_type_id"> {
   spirit_type: string;
   onDelete: () => Promise<void>;
 }
@@ -12,7 +13,7 @@ const BottleDetails = ({
   brand,
   flavor_profile,
   capacity_ml,
-  spirit_type, // Added for display
+  spirit_type,
   onDelete,
 }: BottleDetailsProps) => {
   const [deleting, setDeleting] = useState(false);
@@ -24,29 +25,34 @@ const BottleDetails = ({
     try {
       await onDelete();
     } catch {
-      setError('Failed to delete bottle');
+      setError("Failed to delete bottle");
     } finally {
       setDeleting(false);
     }
   };
 
   return (
-    <div className="border p-4 rounded-lg shadow-md flex flex-col items-start w-full max-w-md mb-4">
-      <div className="flex-grow">
+    <div className="border border-amber-500 p-4 rounded-lg bg-gray-900 flex flex-col items-start w-full max-w-md mb-4 shadow-[0_0_10px_2px_rgba(255,191,0,0.5)]">
+      <div className="flex-grow text-white">
         <p>
-          <strong>Name:</strong> {name}
+          <strong className="text-amber-600">Name:</strong>{" "}
+          <span className="text-amber-300">{name}</span>
         </p>
         <p>
-          <strong>Brand:</strong> {brand || 'N/A'}
+          <strong className="text-amber-600">Brand:</strong>{" "}
+          <span className="text-amber-300">{brand || "N/A"}</span>
         </p>
         <p>
-          <strong>Flavor Profile:</strong> {flavor_profile || 'N/A'}
+          <strong className="text-amber-600">Flavor Profile:</strong>{" "}
+          <span className="text-amber-300">{flavor_profile || "N/A"}</span>
         </p>
         <p>
-          <strong>Spirit Type:</strong> {spirit_type || 'Unknown'}
+          <strong className="text-amber-600">Spirit Type:</strong>{" "}
+          <span className="text-amber-300">{spirit_type || "Unknown"}</span>
         </p>
         <p>
-          <strong>Capacity:</strong> {capacity_ml} ml
+          <strong className="text-amber-600">Capacity:</strong>{" "}
+          <span className="text-amber-300">{capacity_ml} ml</span>
         </p>
       </div>
 
@@ -55,9 +61,9 @@ const BottleDetails = ({
       <button
         onClick={handleDelete}
         disabled={deleting}
-        className="bg-red-600 text-white px-4 py-1 rounded-lg hover:bg-red-700 mt-4 w-full"
+        className="bg-rose-700 text-white px-3 py-1 text-sm rounded hover:bg-rose-800 mt-2 w-full disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-amber-500"
       >
-        {deleting ? 'Deleting...' : 'Delete'}
+        {deleting ? "Deleting..." : "Delete"}
       </button>
     </div>
   );
