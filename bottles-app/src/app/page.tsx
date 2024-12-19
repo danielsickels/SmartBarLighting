@@ -82,7 +82,7 @@ export default function Home() {
           </h1>
           <button
             onClick={() => toggleContent("fetchAll")}
-            className={`w-full px-4 py-2 rounded-lg mb-2 bg-gray-900 text-amber-500 font-bold shadow-[0_0_5px_1px_rgba(153,102,0,0.3)] transition-all ${
+            className={`w-full px-4 py-2 rounded-lg mb-2 bg-gray-900 text-amber-500 font-bold shadow-[0_0_10px_2px_rgba(153,102,0,0.6)] transition-all ${
               activeContent === "fetchAll"
                 ? "shadow-[0_0_20px_4px_rgba(153,102,0,0.8)]"
                 : "hover:shadow-[0_0_20px_4px_rgba(153,102,0,0.8)]"
@@ -92,7 +92,7 @@ export default function Home() {
           </button>
           <button
             onClick={() => toggleContent("addBottle")}
-            className={`w-full px-4 py-2 rounded-lg mb-2 bg-gray-900 text-amber-500 font-bold shadow-[0_0_5px_1px_rgba(153,102,0,0.3)] transition-all ${
+            className={`w-full px-4 py-2 rounded-lg mb-2 bg-gray-900 text-amber-500 font-bold shadow-[0_0_10px_2px_rgba(153,102,0,0.6)] transition-all ${
               activeContent === "addBottle"
                 ? "shadow-[0_0_20px_4px_rgba(153,102,0,0.8)]"
                 : "hover:shadow-[0_0_20px_4px_rgba(153,102,0,0.8)]"
@@ -102,7 +102,7 @@ export default function Home() {
           </button>
           <button
             onClick={() => toggleContent("fetchAllRecipes")}
-            className={`w-full px-4 py-2 rounded-lg mb-2 bg-gray-900 text-amber-500 font-bold shadow-[0_0_5px_1px_rgba(153,102,0,0.3)] transition-all ${
+            className={`w-full px-4 py-2 rounded-lg mb-2 bg-gray-900 text-amber-500 font-bold shadow-[0_0_10px_2px_rgba(153,102,0,0.6)] transition-all ${
               activeContent === "fetchAllRecipes"
                 ? "shadow-[0_0_20px_4px_rgba(153,102,0,0.8)]"
                 : "hover:shadow-[0_0_20px_4px_rgba(153,102,0,0.8)]"
@@ -112,7 +112,7 @@ export default function Home() {
           </button>
           <button
             onClick={() => toggleContent("addRecipe")}
-            className={`w-full px-4 py-2 rounded-lg bg-gray-900 text-amber-500 font-bold shadow-[0_0_5px_1px_rgba(153,102,0,0.3)] transition-all ${
+            className={`w-full px-4 py-2 rounded-lg bg-gray-900 text-amber-500 font-bold shadow-[0_0_10px_2px_rgba(153,102,0,0.6)] transition-all ${
               activeContent === "addRecipe"
                 ? "shadow-[0_0_20px_4px_rgba(153,102,0,0.8)]"
                 : "hover:shadow-[0_0_20px_4px_rgba(153,102,0,0.8)]"
