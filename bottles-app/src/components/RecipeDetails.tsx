@@ -8,7 +8,6 @@ interface RecipeDetailsProps {
 }
 
 const RecipeDetails = ({
-  id,
   name,
   instructions,
   ingredients,

@@ -8,7 +8,6 @@ interface BottleDetailsProps
 }
 
 const BottleDetails = ({
-  id,
   name,
   brand,
   flavor_profile,

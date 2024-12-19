@@ -13,7 +13,7 @@ COPY pyproject.toml poetry.lock /app/
 RUN poetry install --no-root
 
 # Copy app source
-COPY . /app/
+COPY app/ /app/app
 
 # Expose port
 EXPOSE 8000

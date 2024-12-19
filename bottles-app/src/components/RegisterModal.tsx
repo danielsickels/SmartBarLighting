@@ -39,7 +39,7 @@ const RegisterModal = ({ onClose }: RegisterModalProps) => {
         try {
           const errorData = await response.json();
           throw new Error(errorData.detail || "Error registering user");
-        } catch (e) {
+        } catch {
           throw new Error("Error registering user");
         }
       }
@@ -48,7 +48,7 @@ const RegisterModal = ({ onClose }: RegisterModalProps) => {
       setUsername("");
       setPassword("");
       setConfirmPassword("");
-    } catch (error) {
+    } catch {
       setErrorMessage("Error registering user");
     }
   };

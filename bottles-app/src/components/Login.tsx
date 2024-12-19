@@ -69,7 +69,7 @@ const Login = ({ onShowRegister }: LoginProps) => {
         Login
       </button>
       <p className="text-center mt-4">
-        Don't have an account?{" "}
+        Don&apos;t have an account?{" "}
         <button
           onClick={onShowRegister}
           className="text-blue-600 hover:underline"

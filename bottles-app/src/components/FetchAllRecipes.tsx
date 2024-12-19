@@ -3,7 +3,7 @@ import LoadingSpinner from "./LoadingSpinner";
 import SearchBar from "./SearchBar";
 import RecipeDetails from "./RecipeDetails";
 import { fetchAllRecipes, deleteRecipe } from "../services/recipeService";
-import { fetchAllSpiritTypes, SpiritType } from "../services/spiritTypeService";
+// import { fetchAllSpiritTypes, SpiritType } from "../services/spiritTypeService";
 import { fetchAllBottles } from "../services/bottleService";
 
 interface Recipe {
@@ -19,9 +19,9 @@ interface Bottle {
   spirit_type_id: number; // Link between bottles and spirit types
 }
 
-interface Props {
-  showAllRecipes: boolean;
-}
+// interface Props {
+//   showAllRecipes: boolean;
+// }
 
 const FetchAllRecipes = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);

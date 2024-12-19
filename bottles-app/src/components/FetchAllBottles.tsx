@@ -24,7 +24,7 @@ const FetchAllBottles = () => {
         const allBottles = await fetchAllBottles();
         setBottles(allBottles);
         setFilteredBottles(allBottles);
-      } catch (err) {
+      } catch {
         setError("Failed to fetch bottles");
       } finally {
         setLoading(false);
