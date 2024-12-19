@@ -23,13 +23,16 @@ const RegisterModal = ({ onClose }: RegisterModalProps) => {
     }
 
     try {
-      const response = await fetch("http://localhost:8000/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/register`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username, password }),
+        }
+      );
 
       if (!response.ok) {
         // Attempt to parse JSON error message from the backend
@@ -57,9 +60,7 @@ const RegisterModal = ({ onClose }: RegisterModalProps) => {
         {successMessage && (
           <p className="text-green-500 mb-4">{successMessage}</p>
         )}
-        {errorMessage && (
-          <p className="text-red-500 mb-4">{errorMessage}</p>
-        )}
+        {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
         <div className="mb-4">
           <label className="block text-gray-700 font-medium">Username</label>
           <input

@@ -39,8 +39,10 @@ export default function Home() {
         );
       default:
         return (
-          <p className="text-center pt-6">
-            Select an action to display its content here.
+          <p className="text-center text-amber-400 pt-6">
+            <span className="glow-charcoal">
+              Select an action to display its content here.
+            </span>
           </p>
         );
     }

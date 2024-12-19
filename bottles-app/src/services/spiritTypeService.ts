@@ -7,10 +7,13 @@ export interface SpiritType {
 
 export const fetchAllSpiritTypes = async (): Promise<SpiritType[]> => {
   try {
-    const res = await fetch("http://localhost:8000/spirit_types", {
-      method: "GET",
-      headers: getHeaders(),
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/spirit_types`,
+      {
+        method: "GET",
+        headers: getHeaders(),
+      }
+    );
     if (!res.ok) {
       throw new Error("Failed to fetch spirit types");
     }
@@ -26,11 +29,14 @@ export const addSpiritType = async (spiritType: {
   name: string;
 }): Promise<SpiritType> => {
   try {
-    const res = await fetch("http://localhost:8000/spirit_types", {
-      method: "POST",
-      headers: getHeaders(),
-      body: JSON.stringify(spiritType),
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/spirit_types`,
+      {
+        method: "POST",
+        headers: getHeaders(),
+        body: JSON.stringify(spiritType),
+      }
+    );
     if (!res.ok) {
       throw new Error("Failed to add spirit type");
     }

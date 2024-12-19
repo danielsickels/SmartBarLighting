@@ -2,9 +2,11 @@ from passlib.context import CryptContext
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
 
+from app.core.settings import settings
+
 # Secret key and algorithm for JWT
-SECRET_KEY = "your_secret_key"  # Replace with a secure and unique key
-ALGORITHM = "HS256"
+SECRET_KEY = settings.SECRET_KEY
+ALGORITHM = settings.H_ALGORITHM
 
 # Bcrypt password hashing context
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

@@ -19,7 +19,7 @@ export interface RecipeCreate {
 
 export const addRecipe = async (recipe: RecipeCreate): Promise<Recipe> => {
   try {
-    const res = await fetch("http://localhost:8000/recipes", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/recipes`, {
       method: "POST",
       headers: getHeaders(),
       body: JSON.stringify(recipe),
@@ -39,7 +39,7 @@ export const addRecipe = async (recipe: RecipeCreate): Promise<Recipe> => {
 
 export const fetchAllRecipes = async (): Promise<Recipe[]> => {
   try {
-    const res = await fetch("http://localhost:8000/recipes", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/recipes`, {
       method: "GET",
       headers: getHeaders(),
     });
@@ -57,9 +57,12 @@ export const fetchAllRecipes = async (): Promise<Recipe[]> => {
 
 export const fetchRecipe = async (id: number): Promise<Recipe | null> => {
   try {
-    const res = await fetch(`http://localhost:8000/recipes/${id}`, {
-      headers: getHeaders(),
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/recipes/${id}`,
+      {
+        headers: getHeaders(),
+      }
+    );
     if (!res.ok) {
       throw new Error("Recipe not found");
     }
@@ -74,10 +77,13 @@ export const fetchRecipe = async (id: number): Promise<Recipe | null> => {
 
 export const deleteRecipe = async (id: number): Promise<void> => {
   try {
-    const res = await fetch(`http://localhost:8000/recipes/${id}`, {
-      method: "DELETE",
-      headers: getHeaders(),
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/recipes/${id}`,
+      {
+        method: "DELETE",
+        headers: getHeaders(),
+      }
+    );
 
     if (!res.ok) {
       throw new Error("Failed to delete recipe");

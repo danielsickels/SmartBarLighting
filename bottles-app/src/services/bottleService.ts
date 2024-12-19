@@ -20,9 +20,12 @@ export interface BottleCreate {
 
 export const fetchBottle = async (id: number): Promise<Bottle | null> => {
   try {
-    const res = await fetch(`http://localhost:8000/bottles/${id}`, {
-      headers: getHeaders(),
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/bottles/${id}`,
+      {
+        headers: getHeaders(),
+      }
+    );
     if (!res.ok) {
       throw new Error("Bottle not found");
     }
@@ -38,7 +41,9 @@ export const fetchBottleByName = async (
 ): Promise<Bottle[] | null> => {
   try {
     const res = await fetch(
-      `http://localhost:8000/bottles?name=${encodeURIComponent(name.trim())}`,
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/bottles?name=${encodeURIComponent(
+        name.trim()
+      )}`,
       {
         headers: getHeaders(),
       }
@@ -55,7 +60,7 @@ export const fetchBottleByName = async (
 
 export const addBottle = async (bottle: BottleCreate): Promise<Bottle> => {
   try {
-    const res = await fetch("http://localhost:8000/bottles", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/bottles`, {
       method: "POST",
       headers: getHeaders(),
       body: JSON.stringify(bottle),
@@ -74,10 +79,13 @@ export const addBottle = async (bottle: BottleCreate): Promise<Bottle> => {
 
 export const deleteBottle = async (id: number): Promise<void> => {
   try {
-    const res = await fetch(`http://localhost:8000/bottles/${id}`, {
-      method: "DELETE",
-      headers: getHeaders(),
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/bottles/${id}`,
+      {
+        method: "DELETE",
+        headers: getHeaders(),
+      }
+    );
 
     if (!res.ok) {
       throw new Error("Failed to delete bottle");
@@ -94,7 +102,7 @@ export const fetchAllBottles = async (
 ): Promise<Bottle[]> => {
   try {
     const res = await fetch(
-      `http://localhost:8000/bottles?skip=${skip}&limit=${limit}`,
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/bottles?skip=${skip}&limit=${limit}`,
       {
         headers: getHeaders(),
       }
