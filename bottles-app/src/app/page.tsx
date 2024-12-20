@@ -39,11 +39,13 @@ export default function Home() {
         );
       default:
         return (
-          <p className="text-center text-amber-400 pt-6">
-            <span className="glow-charcoal">
-              Select an action to display its content here.
-            </span>
-          </p>
+          <div className="flex flex-col justify-end min-h-screen">
+            <p className="text-center text-amber-400 pt-6 mb-10">
+              <span className="glow-charcoal">
+                Select an action to display its content here.
+              </span>
+            </p>
+          </div>
         );
     }
   };
