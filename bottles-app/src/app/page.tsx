@@ -61,7 +61,7 @@ export default function Home() {
         <div className="md:hidden bg-gray-900 p-0">
           <button
             onClick={() => setSidebarOpen(!isSidebarOpen)}
-            className="md:hidden fixed top-4 left-4 bg-emerald-700 text-white py-2 px-4 rounded-lg z-50 hover:bg-emerald-800"
+            className="md:hidden fixed bottom-4 right-4 bg-emerald-700 text-white py-2 px-4 rounded-lg z-50 hover:bg-emerald-800"
           >
             {isSidebarOpen ? "Close Menu" : "Open Menu"}
           </button>
