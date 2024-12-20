@@ -8,7 +8,7 @@ export interface SpiritType {
 export const fetchAllSpiritTypes = async (): Promise<SpiritType[]> => {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/spirit_types`,
+      `https://backend-barapp.dannysickels.com/spirit_types`,
       {
         method: "GET",
         headers: getHeaders(),
@@ -30,7 +30,7 @@ export const addSpiritType = async (spiritType: {
 }): Promise<SpiritType> => {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/spirit_types`,
+      `https://backend-barapp.dannysickels.com/spirit_types`,
       {
         method: "POST",
         headers: getHeaders(),

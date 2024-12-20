@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -17,7 +17,7 @@ const Login = ({ onShowRegister }: LoginProps) => {
     setErrorMessage(null);
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login`,
+        `https://backend-barapp.dannysickels.com/auth/login`,
         {
           method: "POST",
           headers: {

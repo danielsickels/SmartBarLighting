@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 
 import { useState } from "react";
 
@@ -24,7 +24,7 @@ const RegisterModal = ({ onClose }: RegisterModalProps) => {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/register`,
+        `https://backend-barapp.dannysickels.com/auth/register`,
         {
           method: "POST",
           headers: {

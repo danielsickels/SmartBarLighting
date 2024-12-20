@@ -21,7 +21,7 @@ export interface BottleCreate {
 export const fetchBottle = async (id: number): Promise<Bottle | null> => {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/bottles/${id}`,
+      `https://backend-barapp.dannysickels.com/bottles/${id}`,
       {
         headers: getHeaders(),
       }
@@ -41,7 +41,7 @@ export const fetchBottleByName = async (
 ): Promise<Bottle[] | null> => {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/bottles?name=${encodeURIComponent(
+      `https://backend-barapp.dannysickels.com/bottles?name=${encodeURIComponent(
         name.trim()
       )}`,
       {
@@ -60,7 +60,7 @@ export const fetchBottleByName = async (
 
 export const addBottle = async (bottle: BottleCreate): Promise<Bottle> => {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/bottles`, {
+    const res = await fetch(`https://backend-barapp.dannysickels.com/bottles`, {
       method: "POST",
       headers: getHeaders(),
       body: JSON.stringify(bottle),
@@ -80,7 +80,7 @@ export const addBottle = async (bottle: BottleCreate): Promise<Bottle> => {
 export const deleteBottle = async (id: number): Promise<void> => {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/bottles/${id}`,
+      `https://backend-barapp.dannysickels.com/bottles/${id}`,
       {
         method: "DELETE",
         headers: getHeaders(),
@@ -102,7 +102,7 @@ export const fetchAllBottles = async (
 ): Promise<Bottle[]> => {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/bottles?skip=${skip}&limit=${limit}`,
+      `https://backend-barapp.dannysickels.com/bottles?skip=${skip}&limit=${limit}`,
       {
         headers: getHeaders(),
       }
