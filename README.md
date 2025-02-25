@@ -1,5 +1,5 @@
 # SmartBarLighting
-#Please visit https://barapp.dannysickels.com/ for the live demo!
+## Please visit https://barapp.dannysickels.com/ for the live demo!
   
 SmartBarLighting is a personal project designed to manage and display your collection of spirits and cocktail recipes. The application currently serves as a database for cataloging your bottles and recipes, with future plans to incorporate a lighting system to assist in locating bottles in your bar setup.
 
