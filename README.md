@@ -15,14 +15,17 @@ Future Enhancement: Integration with a lighting display to highlight the locatio
 To set up the SmartBarLighting application locally, follow these steps:
 
 ### Clone the Repository:
-```git clone https://github.com/danielsickels/SmartBarLighting.git```
+```git clone https://github.com/danielsickels/SmartBarLighting.git```  
 ```cd SmartBarLighting```
 ### Set Up the Environment:
-Ensure you have Docker installed on your system.
+Ensure you have Docker installed on your system, and necessary dependencies.  
+
 Run the local development script to build and start the application:
-```bash ./local-dev.sh```
+```bash ./local-dev.sh```, this will begin the backend server.
+You will also need to ```cd /bottles-app```
+From here, please run ```bash run.sh```, this will start up the frontend.
 ### Access the Application:
-Once running, access the application via ```http://localhost:8000``` in your web browser.  
+Once running, access the application via ```http://localhost:3000``` in your web browser to view the application running locally.  
   
 ## Usage
 **Fetch All Bottlews**: Navigate to the "Fetch All Bottles" section to see all current bottles in your database.
