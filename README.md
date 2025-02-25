@@ -28,10 +28,10 @@ From here, please run ```bash run.sh```, this will start up the frontend.
 Once running, access the application via ```http://localhost:3000``` in your web browser to view the application running locally.  
   
 ## Usage
-**Fetch All Bottlews**: Navigate to the "Fetch All Bottles" section to see all current bottles in your database.
-**Add Bottle**: Navigate to "Add Bottle" section to add new entries to your collection. Fill in the details and save.
-**Fetch All Recipes**: Navigate to the "Fetch All Recipes" section to see all current Recipes in your database. If highlighted in green, that means you have the necessary spirit to create the recipe If highlihgted in red, that means you are missing the necessary spirit to create that recipe.
-**Add Recipe**: In the "Add Recipe" section, input your favorite cocktail recipes with all necessary details.
+**Fetch All Bottlews**: Navigate to the "Fetch All Bottles" section to see all current bottles in your database.  
+**Add Bottle**: Navigate to "Add Bottle" section to add new entries to your collection. Fill in the details and save.  
+**Fetch All Recipes**: Navigate to the "Fetch All Recipes" section to see all current Recipes in your database. If highlighted in green, that means you have the necessary spirit to create the recipe If highlihgted in red, that means you are missing the necessary spirit to create that recipe.  
+**Add Recipe**: In the "Add Recipe" section, input your favorite cocktail recipes with all necessary details.  
 **Searching**: Utilize the search functionality to quickly find bottles or recipes in your database.  
   
 ## Future Plans
