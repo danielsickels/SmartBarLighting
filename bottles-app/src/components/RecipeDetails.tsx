@@ -66,6 +66,26 @@ const RecipeDetails = ({
         </div>
 
         <div className="mb-3">
+          <strong className="text-amber-600 block mb-2">Spirits:</strong>
+          <div className="flex flex-wrap gap-1">
+            {spirit_types.length > 0 ? (
+              spiritsWithMeasurements.map((spirit, index) => (
+                <span
+                  key={index}
+                  className="bg-emerald-800 text-emerald-100 px-2 py-1 rounded-full text-xs font-medium"
+                >
+                  {spirit}
+                </span>
+              ))
+            ) : (
+              <span className="text-amber-300 text-sm italic">
+                No spirits used
+              </span>
+            )}
+          </div>
+        </div>
+
+        <div className="mb-3">
           <strong className="text-amber-600 block mb-2">Ingredients:</strong>
           <div className="flex flex-wrap gap-1">
             {customIngredients.length > 0 ? (
@@ -88,26 +108,6 @@ const RecipeDetails = ({
             Debug: Total ingredients: {ingredientsList.length}, Custom:{" "}
             {customIngredients.length}
           </div> */}
-        </div>
-
-        <div className="mb-3">
-          <strong className="text-amber-600 block mb-2">Spirits:</strong>
-          <div className="flex flex-wrap gap-1">
-            {spirit_types.length > 0 ? (
-              spiritsWithMeasurements.map((spirit, index) => (
-                <span
-                  key={index}
-                  className="bg-emerald-800 text-emerald-100 px-2 py-1 rounded-full text-xs font-medium"
-                >
-                  {spirit}
-                </span>
-              ))
-            ) : (
-              <span className="text-amber-300 text-sm italic">
-                No spirits used
-              </span>
-            )}
-          </div>
         </div>
 
         <div className="mb-3">
