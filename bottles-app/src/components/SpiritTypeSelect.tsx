@@ -17,6 +17,7 @@ const SpiritTypeSelect = ({
 }: SpiritTypeSelectProps) => {
   const [spiritTypes, setSpiritTypes] = useState<SpiritType[]>([]);
   const [showModal, setShowModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchTypes = async () => {
@@ -32,11 +33,15 @@ const SpiritTypeSelect = ({
 
   const handleAddSpiritType = async (name: string) => {
     try {
+      setErrorMessage(null); // Clear previous errors
       const newSpiritType = await addSpiritType({ name });
       setSpiritTypes((prev) => [...prev, newSpiritType]);
       onSpiritTypeChange(newSpiritType);
+      setShowModal(false); // Close modal on success
     } catch (error) {
       console.error("Error adding spirit type:", error);
+      setErrorMessage(`Failed to add spirit type. "${name}" already exists.`);
+      // Don't close modal so user can try again
     }
   };
 
@@ -47,6 +52,7 @@ const SpiritTypeSelect = ({
         onChange={(e) => {
           if (e.target.value === "add") {
             setShowModal(true);
+            setErrorMessage(null); // Clear errors when opening modal
           } else {
             const selectedType = e.target.value
               ? {
@@ -78,8 +84,12 @@ const SpiritTypeSelect = ({
 
       {showModal && (
         <AddSpiritModal
-          onClose={() => setShowModal(false)}
+          onClose={() => {
+            setShowModal(false);
+            setErrorMessage(null);
+          }}
           onAdd={handleAddSpiritType}
+          errorMessage={errorMessage}
         />
       )}
     </>

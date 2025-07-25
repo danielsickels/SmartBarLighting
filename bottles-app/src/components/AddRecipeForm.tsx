@@ -177,7 +177,7 @@ const AddRecipeForm = () => {
               (item) => item.spirit.id === spirit.id
             );
             return (
-              <div key={spirit.id} className="flex items-center mb-3">
+              <div key={spirit.id} className="flex items-center mb-2">
                 <input
                   type="checkbox"
                   checked={isSelected}
@@ -188,21 +188,19 @@ const AddRecipeForm = () => {
                   {spirit.name}
                 </label>
                 {isSelected && (
-                  <div className="mr-16">
-                    <input
-                      type="text"
-                      placeholder="Measurement"
-                      className="border border-amber-500 rounded-lg bg-gray-900 text-white text-center placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:outline-none shadow-[0_0_10px_2px_rgba(255,191,0,0.5)]"
-                      value={
-                        spiritIngredients.find(
-                          (item) => item.spirit.id === spirit.id
-                        )?.measurement || ""
-                      }
-                      onChange={(e) =>
-                        updateSpiritMeasurement(spirit.id, e.target.value)
-                      }
-                    />
-                  </div>
+                  <input
+                    type="text"
+                    placeholder="Measurement"
+                    className="border border-amber-500 rounded-lg px-2 py-1 ml-2 w-32 bg-gray-900 text-white text-center placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:outline-none shadow-[0_0_10px_2px_rgba(255,191,0,0.5)]"
+                    value={
+                      spiritIngredients.find(
+                        (item) => item.spirit.id === spirit.id
+                      )?.measurement || ""
+                    }
+                    onChange={(e) =>
+                      updateSpiritMeasurement(spirit.id, e.target.value)
+                    }
+                  />
                 )}
               </div>
             );
@@ -228,9 +226,18 @@ const AddRecipeForm = () => {
           </button>
         </div>
         <ul>
-          {customIngredients.map((item) => (
-            <li key={item.name} className="flex items-center mb-2">
+          {customIngredients.map((item, index) => (
+            <li
+              key={`custom-${index}-${item.name}`}
+              className="flex items-center mb-2"
+            >
               <span className="flex-grow">{item.name}</span>
+              <button
+                onClick={() => handleRemoveCustomIngredient(item.name)}
+                className="text-red-500 hover:text-red-700 ml-2"
+              >
+                Remove
+              </button>
               <input
                 type="text"
                 placeholder="Measurement"
@@ -240,12 +247,6 @@ const AddRecipeForm = () => {
                   updateCustomMeasurement(item.name, e.target.value)
                 }
               />
-              <button
-                onClick={() => handleRemoveCustomIngredient(item.name)}
-                className="text-red-500 hover:text-red-700 ml-2"
-              >
-                Remove
-              </button>
             </li>
           ))}
         </ul>
