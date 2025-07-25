@@ -3,15 +3,20 @@ import { useState } from "react";
 interface AddSpiritModalProps {
   onClose: () => void;
   onAdd: (newSpiritName: string) => void; // Accept only the name of the spirit
+  errorMessage?: string | null;
 }
 
-const AddSpiritModal = ({ onClose, onAdd }: AddSpiritModalProps) => {
+const AddSpiritModal = ({
+  onClose,
+  onAdd,
+  errorMessage,
+}: AddSpiritModalProps) => {
   const [spiritName, setSpiritName] = useState("");
 
   const handleAdd = () => {
     if (spiritName.trim()) {
       onAdd(spiritName.trim());
-      onClose();
+      // Don't close here - let parent component handle closing on success
     }
   };
 
@@ -28,6 +33,13 @@ const AddSpiritModal = ({ onClose, onAdd }: AddSpiritModalProps) => {
           placeholder="Enter Spirit Name"
           className="border border-amber-500 rounded-lg px-3 py-2 w-full bg-gray-900 text-white placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:outline-none shadow-[0_0_10px_2px_rgba(255,191,0,0.5)]"
         />
+
+        {errorMessage && (
+          <div className="text-red-500 text-sm mt-2 text-center">
+            {errorMessage}
+          </div>
+        )}
+
         <div className="flex justify-between mt-4">
           <button
             onClick={onClose}

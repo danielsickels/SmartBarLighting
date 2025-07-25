@@ -122,9 +122,9 @@ const FetchAllRecipes = () => {
               <RecipeDetails
                 id={recipe.id}
                 name={recipe.name}
-                instructions={recipe.instructions}
                 ingredients={recipe.ingredients}
                 spirit_types={recipe.spirit_types}
+                instructions={recipe.instructions}
                 onDelete={() => handleDeleteRecipe(recipe.id)}
               />
             </div>

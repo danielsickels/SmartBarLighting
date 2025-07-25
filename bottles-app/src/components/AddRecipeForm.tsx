@@ -4,7 +4,7 @@ import { fetchAllSpiritTypes, SpiritType } from "../services/spiritTypeService";
 
 const AddRecipeForm = () => {
   const [name, setName] = useState("");
-  const [instructions, setInstructions] = useState("");
+  const [instructions, setInstructions] = useState("1. ");
   const [spiritIngredients, setSpiritIngredients] = useState<
     { spirit: SpiritType; measurement: string }[]
   >([]); // Spirits with measurements
@@ -31,13 +31,44 @@ const AddRecipeForm = () => {
     fetchSpirits();
   }, []);
 
+  const handleInstructionsKeyDown = (
+    e: React.KeyboardEvent<HTMLTextAreaElement>
+  ) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const currentValue = instructions;
+      const lines = currentValue.split("\n");
+      const lastLine = lines[lines.length - 1];
+
+      // Check if the last line has content after the number
+      const numberMatch = lastLine.match(/^(\d+)\.\s*(.*)$/);
+      if (numberMatch && numberMatch[2].trim() !== "") {
+        // If there's content, add a new numbered line
+        const nextNumber = parseInt(numberMatch[1]) + 1;
+        setInstructions(currentValue + `\n${nextNumber}. `);
+      } else if (numberMatch && numberMatch[2].trim() === "") {
+        // If the line is empty (just number and dot), don't add a new number
+        setInstructions(currentValue + "\n");
+      } else {
+        // If no number pattern, just add a new line
+        setInstructions(currentValue + "\n");
+      }
+    }
+  };
+
+  const handleInstructionsChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    setInstructions(e.target.value);
+  };
+
   const handleAddRecipe = async () => {
     setSuccessMessage(null);
     setErrorMessage(null);
 
     if (
       !name ||
-      !instructions ||
+      !instructions.replace(/^\d+\.\s*$/gm, "").trim() || // Check if instructions has content beyond just numbers
       (spiritIngredients.length === 0 && customIngredients.length === 0)
     ) {
       setErrorMessage(
@@ -65,7 +96,7 @@ const AddRecipeForm = () => {
       await addRecipe(payload);
       setSuccessMessage("Recipe added successfully!");
       setName("");
-      setInstructions("");
+      setInstructions("1. ");
       setSpiritIngredients([]);
       setCustomIngredients([]);
     } catch (error) {
@@ -137,12 +168,6 @@ const AddRecipeForm = () => {
         placeholder="Enter Recipe Name"
         className="border border-amber-500 rounded-lg px-4 py-2 my-2 w-full bg-gray-900 text-white placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:outline-none shadow-[0_0_10px_2px_rgba(255,191,0,0.5)]"
       />
-      <textarea
-        value={instructions}
-        onChange={(e) => setInstructions(e.target.value)}
-        placeholder="Enter Instructions"
-        className="border border-amber-500 rounded-lg px-4 py-2 my-2 w-full h-24 bg-gray-900 text-white placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:outline-none shadow-[0_0_10px_2px_rgba(255,191,0,0.5)]"
-      />
 
       <div className="w-full border border-amber-500 rounded-lg px-4 py-2 my-4 bg-gray-900 text-white shadow-[0_0_10px_2px_rgba(255,191,0,0.5)]">
         <p className="font-bold text-amber-500 mb-1">Select Spirits:</p>
@@ -152,7 +177,7 @@ const AddRecipeForm = () => {
               (item) => item.spirit.id === spirit.id
             );
             return (
-              <div key={spirit.id} className="flex items-center mb-3">
+              <div key={spirit.id} className="flex items-center mb-2">
                 <input
                   type="checkbox"
                   checked={isSelected}
@@ -163,21 +188,19 @@ const AddRecipeForm = () => {
                   {spirit.name}
                 </label>
                 {isSelected && (
-                  <div className="mr-16">
-                    <input
-                      type="text"
-                      placeholder="Measurement"
-                      className="border border-amber-500 rounded-lg bg-gray-900 text-white text-center placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:outline-none shadow-[0_0_10px_2px_rgba(255,191,0,0.5)]"
-                      value={
-                        spiritIngredients.find(
-                          (item) => item.spirit.id === spirit.id
-                        )?.measurement || ""
-                      }
-                      onChange={(e) =>
-                        updateSpiritMeasurement(spirit.id, e.target.value)
-                      }
-                    />
-                  </div>
+                  <input
+                    type="text"
+                    placeholder="Measurement"
+                    className="border border-amber-500 rounded-lg px-2 py-1 ml-2 w-32 bg-gray-900 text-white text-center placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:outline-none shadow-[0_0_10px_2px_rgba(255,191,0,0.5)]"
+                    value={
+                      spiritIngredients.find(
+                        (item) => item.spirit.id === spirit.id
+                      )?.measurement || ""
+                    }
+                    onChange={(e) =>
+                      updateSpiritMeasurement(spirit.id, e.target.value)
+                    }
+                  />
                 )}
               </div>
             );
@@ -203,9 +226,18 @@ const AddRecipeForm = () => {
           </button>
         </div>
         <ul>
-          {customIngredients.map((item) => (
-            <li key={item.name} className="flex items-center mb-2">
+          {customIngredients.map((item, index) => (
+            <li
+              key={`custom-${index}-${item.name}`}
+              className="flex items-center mb-2"
+            >
               <span className="flex-grow">{item.name}</span>
+              <button
+                onClick={() => handleRemoveCustomIngredient(item.name)}
+                className="text-red-500 hover:text-red-700 ml-2"
+              >
+                Remove
+              </button>
               <input
                 type="text"
                 placeholder="Measurement"
@@ -215,16 +247,18 @@ const AddRecipeForm = () => {
                   updateCustomMeasurement(item.name, e.target.value)
                 }
               />
-              <button
-                onClick={() => handleRemoveCustomIngredient(item.name)}
-                className="text-red-500 hover:text-red-700 ml-2"
-              >
-                Remove
-              </button>
             </li>
           ))}
         </ul>
       </div>
+
+      <textarea
+        value={instructions}
+        onChange={handleInstructionsChange}
+        onKeyDown={handleInstructionsKeyDown}
+        placeholder="Enter Instructions"
+        className="border border-amber-500 rounded-lg px-4 py-2 my-2 w-full h-24 bg-gray-900 text-white placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:outline-none shadow-[0_0_10px_2px_rgba(255,191,0,0.5)]"
+      />
 
       {successMessage && (
         <div className="text-2xl text-container-success text-emerald-500">

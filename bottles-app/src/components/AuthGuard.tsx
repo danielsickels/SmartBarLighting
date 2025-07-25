@@ -20,7 +20,7 @@ const AuthGuard = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   if (!isAuthenticated && !showModal) {
-    return null; 
+    return null;
   }
 
   if (showModal) {
@@ -31,26 +31,31 @@ const AuthGuard = ({ children }: { children: React.ReactNode }) => {
             Login Required
           </h2>
           <p className="text-gray-600 text-sm leading-relaxed mb-6 text-center">
-            <span className="text-gray-900 font-semibold">Welcome to Smart Bar!</span><br />
-            This app is designed to help you manage your collection of alcoholic spirits and
-            discover creative recipes to make with them. Add your bottles to unlock a world of
-            cocktail possibilities.<br /><br />
+            <span className="text-gray-900 font-semibold">
+              Welcome to Smart Bar!
+            </span>
+            <br />
+            This app is designed to help you manage your collection of alcoholic
+            spirits and discover creative recipes to make with them. Add your
+            bottles to unlock a world of cocktail possibilities.
+            <br />
+            <br />
             <strong>Enjoy responsibly!</strong>
           </p>
           <button
-            onClick={() => router.push("/login")} 
+            onClick={() => router.push("/login")}
             className="bg-blue-600 text-white px-6 py-2 rounded-lg w-full hover:bg-blue-700 transition duration-300 ease-in-out"
           >
             Go to Login
-            </button>
+          </button>
           <div className="absolute -top-5 right-[-20px] w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center shadow-md">
-          <Image
-            src="/cool_ape.png"
-            alt="Icon"
-            width={256} 
-            height={256} 
-            className="rounded-full shadow-lg"
-          />
+            <Image
+              src="/cool_ape-no-bg.png"
+              alt="Icon"
+              width={256}
+              height={256}
+              className="rounded-full shadow-lg"
+            />
           </div>
         </div>
       </div>
