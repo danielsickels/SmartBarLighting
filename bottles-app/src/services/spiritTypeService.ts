@@ -1,4 +1,5 @@
 import getHeaders from "@/lib/utils";
+import { API_ENDPOINTS } from "@/lib/config";
 
 export interface SpiritType {
   id: number;
@@ -7,13 +8,11 @@ export interface SpiritType {
 
 export const fetchAllSpiritTypes = async (): Promise<SpiritType[]> => {
   try {
-    const res = await fetch(
-      `https://backend-barapp.dannysickels.com/spirit_types`,
-      {
-        method: "GET",
-        headers: getHeaders(),
-      }
-    );
+    const headers = await getHeaders();
+    const res = await fetch(API_ENDPOINTS.SPIRIT_TYPES, {
+      method: "GET",
+      headers,
+    });
     if (!res.ok) {
       throw new Error("Failed to fetch spirit types");
     }
@@ -29,14 +28,12 @@ export const addSpiritType = async (spiritType: {
   name: string;
 }): Promise<SpiritType> => {
   try {
-    const res = await fetch(
-      `https://backend-barapp.dannysickels.com/spirit_types`,
-      {
-        method: "POST",
-        headers: getHeaders(),
-        body: JSON.stringify(spiritType),
-      }
-    );
+    const headers = await getHeaders();
+    const res = await fetch(API_ENDPOINTS.SPIRIT_TYPES, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(spiritType),
+    });
     if (!res.ok) {
       throw new Error("Failed to add spirit type");
     }

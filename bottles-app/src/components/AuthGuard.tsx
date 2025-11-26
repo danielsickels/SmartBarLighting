@@ -4,6 +4,7 @@ import Image from "next/image";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation"; // Use next/navigation for routing
+import { getValidAccessToken, clearTokens } from "@/lib/tokenManager";
 
 const AuthGuard = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
@@ -11,12 +12,17 @@ const AuthGuard = ({ children }: { children: React.ReactNode }) => {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("access_token");
-    if (!token) {
-      setShowModal(true);
-    } else {
-      setIsAuthenticated(true);
-    }
+    const checkAuth = async () => {
+      const token = await getValidAccessToken();
+      if (!token) {
+        clearTokens();
+        setShowModal(true);
+      } else {
+        setIsAuthenticated(true);
+      }
+    };
+
+    checkAuth();
   }, []);
 
   if (!isAuthenticated && !showModal) {

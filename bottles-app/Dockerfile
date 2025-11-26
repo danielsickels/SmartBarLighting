@@ -23,4 +23,5 @@ EXPOSE 3000
 # Run npm start when the container launches
 # Uncomment the following line if you want to start your application automatically
 # CMD ["npm", "start"]
-CMD ["sleep", "infinity"]
+# CMD ["sleep", "infinity"]
+CMD ["npm", "run", "dev"]

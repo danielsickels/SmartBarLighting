@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { API_ENDPOINTS } from "@/lib/config";
+import { setTokens } from "@/lib/tokenManager";
 
 interface LoginProps {
   onShowRegister: () => void;
@@ -16,16 +18,13 @@ const Login = ({ onShowRegister }: LoginProps) => {
   const handleLogin = async () => {
     setErrorMessage(null);
     try {
-      const response = await fetch(
-        `https://backend-barapp.dannysickels.com/auth/login`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ username, password }),
-        }
-      );
+      const response = await fetch(API_ENDPOINTS.AUTH.LOGIN, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -33,9 +32,8 @@ const Login = ({ onShowRegister }: LoginProps) => {
       }
 
       const data = await response.json();
-      localStorage.setItem("access_token", data.access_token);
+      setTokens(data.access_token, data.refresh_token);
       router.push("/");
-      // console.log("access_token: ", data.access_token)
     } catch (error: unknown) {
       setErrorMessage((error as Error).message || "Something went wrong");
     }

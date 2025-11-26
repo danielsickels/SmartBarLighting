@@ -1,11 +1,18 @@
-const getHeaders = (): HeadersInit => {
-  const authToken = localStorage.getItem("access_token");
+import { getValidAccessToken } from "./tokenManager";
+
+/**
+ * Get headers for API requests with valid access token
+ * Automatically refreshes token if needed
+ */
+const getHeaders = async (): Promise<HeadersInit> => {
   const headers: HeadersInit = {
     "Content-Type": "application/json",
   };
 
-  if (authToken) {
-    headers["Authorization"] = `Bearer ${authToken}`;
+  const token = await getValidAccessToken();
+  
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
   }
 
   return headers;

@@ -1,6 +1,7 @@
 // "use client";
 
 import { useState } from "react";
+import { API_ENDPOINTS } from "@/lib/config";
 
 interface RegisterModalProps {
   onClose: () => void;
@@ -23,16 +24,13 @@ const RegisterModal = ({ onClose }: RegisterModalProps) => {
     }
 
     try {
-      const response = await fetch(
-        `https://backend-barapp.dannysickels.com/auth/register`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ username, password }),
-        }
-      );
+      const response = await fetch(API_ENDPOINTS.AUTH.REGISTER, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
 
       if (!response.ok) {
         // Attempt to parse JSON error message from the backend

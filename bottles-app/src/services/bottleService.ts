@@ -1,4 +1,5 @@
 import getHeaders from "@/lib/utils";
+import { API_ENDPOINTS } from "@/lib/config";
 
 export interface Bottle {
   id: number;
@@ -20,12 +21,10 @@ export interface BottleCreate {
 
 export const fetchBottle = async (id: number): Promise<Bottle | null> => {
   try {
-    const res = await fetch(
-      `https://backend-barapp.dannysickels.com/bottles/${id}`,
-      {
-        headers: getHeaders(),
-      }
-    );
+    const headers = await getHeaders();
+    const res = await fetch(`${API_ENDPOINTS.BOTTLES}/${id}`, {
+      headers,
+    });
     if (!res.ok) {
       throw new Error("Bottle not found");
     }
@@ -40,12 +39,11 @@ export const fetchBottleByName = async (
   name: string
 ): Promise<Bottle[] | null> => {
   try {
+    const headers = await getHeaders();
     const res = await fetch(
-      `https://backend-barapp.dannysickels.com/bottles?name=${encodeURIComponent(
-        name.trim()
-      )}`,
+      `${API_ENDPOINTS.BOTTLES}?name=${encodeURIComponent(name.trim())}`,
       {
-        headers: getHeaders(),
+        headers,
       }
     );
     if (!res.ok) {
@@ -60,9 +58,10 @@ export const fetchBottleByName = async (
 
 export const addBottle = async (bottle: BottleCreate): Promise<Bottle> => {
   try {
-    const res = await fetch(`https://backend-barapp.dannysickels.com/bottles`, {
+    const headers = await getHeaders();
+    const res = await fetch(API_ENDPOINTS.BOTTLES, {
       method: "POST",
-      headers: getHeaders(),
+      headers,
       body: JSON.stringify(bottle),
     });
 
@@ -79,13 +78,11 @@ export const addBottle = async (bottle: BottleCreate): Promise<Bottle> => {
 
 export const deleteBottle = async (id: number): Promise<void> => {
   try {
-    const res = await fetch(
-      `https://backend-barapp.dannysickels.com/bottles/${id}`,
-      {
-        method: "DELETE",
-        headers: getHeaders(),
-      }
-    );
+    const headers = await getHeaders();
+    const res = await fetch(`${API_ENDPOINTS.BOTTLES}/${id}`, {
+      method: "DELETE",
+      headers,
+    });
 
     if (!res.ok) {
       throw new Error("Failed to delete bottle");
@@ -101,10 +98,11 @@ export const fetchAllBottles = async (
   limit: number = 1000
 ): Promise<Bottle[]> => {
   try {
+    const headers = await getHeaders();
     const res = await fetch(
-      `https://backend-barapp.dannysickels.com/bottles?skip=${skip}&limit=${limit}`,
+      `${API_ENDPOINTS.BOTTLES}?skip=${skip}&limit=${limit}`,
       {
-        headers: getHeaders(),
+        headers,
       }
     );
     if (!res.ok) {
