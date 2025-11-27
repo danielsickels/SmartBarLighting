@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import List, Optional
 
 from app.schemas.bottle import BottleResponse
@@ -16,5 +16,4 @@ class RecipeResponse(RecipeBase):
     id: int
     spirit_types: List[SpiritTypeResponse]  # Many-to-many relationship with spirit types
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
