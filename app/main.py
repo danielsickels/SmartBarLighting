@@ -11,17 +11,15 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 allowed_origins = [
-    settings.FRONTEND_URL, 
+    settings.FRONTEND_URL,  # Development: http://localhost:3000
+    "https://barapp.dannysickels.com",  # Production frontend
 ]
-
-if settings.BACKEND_URL.startswith("https://"):
-    allowed_origins.append("https://barapp.dannysickels.com")
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins,  # Only allow specific origins
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE"],  # Explicitly allow these methods
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],  # Explicitly allow these methods
     allow_headers=["Content-Type", "Authorization"],  # Explicitly allow these headers
 )
 
