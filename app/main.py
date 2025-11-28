@@ -10,12 +10,10 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-# Environment-aware CORS configuration
 allowed_origins = [
-    settings.FRONTEND_URL,  # e.g., "http://localhost:3000" in dev
+    settings.FRONTEND_URL, 
 ]
 
-# In production, add your production domain
 if settings.BACKEND_URL.startswith("https://"):
     allowed_origins.append("https://barapp.dannysickels.com")
 
