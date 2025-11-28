@@ -1,15 +1,7 @@
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
-import { addRecipe, updateRecipe } from "../services/recipeService";
+import { addRecipe, updateRecipe, Recipe } from "../services/recipeService";
 import { fetchAllSpiritTypes, SpiritType } from "../services/spiritTypeService";
-
-interface Recipe {
-  id: number;
-  name: string;
-  instructions: string;
-  ingredients: string;
-  spirit_types: { id: number; name: string }[];
-}
 
 interface AddRecipeFormProps {
   editRecipe?: Recipe | null;

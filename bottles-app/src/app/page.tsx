@@ -8,15 +8,7 @@ import FetchAllRecipes from "../components/FetchAllRecipes";
 import AddRecipeForm from "../components/AddRecipeForm";
 import LogoutButton from "@/components/LogoutButton";
 import { Bottle } from "../services/bottleService";
-
-interface Recipe {
-  id: number;
-  name: string;
-  instructions: string;
-  ingredients: string;
-  spirit_type_ids: number[];
-  spirit_types: { id: number; name: string }[];
-}
+import { Recipe } from "../services/recipeService";
 
 export default function Home() {
   const [activeContent, setActiveContent] = useState<string | null>(null);

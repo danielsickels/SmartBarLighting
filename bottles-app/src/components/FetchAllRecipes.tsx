@@ -4,17 +4,9 @@ import LoadingSpinner from "./LoadingSpinner";
 import SearchBar from "./SearchBar";
 import RecipeDetails from "./RecipeDetails";
 import ConfirmDialog from "./ConfirmDialog";
-import { fetchAllRecipes, deleteRecipe } from "../services/recipeService";
+import { fetchAllRecipes, deleteRecipe, Recipe } from "../services/recipeService";
 // import { fetchAllSpiritTypes, SpiritType } from "../services/spiritTypeService";
 import { fetchAllBottles } from "../services/bottleService";
-
-interface Recipe {
-  id: number;
-  name: string;
-  instructions: string;
-  ingredients: string;
-  spirit_types: { id: number; name: string }[];
-}
 
 interface Bottle {
   id: number;
