@@ -97,7 +97,7 @@ const FetchAllBottles = ({ onEdit }: FetchAllBottlesProps) => {
   };
 
   return (
-    <div className="flex flex-col items-center min-h-screen">
+    <div className="flex flex-col items-center">
       <h2 className="text-4xl font-bold mt-6 mb-8 text-center text-amber-500">
         <span className="glow-charcoal">All Bottles</span>
       </h2>

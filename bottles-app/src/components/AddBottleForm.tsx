@@ -72,7 +72,7 @@ const AddBottleForm = ({ editBottle, onEditComplete }: AddBottleFormProps) => {
   };
 
   return (
-    <div className="flex flex-col items-center min-h-screen">
+    <div className="flex flex-col items-center">
       <h2 className="text-4xl font-bold mt-3 mb-4 text-center text-amber-500">
         <span className="glow-charcoal">{isEditMode ? "Edit Bottle" : "Add New Bottle"}</span>
       </h2>

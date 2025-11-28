@@ -215,7 +215,7 @@ const AddRecipeForm = ({ editRecipe, onEditComplete }: AddRecipeFormProps) => {
   };
 
   return (
-    <div className="flex flex-col items-center min-h-screen">
+    <div className="flex flex-col items-center">
       <h2 className="text-4xl font-bold mt-3 mb-4 text-center text-amber-500">
         <span className="glow-charcoal">{isEditMode ? "Edit Recipe" : "Add New Recipe"}</span>
       </h2>
@@ -231,7 +231,7 @@ const AddRecipeForm = ({ editRecipe, onEditComplete }: AddRecipeFormProps) => {
 
       <div className="w-full border border-amber-500 rounded-lg px-4 py-2 my-4 bg-gray-900 text-white shadow-[0_0_10px_2px_rgba(255,191,0,0.5)]">
         <p className="font-bold text-amber-500 mb-1">Select Spirits:</p>
-        <div className="max-h-48 overflow-y-auto">
+        <div className="max-h-48 overflow-y-auto scrollbar-hide">
           {allSpiritTypes.map((spirit) => {
             const isSelected = spiritIngredients.some(
               (item) => item.spirit.id === spirit.id

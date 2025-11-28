@@ -125,7 +125,7 @@ const FetchAllRecipes = ({ onEdit }: FetchAllRecipesProps) => {
   };
 
   return (
-    <div className="flex flex-col items-center min-h-screen text-white">
+    <div className="flex flex-col items-center text-white">
       <h2 className="text-4xl font-bold mt-6 mb-8 text-center text-amber-500">
         <span className="glow-charcoal">All Recipes</span>
       </h2>
