@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 from app.db.session import get_db
-from app.schemas.recipe import RecipeCreate, RecipeResponse
+from app.schemas.recipe import RecipeCreate, RecipeUpdate, RecipeResponse
 from app.services.recipe import RecipeService
 from app.core.dependencies import get_current_user
 from app.db.models.user import User
@@ -50,6 +50,25 @@ def get_recipe(
     if not recipe or recipe.user_id != current_user.id:
         raise RecipeNotFoundException(recipe_id)
     return recipe
+
+@router.put("/{recipe_id}", response_model=RecipeResponse)
+def update_recipe(
+    recipe_id: int,
+    recipe: RecipeUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    try:
+        updated_recipe = RecipeService.update_recipe(
+            db=db, recipe_id=recipe_id, recipe_in=recipe, user_id=current_user.id
+        )
+        if not updated_recipe:
+            raise RecipeNotFoundException(recipe_id)
+        return updated_recipe
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
 
 @router.delete("/{recipe_id}")
 def delete_recipe(

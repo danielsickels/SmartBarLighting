@@ -1,9 +1,22 @@
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
-import { addRecipe } from "../services/recipeService";
+import { addRecipe, updateRecipe } from "../services/recipeService";
 import { fetchAllSpiritTypes, SpiritType } from "../services/spiritTypeService";
 
-const AddRecipeForm = () => {
+interface Recipe {
+  id: number;
+  name: string;
+  instructions: string;
+  ingredients: string;
+  spirit_types: { id: number; name: string }[];
+}
+
+interface AddRecipeFormProps {
+  editRecipe?: Recipe | null;
+  onEditComplete?: () => void;
+}
+
+const AddRecipeForm = ({ editRecipe, onEditComplete }: AddRecipeFormProps) => {
   const [name, setName] = useState("");
   const [instructions, setInstructions] = useState("1. ");
   const [spiritIngredients, setSpiritIngredients] = useState<
@@ -15,6 +28,8 @@ const AddRecipeForm = () => {
   const [newCustomIngredient, setNewCustomIngredient] = useState(""); // For adding new custom ingredients
   const [allSpiritTypes, setAllSpiritTypes] = useState<SpiritType[]>([]);
   const [submitting, setSubmitting] = useState(false);
+
+  const isEditMode = !!editRecipe;
 
   useEffect(() => {
     const fetchSpirits = async () => {
@@ -29,6 +44,48 @@ const AddRecipeForm = () => {
 
     fetchSpirits();
   }, []);
+
+  // Pre-fill form when editing
+  useEffect(() => {
+    if (editRecipe && allSpiritTypes.length > 0) {
+      setName(editRecipe.name);
+      setInstructions(editRecipe.instructions);
+      
+      // Parse ingredients back into spirit and custom ingredients
+      const ingredientsList = editRecipe.ingredients
+        .split(",")
+        .map((item) => item.trim())
+        .filter((item) => item.length > 0);
+
+      // Separate spirit ingredients and custom ingredients
+      const spiritIngs: { spirit: SpiritType; measurement: string }[] = [];
+      const customIngs: { name: string; measurement: string }[] = [];
+
+      ingredientsList.forEach((ingredient) => {
+        // Check if this is a spirit ingredient
+        const spiritMatch = editRecipe.spirit_types.find((st) =>
+          ingredient.startsWith(st.name + " - ")
+        );
+
+        if (spiritMatch) {
+          const measurement = ingredient.substring(spiritMatch.name.length + 3); // Remove "Name - "
+          const spiritType = allSpiritTypes.find((s) => s.id === spiritMatch.id);
+          if (spiritType) {
+            spiritIngs.push({ spirit: spiritType, measurement });
+          }
+        } else {
+          // Custom ingredient
+          const parts = ingredient.split(" - ");
+          const name = parts[0];
+          const measurement = parts[1] || "";
+          customIngs.push({ name, measurement });
+        }
+      });
+
+      setSpiritIngredients(spiritIngs);
+      setCustomIngredients(customIngs);
+    }
+  }, [editRecipe, allSpiritTypes]);
 
   const handleInstructionsKeyDown = (
     e: React.KeyboardEvent<HTMLTextAreaElement>
@@ -61,7 +118,7 @@ const AddRecipeForm = () => {
     setInstructions(e.target.value);
   };
 
-  const handleAddRecipe = async () => {
+  const handleSubmit = async () => {
     if (
       !name ||
       !instructions.replace(/^\d+\.\s*$/gm, "").trim() || // Check if instructions has content beyond just numbers
@@ -86,18 +143,24 @@ const AddRecipeForm = () => {
       spirit_type_ids: spiritIngredients.map((item) => item.spirit.id),
     };
 
-    const toastId = toast.loading("Adding recipe...");
+    const toastId = toast.loading(isEditMode ? "Updating recipe..." : "Adding recipe...");
 
     try {
-      await addRecipe(payload);
-      toast.success("Recipe added successfully! 🍸", { id: toastId });
-      setName("");
-      setInstructions("1. ");
-      setSpiritIngredients([]);
-      setCustomIngredients([]);
+      if (isEditMode && editRecipe) {
+        await updateRecipe(editRecipe.id, payload);
+        toast.success("Recipe updated successfully! 🍸", { id: toastId });
+        onEditComplete?.();
+      } else {
+        await addRecipe(payload);
+        toast.success("Recipe added successfully! 🍸", { id: toastId });
+        setName("");
+        setInstructions("1. ");
+        setSpiritIngredients([]);
+        setCustomIngredients([]);
+      }
     } catch (error) {
-      console.error("Error adding recipe:", error);
-      toast.error("Error adding recipe. Please try again.", { id: toastId });
+      console.error(`Error ${isEditMode ? "updating" : "adding"} recipe:`, error);
+      toast.error(`Error ${isEditMode ? "updating" : "adding"} recipe. Please try again.`, { id: toastId });
     } finally {
       setSubmitting(false);
     }
@@ -154,7 +217,7 @@ const AddRecipeForm = () => {
   return (
     <div className="flex flex-col items-center min-h-screen">
       <h2 className="text-4xl font-bold mt-3 mb-4 text-center text-amber-500">
-        <span className="glow-charcoal">Add New Recipe</span>
+        <span className="glow-charcoal">{isEditMode ? "Edit Recipe" : "Add New Recipe"}</span>
       </h2>
 
       <input
@@ -162,6 +225,7 @@ const AddRecipeForm = () => {
         value={name}
         onChange={(e) => setName(e.target.value)}
         placeholder="Enter Recipe Name"
+        maxLength={64}
         className="border border-amber-500 rounded-lg px-4 py-2 my-2 w-full bg-gray-900 text-white placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:outline-none shadow-[0_0_10px_2px_rgba(255,191,0,0.5)]"
       />
 
@@ -256,15 +320,25 @@ const AddRecipeForm = () => {
         className="border border-amber-500 rounded-lg px-4 py-2 my-2 w-full h-24 bg-gray-900 text-white placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:outline-none shadow-[0_0_10px_2px_rgba(255,191,0,0.5)]"
       />
 
-      <button
-        onClick={handleAddRecipe}
-        className={`text-2xl bg-emerald-700 text-white px-4 py-2 mt-4 rounded-lg ${
-          submitting ? "opacity-50 cursor-not-allowed" : "hover:bg-emerald-800"
-        } focus:ring-2 focus:ring-amber-500 focus:outline-none shadow-[0_0_20px_3px_rgba(0,0,0,1)]`}
-        disabled={submitting}
-      >
-        {submitting ? "Submitting..." : "Add Recipe"}
-      </button>
+      <div className="flex gap-3">
+        <button
+          onClick={handleSubmit}
+          className={`text-2xl bg-emerald-700 text-white px-4 py-2 mt-4 rounded-lg ${
+            submitting ? "opacity-50 cursor-not-allowed" : "hover:bg-emerald-800"
+          } focus:ring-2 focus:ring-amber-500 focus:outline-none shadow-[0_0_20px_3px_rgba(0,0,0,1)]`}
+          disabled={submitting}
+        >
+          {submitting ? "Submitting..." : isEditMode ? "Update Recipe" : "Add Recipe"}
+        </button>
+        {isEditMode && onEditComplete && (
+          <button
+            onClick={onEditComplete}
+            className="text-2xl bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 mt-4 rounded-lg focus:ring-2 focus:ring-amber-500 focus:outline-none shadow-[0_0_20px_3px_rgba(0,0,0,1)]"
+          >
+            Cancel
+          </button>
+        )}
+      </div>
     </div>
   );
 };

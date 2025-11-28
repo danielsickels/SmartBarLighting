@@ -7,34 +7,74 @@ import FetchAllBottles from "../components/FetchAllBottles";
 import FetchAllRecipes from "../components/FetchAllRecipes";
 import AddRecipeForm from "../components/AddRecipeForm";
 import LogoutButton from "@/components/LogoutButton";
+import { Bottle } from "../services/bottleService";
+
+interface Recipe {
+  id: number;
+  name: string;
+  instructions: string;
+  ingredients: string;
+  spirit_type_ids: number[];
+  spirit_types: { id: number; name: string }[];
+}
 
 export default function Home() {
   const [activeContent, setActiveContent] = useState<string | null>(null);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [editingBottle, setEditingBottle] = useState<Bottle | null>(null);
+  const [editingRecipe, setEditingRecipe] = useState<Recipe | null>(null);
 
   const toggleContent = (contentType: string) => {
+    // Clear edit state when switching views
+    setEditingBottle(null);
+    setEditingRecipe(null);
+    
     setActiveContent((prevContent) =>
       prevContent === contentType ? null : contentType
     );
     setSidebarOpen(false);
   };
 
+  const handleEditBottle = (bottle: Bottle) => {
+    setEditingBottle(bottle);
+    setActiveContent("addBottle");
+    setSidebarOpen(false);
+  };
+
+  const handleEditRecipe = (recipe: Recipe) => {
+    setEditingRecipe(recipe);
+    setActiveContent("addRecipe");
+    setSidebarOpen(false);
+  };
+
   const renderMainContent = () => {
     switch (activeContent) {
       case "fetchAll":
-        return <FetchAllBottles />;
+        return <FetchAllBottles onEdit={handleEditBottle} />;
       case "addBottle":
         return (
           <div className="max-w-full mx-auto p-4">
-            <AddBottleForm />
+            <AddBottleForm 
+              editBottle={editingBottle} 
+              onEditComplete={() => {
+                setEditingBottle(null);
+                setActiveContent("fetchAll");
+              }}
+            />
           </div>
         );
       case "fetchAllRecipes":
-        return <FetchAllRecipes />;
+        return <FetchAllRecipes onEdit={handleEditRecipe} />;
       case "addRecipe":
         return (
           <div className="max-w-full mx-auto p-4">
-            <AddRecipeForm />
+            <AddRecipeForm 
+              editRecipe={editingRecipe}
+              onEditComplete={() => {
+                setEditingRecipe(null);
+                setActiveContent("fetchAllRecipes");
+              }}
+            />
           </div>
         );
       default:

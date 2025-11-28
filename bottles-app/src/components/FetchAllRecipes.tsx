@@ -21,11 +21,11 @@ interface Bottle {
   spirit_type_id: number; // Link between bottles and spirit types
 }
 
-// interface Props {
-//   showAllRecipes: boolean;
-// }
+interface FetchAllRecipesProps {
+  onEdit?: (recipe: Recipe) => void;
+}
 
-const FetchAllRecipes = () => {
+const FetchAllRecipes = ({ onEdit }: FetchAllRecipesProps) => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>([]);
   const [bottles, setBottles] = useState<Bottle[]>([]);
@@ -145,7 +145,7 @@ const FetchAllRecipes = () => {
           filteredRecipes.map((recipe) => (
             <div
               key={recipe.id}
-              className={`border-4 p-4 rounded-lg bg-gray-800 shadow-md ${getCardClassName(
+              className={`border-4 p-4 rounded-lg bg-gray-900 shadow-md ${getCardClassName(
                 recipe
               )}`}
             >
@@ -155,6 +155,7 @@ const FetchAllRecipes = () => {
                 ingredients={recipe.ingredients}
                 spirit_types={recipe.spirit_types}
                 instructions={recipe.instructions}
+                onEdit={() => onEdit?.(recipe)}
                 onDelete={() => handleDeleteClick(recipe.id, recipe.name)}
               />
             </div>

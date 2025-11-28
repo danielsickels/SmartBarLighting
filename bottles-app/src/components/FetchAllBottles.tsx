@@ -10,7 +10,11 @@ import {
   Bottle,
 } from "../services/bottleService";
 
-const FetchAllBottles = () => {
+interface FetchAllBottlesProps {
+  onEdit?: (bottle: Bottle) => void;
+}
+
+const FetchAllBottles = ({ onEdit }: FetchAllBottlesProps) => {
   const [bottles, setBottles] = useState<Bottle[]>([]);
   const [filteredBottles, setFilteredBottles] = useState<Bottle[]>([]);
   const [loading, setLoading] = useState(false);
@@ -121,6 +125,7 @@ const FetchAllBottles = () => {
               flavor_profile={bottle.flavor_profile || "N/A"} // Display 'N/A' if flavor profile is missing
               spirit_type={bottle.spirit_type?.name || "Unknown"} // Display spirit type name or 'Unknown'
               capacity_ml={bottle.capacity_ml}
+              onEdit={() => onEdit?.(bottle)}
               onDelete={() => handleDeleteClick(bottle.id, bottle.name)}
             />
           ))

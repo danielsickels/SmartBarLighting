@@ -5,6 +5,7 @@ interface RecipeDetailsProps {
   ingredients: string;
   spirit_types: { id: number; name: string }[];
   onDelete: () => void;
+  onEdit: () => void;
 }
 
 const RecipeDetails = ({
@@ -13,6 +14,7 @@ const RecipeDetails = ({
   ingredients,
   spirit_types,
   onDelete,
+  onEdit,
 }: RecipeDetailsProps) => {
   // Parse ingredients from comma-separated string into array
   const ingredientsList = ingredients
@@ -58,11 +60,15 @@ const RecipeDetails = ({
   // console.log("Custom ingredients found:", customIngredients);
   // console.log("Spirits with measurements:", spiritsWithMeasurements);
 
+  const truncatedName = name.length > 64 ? name.substring(0, 64) + "..." : name;
+
   return (
-    <div className="border border-brown-500 p-4 rounded-lg shadow-md bg-gray-900 flex flex-col items-start w-full max-w-md mb-4">
+    <div className="flex flex-col items-start w-full">
       <div className="flex-grow text-white w-full">
         <div className="flex justify-center mb-3">
-          <h3 className="font-bold text-lg text-amber-300">{name}</h3>
+          <h3 className="font-bold text-lg text-amber-300 text-center break-all px-2">
+            {truncatedName}
+          </h3>
         </div>
 
         <div className="mb-3">
@@ -117,12 +123,40 @@ const RecipeDetails = ({
           </div>
         </div>
       </div>
-      <button
-        onClick={onDelete}
-        className="mt-2 bg-rose-700 text-white px-3 py-1 text-sm rounded hover:bg-rose-800 focus:outline-none focus:ring-2 focus:ring-amber-500"
-      >
-        Delete
-      </button>
+      <div className="flex gap-2 mt-2 w-full">
+        <button
+          onClick={onEdit}
+          className="flex-1 text-amber-500 px-3 py-1 text-sm font-bold rounded border border-amber-500/30 transition-all focus:outline-none focus:ring-2 focus:ring-amber-500"
+          style={{
+            background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.05), rgba(217, 119, 6, 0.08))',
+            boxShadow: '0 0 8px 1px rgba(153, 102, 0, 0.2)',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.boxShadow = '0 0 15px 2px rgba(153, 102, 0, 0.35)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.boxShadow = '0 0 8px 1px rgba(153, 102, 0, 0.2)';
+          }}
+        >
+          Edit
+        </button>
+        <button
+          onClick={onDelete}
+          className="flex-1 text-rose-400 px-3 py-1 text-sm font-bold rounded border border-rose-400/30 transition-all focus:outline-none focus:ring-2 focus:ring-amber-500"
+          style={{
+            background: 'linear-gradient(135deg, rgba(251, 113, 133, 0.05), rgba(225, 29, 72, 0.08))',
+            boxShadow: '0 0 8px 1px rgba(225, 29, 72, 0.2)',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.boxShadow = '0 0 15px 2px rgba(225, 29, 72, 0.35)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.boxShadow = '0 0 8px 1px rgba(225, 29, 72, 0.2)';
+          }}
+        >
+          Delete
+        </button>
+      </div>
     </div>
   );
 };

@@ -76,6 +76,26 @@ export const fetchRecipe = async (id: number): Promise<Recipe | null> => {
   }
 };
 
+export const updateRecipe = async (id: number, recipe: Partial<RecipeCreate>): Promise<Recipe> => {
+  try {
+    const headers = await getHeaders();
+    const res = await fetch(`${API_ENDPOINTS.RECIPES}/${id}`, {
+      method: "PUT",
+      headers,
+      body: JSON.stringify(recipe),
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to update recipe");
+    }
+
+    return await res.json();
+  } catch (error) {
+    console.error("Error updating recipe:", error);
+    throw error;
+  }
+};
+
 export const deleteRecipe = async (id: number): Promise<void> => {
   try {
     const headers = await getHeaders();

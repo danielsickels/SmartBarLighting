@@ -12,6 +12,12 @@ class RecipeBase(BaseModel):
 class RecipeCreate(RecipeBase):
     spirit_type_ids: List[int]  # List of spirit type IDs
 
+class RecipeUpdate(BaseModel):
+    name: Optional[str] = None
+    instructions: Optional[str] = None
+    ingredients: Optional[str] = None
+    spirit_type_ids: Optional[List[int]] = None
+
 class RecipeResponse(RecipeBase):
     id: int
     spirit_types: List[SpiritTypeResponse]  # Many-to-many relationship with spirit types

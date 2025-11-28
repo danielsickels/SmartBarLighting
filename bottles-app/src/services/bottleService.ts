@@ -76,6 +76,26 @@ export const addBottle = async (bottle: BottleCreate): Promise<Bottle> => {
   }
 };
 
+export const updateBottle = async (id: number, bottle: Partial<BottleCreate>): Promise<Bottle> => {
+  try {
+    const headers = await getHeaders();
+    const res = await fetch(`${API_ENDPOINTS.BOTTLES}/${id}`, {
+      method: "PUT",
+      headers,
+      body: JSON.stringify(bottle),
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to update bottle");
+    }
+
+    return await res.json();
+  } catch (error) {
+    console.error("Error updating bottle:", error);
+    throw error;
+  }
+};
+
 export const deleteBottle = async (id: number): Promise<void> => {
   try {
     const headers = await getHeaders();
