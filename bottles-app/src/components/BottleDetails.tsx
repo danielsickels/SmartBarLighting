@@ -5,7 +5,7 @@ interface BottleDetailsProps
   extends Omit<Bottle, "spirit_type" | "spirit_type_id"> {
   spirit_type: string;
   onDelete: () => void;
-  onEdit: () => void;
+  onEdit?: () => void;
 }
 
 const BottleDetails = ({
@@ -63,22 +63,24 @@ const BottleDetails = ({
       {error && <div className="text-red-500 mt-2">{error}</div>}
 
       <div className="flex gap-2 mt-2 w-full">
-        <button
-          onClick={onEdit}
-          className="flex-1 text-amber-500 px-3 py-1 text-sm font-bold rounded border border-amber-500/30 transition-all focus:outline-none focus:ring-2 focus:ring-amber-500"
-          style={{
-            background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.05), rgba(217, 119, 6, 0.08))',
-            boxShadow: '0 0 8px 1px rgba(153, 102, 0, 0.2)',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.boxShadow = '0 0 15px 2px rgba(153, 102, 0, 0.35)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.boxShadow = '0 0 8px 1px rgba(153, 102, 0, 0.2)';
-          }}
-        >
-          Edit
-        </button>
+        {onEdit && (
+          <button
+            onClick={onEdit}
+            className="flex-1 text-amber-500 px-3 py-1 text-sm font-bold rounded border border-amber-500/30 transition-all focus:outline-none focus:ring-2 focus:ring-amber-500"
+            style={{
+              background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.05), rgba(217, 119, 6, 0.08))',
+              boxShadow: '0 0 8px 1px rgba(153, 102, 0, 0.2)',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.boxShadow = '0 0 15px 2px rgba(153, 102, 0, 0.35)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.boxShadow = '0 0 8px 1px rgba(153, 102, 0, 0.2)';
+            }}
+          >
+            Edit
+          </button>
+        )}
         <button
           onClick={handleDelete}
           disabled={deleting}
