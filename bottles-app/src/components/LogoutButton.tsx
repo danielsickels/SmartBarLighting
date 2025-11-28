@@ -1,12 +1,13 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { clearTokens } from "@/lib/tokenManager";
 
 const LogoutButton = () => {
   const router = useRouter();
 
   const handleLogout = () => {
-    localStorage.removeItem("access_token");
+    clearTokens();
     router.push("/login");
   };
 

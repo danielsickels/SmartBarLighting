@@ -10,12 +10,16 @@ fastapi = "^0.100.0" # Use a FastAPI version compatible with Pydantic 2.x
 uvicorn = "^0.20.0"
 pydantic = "^2.0.0"
 pydantic-settings = "^2.0.0"
-sqlalchemy = "^1.4.47"
+sqlalchemy = "^2.0.0"
 alembic = "^1.14.0"
 pytest = "^7.0"
 httpx = "^0.28.0"
 passlib = "^1.7.4"
 python-jose = "^3.3.0"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 pytest = "^7.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

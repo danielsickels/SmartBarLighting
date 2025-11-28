@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Boolean
 from app.db.base import Base
 from sqlalchemy.orm import relationship
 
@@ -8,7 +8,7 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, nullable=False, index=True)
     hashed_password = Column(String, nullable=False)
-    is_admin = Column(Integer, default=0) 
+    is_admin = Column(Boolean, default=False) 
 
     bottles = relationship("Bottle", back_populates="user")
     recipes = relationship("Recipe", back_populates="user")

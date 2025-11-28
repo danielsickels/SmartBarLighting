@@ -1,4 +1,5 @@
 import getHeaders from "@/lib/utils";
+import { API_ENDPOINTS } from "@/lib/config";
 
 export interface Recipe {
   id: number;
@@ -19,9 +20,10 @@ export interface RecipeCreate {
 
 export const addRecipe = async (recipe: RecipeCreate): Promise<Recipe> => {
   try {
-    const res = await fetch(`https://backend-barapp.dannysickels.com/recipes`, {
+    const headers = await getHeaders();
+    const res = await fetch(API_ENDPOINTS.RECIPES, {
       method: "POST",
-      headers: getHeaders(),
+      headers,
       body: JSON.stringify(recipe),
     });
 
@@ -39,9 +41,10 @@ export const addRecipe = async (recipe: RecipeCreate): Promise<Recipe> => {
 
 export const fetchAllRecipes = async (): Promise<Recipe[]> => {
   try {
-    const res = await fetch(`https://backend-barapp.dannysickels.com/recipes`, {
+    const headers = await getHeaders();
+    const res = await fetch(API_ENDPOINTS.RECIPES, {
       method: "GET",
-      headers: getHeaders(),
+      headers,
     });
     if (!res.ok) {
       throw new Error("Failed to fetch recipes");
@@ -57,12 +60,10 @@ export const fetchAllRecipes = async (): Promise<Recipe[]> => {
 
 export const fetchRecipe = async (id: number): Promise<Recipe | null> => {
   try {
-    const res = await fetch(
-      `https://backend-barapp.dannysickels.com/recipes/${id}`,
-      {
-        headers: getHeaders(),
-      }
-    );
+    const headers = await getHeaders();
+    const res = await fetch(`${API_ENDPOINTS.RECIPES}/${id}`, {
+      headers,
+    });
     if (!res.ok) {
       throw new Error("Recipe not found");
     }
@@ -77,13 +78,11 @@ export const fetchRecipe = async (id: number): Promise<Recipe | null> => {
 
 export const deleteRecipe = async (id: number): Promise<void> => {
   try {
-    const res = await fetch(
-      `https://backend-barapp.dannysickels.com/recipes/${id}`,
-      {
-        method: "DELETE",
-        headers: getHeaders(),
-      }
-    );
+    const headers = await getHeaders();
+    const res = await fetch(`${API_ENDPOINTS.RECIPES}/${id}`, {
+      method: "DELETE",
+      headers,
+    });
 
     if (!res.ok) {
       throw new Error("Failed to delete recipe");

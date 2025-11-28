@@ -26,13 +26,24 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
 
 
-def create_access_token(data: dict, expires_delta: timedelta = timedelta(days=365 * 100)) -> str:
+def create_access_token(data: dict, expires_delta: timedelta = timedelta(minutes=45)) -> str:
     """
-    Create a JWT access token with optional expiration.
+    Create a JWT access token with 45-minute expiration.
     """
     to_encode = data.copy()
     expire = datetime.utcnow() + expires_delta
-    to_encode.update({"exp": expire})
+    to_encode.update({"exp": expire, "type": "access"})
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return encoded_jwt
+
+
+def create_refresh_token(data: dict, expires_delta: timedelta = timedelta(days=7)) -> str:
+    """
+    Create a JWT refresh token with 7-day expiration.
+    """
+    to_encode = data.copy()
+    expire = datetime.utcnow() + expires_delta
+    to_encode.update({"exp": expire, "type": "refresh"})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
@@ -43,6 +54,20 @@ def decode_access_token(token: str) -> dict:
     """
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        return payload
+    except JWTError:
+        return None
+
+
+def verify_refresh_token(token: str) -> dict:
+    """
+    Verify and decode a refresh token.
+    Returns the payload if valid, None otherwise.
+    """
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        if payload.get("type") != "refresh":
+            return None
         return payload
     except JWTError:
         return None

@@ -3,19 +3,26 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.router import api_router
 from app.db.session import engine
 from app.db.base import Base
+from app.core.settings import settings
 
 # Create database tables
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-# Add CORS middleware to allow all origins (for development purposes)
+allowed_origins = [
+    settings.FRONTEND_URL, 
+]
+
+if settings.BACKEND_URL.startswith("https://"):
+    allowed_origins.append("https://barapp.dannysickels.com")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allows all origins (use specific domains in production)
+    allow_origins=allowed_origins,  # Only allow specific origins
     allow_credentials=True,
-    allow_methods=["*"],  # Allows all methods (GET, POST, PUT, DELETE, etc.)
-    allow_headers=["*"],  # Allows all headers
+    allow_methods=["GET", "POST", "PUT", "DELETE"],  # Explicitly allow these methods
+    allow_headers=["Content-Type", "Authorization"],  # Explicitly allow these headers
 )
 
 # Include the API router

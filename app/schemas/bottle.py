@@ -1,12 +1,11 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Optional
 
 class SpiritTypeResponse(BaseModel):
     id: int
     name: str
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 class BottleBase(BaseModel):
     name: str
@@ -29,5 +28,4 @@ class BottleResponse(BottleBase):
     id: int
     spirit_type: Optional[SpiritTypeResponse]  # Include nested spirit type object
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
