@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import toast from "react-hot-toast";
 import { addRecipe } from "../services/recipeService";
 import { fetchAllSpiritTypes, SpiritType } from "../services/spiritTypeService";
 
@@ -13,8 +14,6 @@ const AddRecipeForm = () => {
   >([]); // Custom ingredients with measurements
   const [newCustomIngredient, setNewCustomIngredient] = useState(""); // For adding new custom ingredients
   const [allSpiritTypes, setAllSpiritTypes] = useState<SpiritType[]>([]);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -24,7 +23,7 @@ const AddRecipeForm = () => {
         setAllSpiritTypes(spirits);
       } catch (error) {
         console.error("Error fetching spirits:", error);
-        setErrorMessage("Failed to fetch spirit types.");
+        toast.error("Failed to fetch spirit types");
       }
     };
 
@@ -63,17 +62,12 @@ const AddRecipeForm = () => {
   };
 
   const handleAddRecipe = async () => {
-    setSuccessMessage(null);
-    setErrorMessage(null);
-
     if (
       !name ||
       !instructions.replace(/^\d+\.\s*$/gm, "").trim() || // Check if instructions has content beyond just numbers
       (spiritIngredients.length === 0 && customIngredients.length === 0)
     ) {
-      setErrorMessage(
-        "Please fill all fields and add at least one ingredient."
-      );
+      toast.error("Please fill all fields and add at least one ingredient");
       return;
     }
 
@@ -92,16 +86,18 @@ const AddRecipeForm = () => {
       spirit_type_ids: spiritIngredients.map((item) => item.spirit.id),
     };
 
+    const toastId = toast.loading("Adding recipe...");
+
     try {
       await addRecipe(payload);
-      setSuccessMessage("Recipe added successfully!");
+      toast.success("Recipe added successfully! 🍸", { id: toastId });
       setName("");
       setInstructions("1. ");
       setSpiritIngredients([]);
       setCustomIngredients([]);
     } catch (error) {
       console.error("Error adding recipe:", error);
-      setErrorMessage("Error adding recipe. Please try again.");
+      toast.error("Error adding recipe. Please try again.", { id: toastId });
     } finally {
       setSubmitting(false);
     }
@@ -259,17 +255,6 @@ const AddRecipeForm = () => {
         placeholder="Enter Instructions"
         className="border border-amber-500 rounded-lg px-4 py-2 my-2 w-full h-24 bg-gray-900 text-white placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:outline-none shadow-[0_0_10px_2px_rgba(255,191,0,0.5)]"
       />
-
-      {successMessage && (
-        <div className="text-2xl text-container-success text-emerald-500">
-          {successMessage}
-        </div>
-      )}
-      {errorMessage && (
-        <div className="text-2xl text-container-error text-red-500">
-          {errorMessage}
-        </div>
-      )}
 
       <button
         onClick={handleAddRecipe}

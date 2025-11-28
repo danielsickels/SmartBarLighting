@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
+import toast from "react-hot-toast";
 import BottleDetails from "./BottleDetails";
 import LoadingSpinner from "./LoadingSpinner";
 import SearchBar from "./SearchBar";
+import ConfirmDialog from "./ConfirmDialog";
 import {
   fetchAllBottles,
   deleteBottle,
@@ -14,6 +16,15 @@ const FetchAllBottles = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [confirmDialog, setConfirmDialog] = useState<{
+    isOpen: boolean;
+    bottleId: number | null;
+    bottleName: string;
+  }>({
+    isOpen: false,
+    bottleId: null,
+    bottleName: "",
+  });
 
   useEffect(() => {
     const fetchBottles = async () => {
@@ -46,19 +57,39 @@ const FetchAllBottles = () => {
     setFilteredBottles(filtered);
   }, [searchQuery, bottles]);
 
+  // Show confirmation dialog before deleting
+  const handleDeleteClick = (id: number, name: string) => {
+    setConfirmDialog({
+      isOpen: true,
+      bottleId: id,
+      bottleName: name,
+    });
+  };
+
   // Delete a specific bottle and update the displayed lists
-  const handleDelete = async (id: number) => {
+  const handleDeleteConfirm = async () => {
+    const bottleId = confirmDialog.bottleId;
+    if (!bottleId) return;
+
+    setConfirmDialog({ isOpen: false, bottleId: null, bottleName: "" });
+    const toastId = toast.loading("Deleting bottle...");
+
     try {
-      await deleteBottle(id);
+      await deleteBottle(bottleId);
       setBottles((prevBottles) =>
-        prevBottles.filter((bottle) => bottle.id !== id)
+        prevBottles.filter((bottle) => bottle.id !== bottleId)
       );
       setFilteredBottles((prevFiltered) =>
-        prevFiltered.filter((bottle) => bottle.id !== id)
+        prevFiltered.filter((bottle) => bottle.id !== bottleId)
       );
+      toast.success("Bottle deleted successfully", { id: toastId });
     } catch {
-      setError("Failed to delete the bottle");
+      toast.error("Failed to delete the bottle", { id: toastId });
     }
+  };
+
+  const handleDeleteCancel = () => {
+    setConfirmDialog({ isOpen: false, bottleId: null, bottleName: "" });
   };
 
   return (
@@ -90,7 +121,7 @@ const FetchAllBottles = () => {
               flavor_profile={bottle.flavor_profile || "N/A"} // Display 'N/A' if flavor profile is missing
               spirit_type={bottle.spirit_type?.name || "Unknown"} // Display spirit type name or 'Unknown'
               capacity_ml={bottle.capacity_ml}
-              onDelete={() => handleDelete(bottle.id)}
+              onDelete={() => handleDeleteClick(bottle.id, bottle.name)}
             />
           ))
         ) : (
@@ -99,6 +130,18 @@ const FetchAllBottles = () => {
           </p>
         )}
       </div>
+
+      {/* Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={confirmDialog.isOpen}
+        title="Delete Bottle?"
+        message={`Are you sure you want to delete "${confirmDialog.bottleName}"? This action cannot be undone.`}
+        confirmLabel="Delete"
+        cancelLabel="Cancel"
+        type="danger"
+        onConfirm={handleDeleteConfirm}
+        onCancel={handleDeleteCancel}
+      />
     </div>
   );
 };

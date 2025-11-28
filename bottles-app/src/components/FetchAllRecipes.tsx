@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
+import toast from "react-hot-toast";
 import LoadingSpinner from "./LoadingSpinner";
 import SearchBar from "./SearchBar";
 import RecipeDetails from "./RecipeDetails";
+import ConfirmDialog from "./ConfirmDialog";
 import { fetchAllRecipes, deleteRecipe } from "../services/recipeService";
 // import { fetchAllSpiritTypes, SpiritType } from "../services/spiritTypeService";
 import { fetchAllBottles } from "../services/bottleService";
@@ -30,6 +32,15 @@ const FetchAllRecipes = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [confirmDialog, setConfirmDialog] = useState<{
+    isOpen: boolean;
+    recipeId: number | null;
+    recipeName: string;
+  }>({
+    isOpen: false,
+    recipeId: null,
+    recipeName: "",
+  });
 
   useEffect(() => {
     const fetchRecipesAndData = async () => {
@@ -69,19 +80,38 @@ const FetchAllRecipes = () => {
     }
   }, [searchQuery, recipes]);
 
-  const handleDeleteRecipe = async (id: number) => {
+  const handleDeleteClick = (id: number, name: string) => {
+    setConfirmDialog({
+      isOpen: true,
+      recipeId: id,
+      recipeName: name,
+    });
+  };
+
+  const handleDeleteConfirm = async () => {
+    const recipeId = confirmDialog.recipeId;
+    if (!recipeId) return;
+
+    setConfirmDialog({ isOpen: false, recipeId: null, recipeName: "" });
+    const toastId = toast.loading("Deleting recipe...");
+
     try {
-      await deleteRecipe(id);
+      await deleteRecipe(recipeId);
       setRecipes((prevRecipes) =>
-        prevRecipes.filter((recipe) => recipe.id !== id)
+        prevRecipes.filter((recipe) => recipe.id !== recipeId)
       );
       setFilteredRecipes((prevRecipes) =>
-        prevRecipes.filter((recipe) => recipe.id !== id)
+        prevRecipes.filter((recipe) => recipe.id !== recipeId)
       );
+      toast.success("Recipe deleted successfully", { id: toastId });
     } catch (error) {
       console.error("Error deleting recipe:", error);
-      setError("Failed to delete recipe");
+      toast.error("Failed to delete recipe", { id: toastId });
     }
+  };
+
+  const handleDeleteCancel = () => {
+    setConfirmDialog({ isOpen: false, recipeId: null, recipeName: "" });
   };
 
   const getCardClassName = (recipe: Recipe) => {
@@ -125,7 +155,7 @@ const FetchAllRecipes = () => {
                 ingredients={recipe.ingredients}
                 spirit_types={recipe.spirit_types}
                 instructions={recipe.instructions}
-                onDelete={() => handleDeleteRecipe(recipe.id)}
+                onDelete={() => handleDeleteClick(recipe.id, recipe.name)}
               />
             </div>
           ))
@@ -135,6 +165,18 @@ const FetchAllRecipes = () => {
           </p>
         )}
       </div>
+
+      {/* Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={confirmDialog.isOpen}
+        title="Delete Recipe?"
+        message={`Are you sure you want to delete "${confirmDialog.recipeName}"? This action cannot be undone.`}
+        confirmLabel="Delete"
+        cancelLabel="Cancel"
+        type="danger"
+        onConfirm={handleDeleteConfirm}
+        onCancel={handleDeleteCancel}
+      />
     </div>
   );
 };

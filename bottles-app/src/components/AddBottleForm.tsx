@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { addBottle } from "../services/bottleService";
 import SpiritTypeSelect from "./SpiritTypeSelect";
 import { SpiritType } from "../services/spiritTypeService";
@@ -9,15 +10,10 @@ const AddBottleForm = () => {
   const [flavorProfile, setFlavorProfile] = useState("");
   const [spiritType, setSpiritType] = useState<SpiritType | null>(null);
   const [capacity, setCapacity] = useState<number | "">("");
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleAddBottle = async () => {
-    setSuccessMessage(null);
-    setErrorMessage(null);
-
     if (!name || !spiritType || !capacity) {
-      setErrorMessage("Please fill all required fields");
+      toast.error("Please fill all required fields");
       return;
     }
 
@@ -29,9 +25,11 @@ const AddBottleForm = () => {
       capacity_ml: Number(capacity),
     };
 
+    const toastId = toast.loading("Adding bottle...");
+
     try {
       await addBottle(newBottle);
-      setSuccessMessage("Bottle added successfully");
+      toast.success("Bottle added successfully! 🍾", { id: toastId });
       setName("");
       setBrand("");
       setFlavorProfile("");
@@ -39,7 +37,7 @@ const AddBottleForm = () => {
       setCapacity("");
     } catch (error) {
       console.error("Error adding bottle:", error);
-      setErrorMessage("Failed to add bottle");
+      toast.error("Failed to add bottle", { id: toastId });
     }
   };
 
@@ -83,17 +81,6 @@ const AddBottleForm = () => {
         placeholder="Enter Capacity (ml)"
         className="border border-amber-500 rounded-lg px-4 py-2 my-2 w-full bg-gray-900 text-white placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:outline-none shadow-[0_0_10px_2px_rgba(255,191,0,0.5)]"
       />
-
-      {successMessage && (
-        <div className="text-2xl text-container-success text-emerald-500">
-          {successMessage}
-        </div>
-      )}
-      {errorMessage && (
-        <div className="text-2xl text-container-error text-red-500">
-          {errorMessage}
-        </div>
-      )}
 
       <button
         onClick={handleAddBottle}
