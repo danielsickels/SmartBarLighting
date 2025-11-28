@@ -35,8 +35,8 @@ const BottleDetails = ({
   const truncatedName = name.length > 64 ? name.substring(0, 64) + "..." : name;
 
   return (
-    <div className="border border-amber-500 p-4 rounded-lg bg-gray-900 flex flex-col items-start w-full max-w-md mb-4 shadow-[0_0_10px_2px_rgba(255,191,0,0.5)]">
-      <div className="flex-grow text-white w-full">
+    <div className="border border-amber-500 p-4 rounded-lg bg-gray-900 flex flex-col w-full max-w-md mb-4 shadow-[0_0_10px_2px_rgba(255,191,0,0.5)] h-full">
+      <div className="flex-1 text-white w-full">
         <div className="flex justify-center mb-3">
           <h3 className="font-bold text-lg text-amber-300 text-center break-all px-2">
             {truncatedName}

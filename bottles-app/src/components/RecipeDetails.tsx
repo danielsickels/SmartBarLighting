@@ -63,8 +63,8 @@ const RecipeDetails = ({
   const truncatedName = name.length > 64 ? name.substring(0, 64) + "..." : name;
 
   return (
-    <div className="flex flex-col items-start w-full">
-      <div className="flex-grow text-white w-full">
+    <div className="flex flex-col w-full h-full">
+      <div className="flex-1 text-white w-full">
         <div className="flex justify-center mb-3">
           <h3 className="font-bold text-lg text-amber-300 text-center break-all px-2">
             {truncatedName}

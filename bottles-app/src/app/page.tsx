@@ -116,7 +116,7 @@ export default function Home() {
         <div className="md:hidden bg-gray-900 p-0">
           <button
             onClick={() => setSidebarOpen(!isSidebarOpen)}
-            className="md:hidden fixed bottom-4 right-4 bg-emerald-700 text-white py-2 px-4 rounded-lg z-50 hover:bg-emerald-800"
+            className="md:hidden fixed bottom-4 right-4 bg-emerald-700 text-white py-2 px-4 rounded-lg z-[70] hover:bg-emerald-800"
           >
             {isSidebarOpen ? "Close Menu" : "Open Menu"}
           </button>
@@ -142,7 +142,9 @@ export default function Home() {
           <div className="absolute inset-0 bg-black/30 z-10" />
           
           {/* Sidebar content wrapper - centers vertically */}
-          <div className="relative z-20 h-full flex items-center py-8 pb-20 md:pb-10 lg:pb-20">
+          <div className={`relative z-20 h-full flex items-center py-8 pb-20 md:pb-10 lg:pb-20 ${
+            editingBottle || editingRecipe ? "pointer-events-none" : ""
+          }`}>
             {/* Scrollable content area - only scrolls if overflow */}
             <div className="w-full max-h-full overflow-y-auto scrollbar-hide px-8 space-y-4 pb-16 md:pb-4 lg:pb-16">
           <h1 className="text-2xl md:text-xl lg:text-2xl font-bold mb-8 md:mb-1 lg:mb-8 text-center text-amber-500">
@@ -188,23 +190,25 @@ export default function Home() {
           >
             Add Recipe
           </button>
-          <div className="fixed bottom-4 left-4 z-20">
+          <div className={`fixed bottom-4 left-4 ${
+            editingBottle || editingRecipe ? "z-[70] pointer-events-auto" : "z-20"
+          }`}>
             <LogoutButton />
           </div>
           </div> {/* Close scrollable content area */}
           </div> {/* Close sidebar content wrapper */}
         </div>
 
-        {/* Dark overlay when editing */}
+        {/* Dark overlay when editing - covers everything including sidebar */}
         {(editingBottle || editingRecipe) && (
-          <div className="fixed inset-0 bg-black/80 z-30 transition-opacity duration-300" />
+          <div className="fixed inset-0 bg-black/80 z-50 transition-opacity duration-300" />
         )}
 
         {/* Main content */}
         <div
           className={`flex-grow pt-8 pb-12 transition-all ${
             isSidebarOpen ? "ml-0" : "md:ml-[25%]"
-          } ${editingBottle || editingRecipe ? "relative z-40" : ""}`}
+          } ${editingBottle || editingRecipe ? "relative z-[60]" : ""}`}
         >
           <div className="p-4">{renderMainContent()}</div>
         </div>

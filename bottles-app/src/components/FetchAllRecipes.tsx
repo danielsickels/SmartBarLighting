@@ -145,7 +145,7 @@ const FetchAllRecipes = ({ onEdit }: FetchAllRecipesProps) => {
           filteredRecipes.map((recipe) => (
             <div
               key={recipe.id}
-              className={`border-4 p-4 rounded-lg bg-gray-900 shadow-md ${getCardClassName(
+              className={`border-4 p-4 rounded-lg bg-gray-900 shadow-md flex flex-col h-full ${getCardClassName(
                 recipe
               )}`}
             >
