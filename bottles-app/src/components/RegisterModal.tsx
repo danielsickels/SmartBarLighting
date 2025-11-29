@@ -5,9 +5,10 @@ import { API_ENDPOINTS } from "@/lib/config";
 
 interface RegisterModalProps {
   onClose: () => void;
+  onRegisterSuccess?: (username: string) => void;
 }
 
-const RegisterModal = ({ onClose }: RegisterModalProps) => {
+const RegisterModal = ({ onClose, onRegisterSuccess }: RegisterModalProps) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -43,61 +44,70 @@ const RegisterModal = ({ onClose }: RegisterModalProps) => {
       }
 
       setSuccessMessage("Registration successful! Please log in.");
+      const registeredUsername = username;
       setUsername("");
       setPassword("");
       setConfirmPassword("");
+      
+      // Close modal and pass username back after a short delay
+      setTimeout(() => {
+        onClose();
+        if (onRegisterSuccess) {
+          onRegisterSuccess(registeredUsername);
+        }
+      }, 1000);
     } catch {
       setErrorMessage("Error registering user");
     }
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-        <h2 className="text-xl font-bold mb-4">Register</h2>
+    <div className="fixed inset-0 flex items-center justify-center bg-black/80 z-50">
+      <div className="bg-gradient-to-br from-amber-100 to-yellow-100 p-6 lg:p-9 rounded-xl border-4 border-double border-amber-500 shadow-lg max-w-md w-full">
+        <h2 className="text-2xl lg:text-4xl font-bold mb-2 lg:mb-4 text-center text-amber-900">Register</h2>
         {successMessage && (
-          <p className="text-green-500 mb-4">{successMessage}</p>
+          <p className="text-green-600 mb-4">{successMessage}</p>
         )}
-        {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
+        {errorMessage && <p className="text-red-600 mb-4">{errorMessage}</p>}
         <div className="mb-4">
-          <label className="block text-gray-700 font-medium">Username</label>
+          <label className="block text-amber-900 font-medium">Username</label>
           <input
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2"
+            className="w-full border border-amber-300 rounded-lg px-3 py-2"
           />
         </div>
         <div className="mb-4">
-          <label className="block text-gray-700 font-medium">Password</label>
+          <label className="block text-amber-900 font-medium">Password</label>
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2"
+            className="w-full border border-amber-300 rounded-lg px-3 py-2"
           />
         </div>
         <div className="mb-4">
-          <label className="block text-gray-700 font-medium">
+          <label className="block text-amber-900 font-medium">
             Confirm Password
           </label>
           <input
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2"
+            className="w-full border border-amber-300 rounded-lg px-3 py-2"
           />
         </div>
-        <div className="flex justify-end space-x-4">
+        <div className="flex justify-center space-x-4">
           <button
             onClick={onClose}
-            className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400"
+            className="bg-amber-200 text-amber-900 px-4 py-2 rounded-lg hover:bg-amber-300 font-medium"
           >
             Cancel
           </button>
           <button
             onClick={handleRegister}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+            className="bg-amber-600 text-white px-4 py-2 rounded-lg hover:bg-amber-700 font-medium"
           >
             Register
           </button>

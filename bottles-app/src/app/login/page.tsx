@@ -6,6 +6,11 @@ import RegisterModal from "../../components/RegisterModal";
 
 const LoginPage = () => {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
+  const [registeredUsername, setRegisteredUsername] = useState<string>("");
+
+  const handleRegisterSuccess = (username: string) => {
+    setRegisteredUsername(username);
+  };
 
   return (
     <div
@@ -16,12 +21,18 @@ const LoginPage = () => {
         backgroundSize: "autp%", // Shrinks the size of the tiles
       }}
     >
-      <div className="max-w-md w-full bg-white p-6 rounded-lg shadow-md">
-        <h1 className="text-2xl font-bold text-center mb-4">Smart Bar Login</h1>
-        <Login onShowRegister={() => setShowRegisterModal(true)} />
+      <div className="max-w-md w-full bg-gradient-to-br from-amber-50 to-yellow-50 p-6 lg:p-9 rounded-xl border-4 border-double border-amber-700 shadow-lg">
+        <h1 className="text-2xl lg:text-4xl font-bold text-center mb-4 lg:mb-6 text-amber-900">Smart Bar Login</h1>
+        <Login 
+          onShowRegister={() => setShowRegisterModal(true)} 
+          initialUsername={registeredUsername}
+        />
       </div>
       {showRegisterModal && (
-        <RegisterModal onClose={() => setShowRegisterModal(false)} />
+        <RegisterModal 
+          onClose={() => setShowRegisterModal(false)} 
+          onRegisterSuccess={handleRegisterSuccess}
+        />
       )}
     </div>
   );

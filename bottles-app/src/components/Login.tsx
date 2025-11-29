@@ -1,19 +1,27 @@
 // "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { API_ENDPOINTS } from "@/lib/config";
 import { setTokens } from "@/lib/tokenManager";
 
 interface LoginProps {
   onShowRegister: () => void;
+  initialUsername?: string;
 }
 
-const Login = ({ onShowRegister }: LoginProps) => {
-  const [username, setUsername] = useState("");
+const Login = ({ onShowRegister, initialUsername }: LoginProps) => {
+  const [username, setUsername] = useState(initialUsername || "");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const router = useRouter();
+
+  // Update username when initialUsername changes (after registration)
+  useEffect(() => {
+    if (initialUsername) {
+      setUsername(initialUsername);
+    }
+  }, [initialUsername]);
 
   const handleLogin = async () => {
     setErrorMessage(null);
@@ -70,7 +78,7 @@ const Login = ({ onShowRegister }: LoginProps) => {
         Don&apos;t have an account?{" "}
         <button
           onClick={onShowRegister}
-          className="text-blue-600 hover:underline"
+          className="font-bold text-blue-600 hover:underline"
         >
           Register
         </button>
