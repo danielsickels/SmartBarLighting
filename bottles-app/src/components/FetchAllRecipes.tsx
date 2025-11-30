@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import toast from "react-hot-toast";
 import LoadingSpinner from "./LoadingSpinner";
 import SearchBar from "./SearchBar";
 import RecipeDetails from "./RecipeDetails";
 import ConfirmDialog from "./ConfirmDialog";
+import SpiritFilterButtons from "./SpiritFilterButtons";
 import { fetchAllRecipes, deleteRecipe, Recipe } from "../services/recipeService";
 // import { fetchAllSpiritTypes, SpiritType } from "../services/spiritTypeService";
 import { fetchAllBottles } from "../services/bottleService";
@@ -24,6 +25,7 @@ const FetchAllRecipes = ({ onEdit }: FetchAllRecipesProps) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedSpiritIds, setSelectedSpiritIds] = useState<number[]>([]);
   const [confirmDialog, setConfirmDialog] = useState<{
     isOpen: boolean;
     recipeId: number | null;
@@ -33,6 +35,17 @@ const FetchAllRecipes = ({ onEdit }: FetchAllRecipesProps) => {
     recipeId: null,
     recipeName: "",
   });
+
+  // Extract unique spirit types from recipes
+  const availableSpiritTypes = useMemo(() => {
+    const spiritMap = new Map();
+    recipes.forEach((recipe) => {
+      recipe.spirit_types.forEach((spirit) => {
+        spiritMap.set(spirit.id, spirit);
+      });
+    });
+    return Array.from(spiritMap.values()).sort((a, b) => a.name.localeCompare(b.name));
+  }, [recipes]);
 
   useEffect(() => {
     const fetchRecipesAndData = async () => {
@@ -59,18 +72,31 @@ const FetchAllRecipes = ({ onEdit }: FetchAllRecipesProps) => {
   }, []);
 
   useEffect(() => {
-    if (searchQuery === "") {
-      setFilteredRecipes(recipes); // Show all recipes when search query is empty
-    } else {
-      const regex = new RegExp(searchQuery, "i");
-      const filtered = recipes.filter(
-        (recipe) =>
-          regex.test(recipe.name) ||
-          recipe.spirit_types.some((spirit) => regex.test(spirit.name)) // Filter by spirit type
-      );
-      setFilteredRecipes(filtered);
-    }
-  }, [searchQuery, recipes]);
+    const regex = new RegExp(searchQuery, "i");
+    const filtered = recipes.filter((recipe) => {
+      // Search filter
+      const matchesSearch =
+        searchQuery === "" ||
+        regex.test(recipe.name) ||
+        recipe.spirit_types.some((spirit) => regex.test(spirit.name));
+
+      // Spirit type filter
+      const matchesSpirit =
+        selectedSpiritIds.length === 0 ||
+        recipe.spirit_types.some((spirit) => selectedSpiritIds.includes(spirit.id));
+
+      return matchesSearch && matchesSpirit;
+    });
+    setFilteredRecipes(filtered);
+  }, [searchQuery, recipes, selectedSpiritIds]);
+
+  const handleToggleSpirit = (spiritId: number) => {
+    setSelectedSpiritIds((prev) =>
+      prev.includes(spiritId)
+        ? prev.filter((id) => id !== spiritId)
+        : [...prev, spiritId]
+    );
+  };
 
   const handleDeleteClick = (id: number, name: string) => {
     setConfirmDialog({
@@ -129,6 +155,13 @@ const FetchAllRecipes = ({ onEdit }: FetchAllRecipesProps) => {
           placeholder="Search recipes..."
         />
       </div>
+
+      {/* Spirit Type Filter Buttons */}
+      <SpiritFilterButtons
+        spiritTypes={availableSpiritTypes}
+        selectedSpiritIds={selectedSpiritIds}
+        onToggleSpirit={handleToggleSpirit}
+      />
 
       {loading && <LoadingSpinner />}
       {error && <p className="text-red-500">{error}</p>}

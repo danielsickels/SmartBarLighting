@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import toast from "react-hot-toast";
 import BottleDetails from "./BottleDetails";
 import LoadingSpinner from "./LoadingSpinner";
 import SearchBar from "./SearchBar";
 import ConfirmDialog from "./ConfirmDialog";
+import SpiritFilterButtons from "./SpiritFilterButtons";
 import {
   fetchAllBottles,
   deleteBottle,
@@ -20,6 +21,7 @@ const FetchAllBottles = ({ onEdit }: FetchAllBottlesProps) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedSpiritIds, setSelectedSpiritIds] = useState<number[]>([]);
   const [confirmDialog, setConfirmDialog] = useState<{
     isOpen: boolean;
     bottleId: number | null;
@@ -29,6 +31,17 @@ const FetchAllBottles = ({ onEdit }: FetchAllBottlesProps) => {
     bottleId: null,
     bottleName: "",
   });
+
+  // Extract unique spirit types from bottles
+  const availableSpiritTypes = useMemo(() => {
+    const spiritMap = new Map();
+    bottles.forEach((bottle) => {
+      if (bottle.spirit_type) {
+        spiritMap.set(bottle.spirit_type.id, bottle.spirit_type);
+      }
+    });
+    return Array.from(spiritMap.values()).sort((a, b) => a.name.localeCompare(b.name));
+  }, [bottles]);
 
   useEffect(() => {
     const fetchBottles = async () => {
@@ -51,15 +64,31 @@ const FetchAllBottles = ({ onEdit }: FetchAllBottlesProps) => {
 
   useEffect(() => {
     const regex = new RegExp(searchQuery, "i");
-    const filtered = bottles.filter(
-      (bottle) =>
+    const filtered = bottles.filter((bottle) => {
+      // Search filter
+      const matchesSearch =
         regex.test(bottle.name) ||
         regex.test(bottle.brand || "") ||
         regex.test(bottle.flavor_profile || "") ||
-        regex.test(bottle.spirit_type?.name || "")
-    );
+        regex.test(bottle.spirit_type?.name || "");
+
+      // Spirit type filter
+      const matchesSpirit =
+        selectedSpiritIds.length === 0 ||
+        (bottle.spirit_type && selectedSpiritIds.includes(bottle.spirit_type.id));
+
+      return matchesSearch && matchesSpirit;
+    });
     setFilteredBottles(filtered);
-  }, [searchQuery, bottles]);
+  }, [searchQuery, bottles, selectedSpiritIds]);
+
+  const handleToggleSpirit = (spiritId: number) => {
+    setSelectedSpiritIds((prev) =>
+      prev.includes(spiritId)
+        ? prev.filter((id) => id !== spiritId)
+        : [...prev, spiritId]
+    );
+  };
 
   // Show confirmation dialog before deleting
   const handleDeleteClick = (id: number, name: string) => {
@@ -110,6 +139,13 @@ const FetchAllBottles = ({ onEdit }: FetchAllBottlesProps) => {
           placeholder="Search bottles..."
         />
       </div>
+
+      {/* Spirit Type Filter Buttons */}
+      <SpiritFilterButtons
+        spiritTypes={availableSpiritTypes}
+        selectedSpiritIds={selectedSpiritIds}
+        onToggleSpirit={handleToggleSpirit}
+      />
 
       {loading && <LoadingSpinner />}
       {error && <div className="text-red-500 mt-4">{error}</div>}
