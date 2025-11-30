@@ -9,8 +9,6 @@ const ScrollToTop = ({ scrollContainerRef }: ScrollToTopProps) => {
 
   // Show button when page is scrolled down
   useEffect(() => {
-    const scrollElement = scrollContainerRef?.current || window;
-    
     const toggleVisibility = () => {
       const scrollY = scrollContainerRef?.current 
         ? scrollContainerRef.current.scrollTop 
@@ -23,10 +21,12 @@ const ScrollToTop = ({ scrollContainerRef }: ScrollToTopProps) => {
       }
     };
 
-    if (scrollContainerRef?.current) {
-      scrollContainerRef.current.addEventListener("scroll", toggleVisibility);
+    const scrollElement = scrollContainerRef?.current;
+    
+    if (scrollElement) {
+      scrollElement.addEventListener("scroll", toggleVisibility);
       return () => {
-        scrollContainerRef.current?.removeEventListener("scroll", toggleVisibility);
+        scrollElement.removeEventListener("scroll", toggleVisibility);
       };
     } else {
       window.addEventListener("scroll", toggleVisibility);

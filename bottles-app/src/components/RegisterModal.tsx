@@ -75,7 +75,7 @@ const RegisterModal = ({ onClose, onRegisterSuccess }: RegisterModalProps) => {
         
         // Handle validation errors from Pydantic
         if (errorData.detail && Array.isArray(errorData.detail)) {
-          const messages = errorData.detail.map((err: any) => err.msg).join(", ");
+          const messages = errorData.detail.map((err: { msg: string }) => err.msg).join(", ");
           throw new Error(messages);
         } else if (errorData.detail) {
           throw new Error(errorData.detail);
