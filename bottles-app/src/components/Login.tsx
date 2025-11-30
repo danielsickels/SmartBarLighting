@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { API_ENDPOINTS } from "@/lib/config";
 import { setTokens } from "@/lib/tokenManager";
+import toast from "react-hot-toast";
 
 interface LoginProps {
   onShowRegister: () => void;
@@ -11,52 +12,73 @@ interface LoginProps {
 }
 
 const Login = ({ onShowRegister, initialUsername }: LoginProps) => {
-  const [username, setUsername] = useState(initialUsername || "");
+  const [usernameOrEmail, setUsernameOrEmail] = useState(initialUsername || "");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
   // Update username when initialUsername changes (after registration)
   useEffect(() => {
     if (initialUsername) {
-      setUsername(initialUsername);
+      setUsernameOrEmail(initialUsername);
     }
   }, [initialUsername]);
 
   const handleLogin = async () => {
-    setErrorMessage(null);
+    // Basic validation
+    if (!usernameOrEmail.trim()) {
+      toast.error("Please enter your username or email");
+      return;
+    }
+    
+    if (!password.trim()) {
+      toast.error("Please enter your password");
+      return;
+    }
+    
+    setIsSubmitting(true);
+    const toastId = toast.loading("Logging you in...");
+    
     try {
       const response = await fetch(API_ENDPOINTS.AUTH.LOGIN, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username_or_email: usernameOrEmail, password }),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
+        // Show the backend error message
         throw new Error(errorData.detail || "Login failed");
       }
 
       const data = await response.json();
       setTokens(data.access_token, data.refresh_token);
-      router.push("/");
+      toast.success("Welcome back! 🍸", { id: toastId });
+      
+      // Small delay to show success message before redirect
+      setTimeout(() => {
+        router.push("/");
+      }, 500);
     } catch (error: unknown) {
-      setErrorMessage((error as Error).message || "Something went wrong");
+      const errorMsg = (error as Error).message || "Something went wrong";
+      toast.error(errorMsg, { id: toastId });
+      setIsSubmitting(false);
     }
   };
 
   return (
     <div>
-      {errorMessage && <p className="text-red-500 mb-2">{errorMessage}</p>}
       <div className="mb-4">
-        <label className="block text-gray-700 font-medium">Username</label>
+        <label className="block text-gray-700 font-medium">Username or Email</label>
         <input
           type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          value={usernameOrEmail}
+          onChange={(e) => setUsernameOrEmail(e.target.value)}
           className="w-full border border-gray-300 rounded-lg px-3 py-2"
+          placeholder="Enter your username or email"
         />
       </div>
       <div className="mb-4">
@@ -70,9 +92,10 @@ const Login = ({ onShowRegister, initialUsername }: LoginProps) => {
       </div>
       <button
         onClick={handleLogin}
-        className="bg-blue-600 text-white w-full py-2 rounded-lg hover:bg-blue-700"
+        disabled={isSubmitting}
+        className="bg-blue-600 text-white w-full py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        Login
+        {isSubmitting ? "Logging in..." : "Login"}
       </button>
       <p className="text-center mt-4">
         Don&apos;t have an account?{" "}
