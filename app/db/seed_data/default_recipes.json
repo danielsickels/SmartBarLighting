@@ -1,0 +1,917 @@
+{
+  "spirit_types": [
+    "Bourbon",
+    "Rye Whiskey",
+    "Scotch",
+    "Irish Whiskey",
+    "Vodka",
+    "Gin",
+    "White Rum",
+    "Dark Rum",
+    "Spiced Rum",
+    "Tequila",
+    "Mezcal",
+    "Brandy",
+    "Cognac",
+    "Champagne",
+    "Vermouth"
+  ],
+  "recipes": [
+    {
+      "name": "Old Fashioned",
+      "instructions": "Muddle sugar cube and bitters with a splash of water in a rocks glass. Add ice and bourbon. Stir gently for 30 seconds. Express orange peel over the drink and garnish.",
+      "ingredients": [
+        {"name": "Sugar Cube", "quantity": "1", "unit": "cube"},
+        {"name": "Angostura Bitters", "quantity": "3", "unit": "dashes"},
+        {"name": "Water", "quantity": "1", "unit": "tsp"},
+        {"name": "Bourbon", "quantity": "2", "unit": "oz"},
+        {"name": "Orange Peel", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Bourbon"]
+    },
+    {
+      "name": "Manhattan",
+      "instructions": "Add rye whiskey, sweet vermouth, and bitters to a mixing glass with ice. Stir for 30 seconds. Strain into a chilled coupe glass. Garnish with a cherry.",
+      "ingredients": [
+        {"name": "Rye Whiskey", "quantity": "2", "unit": "oz"},
+        {"name": "Sweet Vermouth", "quantity": "1", "unit": "oz"},
+        {"name": "Angostura Bitters", "quantity": "2", "unit": "dashes"},
+        {"name": "Maraschino Cherry", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Rye Whiskey"]
+    },
+    {
+      "name": "Whiskey Sour",
+      "instructions": "Add bourbon, lemon juice, and simple syrup to a shaker with ice. Shake vigorously for 15 seconds. Strain into a rocks glass with fresh ice. Garnish with cherry and orange slice.",
+      "ingredients": [
+        {"name": "Bourbon", "quantity": "2", "unit": "oz"},
+        {"name": "Fresh Lemon Juice", "quantity": "0.75", "unit": "oz"},
+        {"name": "Simple Syrup", "quantity": "0.5", "unit": "oz"},
+        {"name": "Maraschino Cherry", "quantity": "1", "unit": "piece"},
+        {"name": "Orange Slice", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Bourbon"]
+    },
+    {
+      "name": "Margarita",
+      "instructions": "Rim a rocks glass with salt. Add tequila, lime juice, and triple sec to a shaker with ice. Shake well for 15 seconds. Strain into the prepared glass with fresh ice. Garnish with lime wheel.",
+      "ingredients": [
+        {"name": "Tequila", "quantity": "2", "unit": "oz"},
+        {"name": "Fresh Lime Juice", "quantity": "1", "unit": "oz"},
+        {"name": "Triple Sec", "quantity": "0.75", "unit": "oz"},
+        {"name": "Salt", "quantity": "1", "unit": "rim"},
+        {"name": "Lime Wheel", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Tequila"]
+    },
+    {
+      "name": "Mojito",
+      "instructions": "Muddle mint leaves with sugar and lime juice in a highball glass. Add rum and fill with ice. Top with soda water and stir. Garnish with mint sprig and lime wheel.",
+      "ingredients": [
+        {"name": "White Rum", "quantity": "2", "unit": "oz"},
+        {"name": "Fresh Lime Juice", "quantity": "1", "unit": "oz"},
+        {"name": "Simple Syrup", "quantity": "0.75", "unit": "oz"},
+        {"name": "Mint Leaves", "quantity": "8", "unit": "leaves"},
+        {"name": "Soda Water", "quantity": "2", "unit": "oz"},
+        {"name": "Mint Sprig", "quantity": "1", "unit": "sprig"}
+      ],
+      "spirit_types": ["White Rum"]
+    },
+    {
+      "name": "Daiquiri",
+      "instructions": "Add white rum, lime juice, and simple syrup to a shaker with ice. Shake vigorously for 15 seconds. Strain into a chilled coupe glass. Garnish with lime wheel.",
+      "ingredients": [
+        {"name": "White Rum", "quantity": "2", "unit": "oz"},
+        {"name": "Fresh Lime Juice", "quantity": "1", "unit": "oz"},
+        {"name": "Simple Syrup", "quantity": "0.75", "unit": "oz"},
+        {"name": "Lime Wheel", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["White Rum"]
+    },
+    {
+      "name": "Martini",
+      "instructions": "Add gin and dry vermouth to a mixing glass with ice. Stir for 30 seconds until well-chilled. Strain into a chilled martini glass. Garnish with lemon twist or olives.",
+      "ingredients": [
+        {"name": "Gin", "quantity": "2.5", "unit": "oz"},
+        {"name": "Dry Vermouth", "quantity": "0.5", "unit": "oz"},
+        {"name": "Lemon Twist or Olives", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Gin"]
+    },
+    {
+      "name": "Negroni",
+      "instructions": "Add gin, Campari, and sweet vermouth to a rocks glass with ice. Stir gently for 20 seconds. Garnish with orange peel.",
+      "ingredients": [
+        {"name": "Gin", "quantity": "1", "unit": "oz"},
+        {"name": "Campari", "quantity": "1", "unit": "oz"},
+        {"name": "Sweet Vermouth", "quantity": "1", "unit": "oz"},
+        {"name": "Orange Peel", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Gin"]
+    },
+    {
+      "name": "Moscow Mule",
+      "instructions": "Add vodka and lime juice to a copper mug with ice. Top with ginger beer and stir gently. Garnish with lime wheel and mint sprig.",
+      "ingredients": [
+        {"name": "Vodka", "quantity": "2", "unit": "oz"},
+        {"name": "Fresh Lime Juice", "quantity": "0.5", "unit": "oz"},
+        {"name": "Ginger Beer", "quantity": "4", "unit": "oz"},
+        {"name": "Lime Wheel", "quantity": "1", "unit": "piece"},
+        {"name": "Mint Sprig", "quantity": "1", "unit": "sprig"}
+      ],
+      "spirit_types": ["Vodka"]
+    },
+    {
+      "name": "Cosmopolitan",
+      "instructions": "Add vodka, triple sec, cranberry juice, and lime juice to a shaker with ice. Shake well for 15 seconds. Strain into a chilled martini glass. Garnish with lime wheel.",
+      "ingredients": [
+        {"name": "Vodka", "quantity": "1.5", "unit": "oz"},
+        {"name": "Triple Sec", "quantity": "0.5", "unit": "oz"},
+        {"name": "Cranberry Juice", "quantity": "1", "unit": "oz"},
+        {"name": "Fresh Lime Juice", "quantity": "0.5", "unit": "oz"},
+        {"name": "Lime Wheel", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Vodka"]
+    },
+    {
+      "name": "Mai Tai",
+      "instructions": "Add rum, orange curaçao, lime juice, and orgeat syrup to a shaker with ice. Shake well. Strain into a rocks glass with crushed ice. Float dark rum on top. Garnish with mint and lime.",
+      "ingredients": [
+        {"name": "White Rum", "quantity": "1.5", "unit": "oz"},
+        {"name": "Dark Rum", "quantity": "0.5", "unit": "oz"},
+        {"name": "Orange Curaçao", "quantity": "0.75", "unit": "oz"},
+        {"name": "Fresh Lime Juice", "quantity": "0.75", "unit": "oz"},
+        {"name": "Orgeat Syrup", "quantity": "0.5", "unit": "oz"},
+        {"name": "Mint Sprig", "quantity": "1", "unit": "sprig"}
+      ],
+      "spirit_types": ["White Rum", "Dark Rum"]
+    },
+    {
+      "name": "Mint Julep",
+      "instructions": "Muddle mint leaves with simple syrup in a julep cup. Fill with crushed ice and add bourbon. Stir gently. Top with more crushed ice. Garnish with mint sprig.",
+      "ingredients": [
+        {"name": "Bourbon", "quantity": "2.5", "unit": "oz"},
+        {"name": "Simple Syrup", "quantity": "0.5", "unit": "oz"},
+        {"name": "Mint Leaves", "quantity": "8", "unit": "leaves"},
+        {"name": "Mint Sprig", "quantity": "1", "unit": "sprig"}
+      ],
+      "spirit_types": ["Bourbon"]
+    },
+    {
+      "name": "Gimlet",
+      "instructions": "Add gin and lime juice to a shaker with ice. Shake vigorously for 15 seconds. Strain into a chilled coupe glass. Garnish with lime wheel.",
+      "ingredients": [
+        {"name": "Gin", "quantity": "2.5", "unit": "oz"},
+        {"name": "Fresh Lime Juice", "quantity": "0.75", "unit": "oz"},
+        {"name": "Simple Syrup", "quantity": "0.5", "unit": "oz"},
+        {"name": "Lime Wheel", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Gin"]
+    },
+    {
+      "name": "Tom Collins",
+      "instructions": "Add gin, lemon juice, and simple syrup to a shaker with ice. Shake well. Strain into a Collins glass with ice. Top with soda water. Garnish with lemon wheel and cherry.",
+      "ingredients": [
+        {"name": "Gin", "quantity": "2", "unit": "oz"},
+        {"name": "Fresh Lemon Juice", "quantity": "1", "unit": "oz"},
+        {"name": "Simple Syrup", "quantity": "0.5", "unit": "oz"},
+        {"name": "Soda Water", "quantity": "2", "unit": "oz"},
+        {"name": "Lemon Wheel", "quantity": "1", "unit": "piece"},
+        {"name": "Maraschino Cherry", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Gin"]
+    },
+    {
+      "name": "Sazerac",
+      "instructions": "Rinse a rocks glass with absinthe and discard excess. In a mixing glass, muddle sugar cube with bitters and a splash of water. Add rye whiskey and ice, stir well. Strain into the prepared glass. Garnish with lemon peel.",
+      "ingredients": [
+        {"name": "Rye Whiskey", "quantity": "2", "unit": "oz"},
+        {"name": "Sugar Cube", "quantity": "1", "unit": "cube"},
+        {"name": "Peychaud's Bitters", "quantity": "3", "unit": "dashes"},
+        {"name": "Absinthe", "quantity": "1", "unit": "rinse"},
+        {"name": "Lemon Peel", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Rye Whiskey"]
+    },
+    {
+      "name": "Paloma",
+      "instructions": "Rim a highball glass with salt. Add tequila and lime juice to the glass with ice. Top with grapefruit soda. Stir gently. Garnish with grapefruit wedge.",
+      "ingredients": [
+        {"name": "Tequila", "quantity": "2", "unit": "oz"},
+        {"name": "Fresh Lime Juice", "quantity": "0.5", "unit": "oz"},
+        {"name": "Grapefruit Soda", "quantity": "4", "unit": "oz"},
+        {"name": "Salt", "quantity": "1", "unit": "rim"},
+        {"name": "Grapefruit Wedge", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Tequila"]
+    },
+    {
+      "name": "Boulevardier",
+      "instructions": "Add bourbon, Campari, and sweet vermouth to a mixing glass with ice. Stir for 30 seconds. Strain into a chilled coupe glass. Garnish with orange peel.",
+      "ingredients": [
+        {"name": "Bourbon", "quantity": "1.5", "unit": "oz"},
+        {"name": "Campari", "quantity": "1", "unit": "oz"},
+        {"name": "Sweet Vermouth", "quantity": "1", "unit": "oz"},
+        {"name": "Orange Peel", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Bourbon"]
+    },
+    {
+      "name": "Dark and Stormy",
+      "instructions": "Fill a highball glass with ice. Add dark rum and top with ginger beer. Stir gently. Garnish with lime wheel.",
+      "ingredients": [
+        {"name": "Dark Rum", "quantity": "2", "unit": "oz"},
+        {"name": "Ginger Beer", "quantity": "4", "unit": "oz"},
+        {"name": "Lime Wheel", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Dark Rum"]
+    },
+    {
+      "name": "Aperol Spritz",
+      "instructions": "Fill a wine glass with ice. Add Aperol and prosecco. Top with a splash of soda water. Stir gently. Garnish with orange slice.",
+      "ingredients": [
+        {"name": "Aperol", "quantity": "3", "unit": "oz"},
+        {"name": "Prosecco", "quantity": "4", "unit": "oz"},
+        {"name": "Soda Water", "quantity": "1", "unit": "oz"},
+        {"name": "Orange Slice", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Vermouth"]
+    },
+    {
+      "name": "Sidecar",
+      "instructions": "Add cognac, triple sec, and lemon juice to a shaker with ice. Shake well for 15 seconds. Strain into a chilled coupe glass with sugared rim. Garnish with lemon twist.",
+      "ingredients": [
+        {"name": "Cognac", "quantity": "2", "unit": "oz"},
+        {"name": "Triple Sec", "quantity": "0.75", "unit": "oz"},
+        {"name": "Fresh Lemon Juice", "quantity": "0.75", "unit": "oz"},
+        {"name": "Sugar", "quantity": "1", "unit": "rim"},
+        {"name": "Lemon Twist", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Cognac"]
+    },
+    {
+      "name": "French 75",
+      "instructions": "Add gin, lemon juice, and simple syrup to a shaker with ice. Shake well. Strain into a champagne flute. Top with champagne. Garnish with lemon twist.",
+      "ingredients": [
+        {"name": "Gin", "quantity": "1", "unit": "oz"},
+        {"name": "Fresh Lemon Juice", "quantity": "0.5", "unit": "oz"},
+        {"name": "Simple Syrup", "quantity": "0.5", "unit": "oz"},
+        {"name": "Champagne", "quantity": "3", "unit": "oz"},
+        {"name": "Lemon Twist", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Gin", "Champagne"]
+    },
+    {
+      "name": "Pisco Sour",
+      "instructions": "Add pisco, lime juice, simple syrup, and egg white to a shaker without ice. Dry shake for 10 seconds. Add ice and shake vigorously for 15 seconds. Strain into a rocks glass. Top with Angostura bitters.",
+      "ingredients": [
+        {"name": "Pisco", "quantity": "2", "unit": "oz"},
+        {"name": "Fresh Lime Juice", "quantity": "1", "unit": "oz"},
+        {"name": "Simple Syrup", "quantity": "0.75", "unit": "oz"},
+        {"name": "Egg White", "quantity": "1", "unit": "whole"},
+        {"name": "Angostura Bitters", "quantity": "3", "unit": "dashes"}
+      ],
+      "spirit_types": ["Brandy"]
+    },
+    {
+      "name": "Rusty Nail",
+      "instructions": "Add scotch and Drambuie to a rocks glass with ice. Stir gently. Garnish with lemon twist.",
+      "ingredients": [
+        {"name": "Scotch", "quantity": "2", "unit": "oz"},
+        {"name": "Drambuie", "quantity": "0.75", "unit": "oz"},
+        {"name": "Lemon Twist", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Scotch"]
+    },
+    {
+      "name": "Rob Roy",
+      "instructions": "Add scotch, sweet vermouth, and bitters to a mixing glass with ice. Stir for 30 seconds. Strain into a chilled coupe glass. Garnish with cherry.",
+      "ingredients": [
+        {"name": "Scotch", "quantity": "2", "unit": "oz"},
+        {"name": "Sweet Vermouth", "quantity": "1", "unit": "oz"},
+        {"name": "Angostura Bitters", "quantity": "2", "unit": "dashes"},
+        {"name": "Maraschino Cherry", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Scotch"]
+    },
+    {
+      "name": "Piña Colada",
+      "instructions": "Add white rum, coconut cream, and pineapple juice to a blender with ice. Blend until smooth. Pour into a hurricane glass. Garnish with pineapple wedge and cherry.",
+      "ingredients": [
+        {"name": "White Rum", "quantity": "2", "unit": "oz"},
+        {"name": "Coconut Cream", "quantity": "1.5", "unit": "oz"},
+        {"name": "Pineapple Juice", "quantity": "3", "unit": "oz"},
+        {"name": "Pineapple Wedge", "quantity": "1", "unit": "piece"},
+        {"name": "Maraschino Cherry", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["White Rum"]
+    },
+    {
+      "name": "Corpse Reviver No. 2",
+      "instructions": "Add gin, Lillet Blanc, triple sec, lemon juice, and a dash of absinthe to a shaker with ice. Shake well. Strain into a chilled coupe glass. Garnish with cherry.",
+      "ingredients": [
+        {"name": "Gin", "quantity": "0.75", "unit": "oz"},
+        {"name": "Lillet Blanc", "quantity": "0.75", "unit": "oz"},
+        {"name": "Triple Sec", "quantity": "0.75", "unit": "oz"},
+        {"name": "Fresh Lemon Juice", "quantity": "0.75", "unit": "oz"},
+        {"name": "Absinthe", "quantity": "1", "unit": "dash"},
+        {"name": "Maraschino Cherry", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Gin"]
+    },
+    {
+      "name": "Vieux Carré",
+      "instructions": "Add rye whiskey, cognac, sweet vermouth, Bénédictine, and bitters to a mixing glass with ice. Stir well. Strain into a rocks glass with ice. Garnish with lemon peel.",
+      "ingredients": [
+        {"name": "Rye Whiskey", "quantity": "0.75", "unit": "oz"},
+        {"name": "Cognac", "quantity": "0.75", "unit": "oz"},
+        {"name": "Sweet Vermouth", "quantity": "0.75", "unit": "oz"},
+        {"name": "Bénédictine", "quantity": "0.25", "unit": "oz"},
+        {"name": "Peychaud's Bitters", "quantity": "2", "unit": "dashes"},
+        {"name": "Angostura Bitters", "quantity": "2", "unit": "dashes"},
+        {"name": "Lemon Peel", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Rye Whiskey", "Cognac"]
+    },
+    {
+      "name": "Americano",
+      "instructions": "Add Campari and sweet vermouth to a rocks glass with ice. Top with soda water. Stir gently. Garnish with orange slice.",
+      "ingredients": [
+        {"name": "Campari", "quantity": "1.5", "unit": "oz"},
+        {"name": "Sweet Vermouth", "quantity": "1.5", "unit": "oz"},
+        {"name": "Soda Water", "quantity": "2", "unit": "oz"},
+        {"name": "Orange Slice", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Vermouth"]
+    },
+    {
+      "name": "Blood and Sand",
+      "instructions": "Add scotch, cherry liqueur, sweet vermouth, and orange juice to a shaker with ice. Shake well. Strain into a chilled coupe glass. Garnish with orange twist.",
+      "ingredients": [
+        {"name": "Scotch", "quantity": "0.75", "unit": "oz"},
+        {"name": "Cherry Liqueur", "quantity": "0.75", "unit": "oz"},
+        {"name": "Sweet Vermouth", "quantity": "0.75", "unit": "oz"},
+        {"name": "Fresh Orange Juice", "quantity": "0.75", "unit": "oz"},
+        {"name": "Orange Twist", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Scotch"]
+    },
+    {
+      "name": "Aviation",
+      "instructions": "Add gin, maraschino liqueur, crème de violette, and lemon juice to a shaker with ice. Shake well. Strain into a chilled coupe glass. Garnish with cherry.",
+      "ingredients": [
+        {"name": "Gin", "quantity": "2", "unit": "oz"},
+        {"name": "Maraschino Liqueur", "quantity": "0.5", "unit": "oz"},
+        {"name": "Crème de Violette", "quantity": "0.25", "unit": "oz"},
+        {"name": "Fresh Lemon Juice", "quantity": "0.75", "unit": "oz"},
+        {"name": "Maraschino Cherry", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Gin"]
+    },
+    {
+      "name": "Last Word",
+      "instructions": "Add gin, green Chartreuse, maraschino liqueur, and lime juice to a shaker with ice. Shake well. Strain into a chilled coupe glass. Garnish with lime wheel.",
+      "ingredients": [
+        {"name": "Gin", "quantity": "0.75", "unit": "oz"},
+        {"name": "Green Chartreuse", "quantity": "0.75", "unit": "oz"},
+        {"name": "Maraschino Liqueur", "quantity": "0.75", "unit": "oz"},
+        {"name": "Fresh Lime Juice", "quantity": "0.75", "unit": "oz"},
+        {"name": "Lime Wheel", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Gin"]
+    },
+    {
+      "name": "Penicillin",
+      "instructions": "Add scotch, lemon juice, honey-ginger syrup, and ginger to a shaker with ice. Shake well. Strain into a rocks glass with ice. Float Islay scotch on top. Garnish with candied ginger.",
+      "ingredients": [
+        {"name": "Scotch", "quantity": "2", "unit": "oz"},
+        {"name": "Fresh Lemon Juice", "quantity": "0.75", "unit": "oz"},
+        {"name": "Honey-Ginger Syrup", "quantity": "0.75", "unit": "oz"},
+        {"name": "Islay Scotch", "quantity": "0.25", "unit": "oz"},
+        {"name": "Candied Ginger", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Scotch"]
+    },
+    {
+      "name": "Bee's Knees",
+      "instructions": "Add gin, lemon juice, and honey syrup to a shaker with ice. Shake vigorously. Strain into a chilled coupe glass. Garnish with lemon twist.",
+      "ingredients": [
+        {"name": "Gin", "quantity": "2", "unit": "oz"},
+        {"name": "Fresh Lemon Juice", "quantity": "0.75", "unit": "oz"},
+        {"name": "Honey Syrup", "quantity": "0.5", "unit": "oz"},
+        {"name": "Lemon Twist", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Gin"]
+    },
+    {
+      "name": "Bramble",
+      "instructions": "Add gin, lemon juice, and simple syrup to a shaker with ice. Shake well. Strain into a rocks glass with crushed ice. Drizzle blackberry liqueur over the top. Garnish with blackberries and lemon slice.",
+      "ingredients": [
+        {"name": "Gin", "quantity": "2", "unit": "oz"},
+        {"name": "Fresh Lemon Juice", "quantity": "1", "unit": "oz"},
+        {"name": "Simple Syrup", "quantity": "0.5", "unit": "oz"},
+        {"name": "Blackberry Liqueur", "quantity": "0.5", "unit": "oz"},
+        {"name": "Blackberries", "quantity": "2", "unit": "pieces"},
+        {"name": "Lemon Slice", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Gin"]
+    },
+    {
+      "name": "Clover Club",
+      "instructions": "Add gin, lemon juice, raspberry syrup, and egg white to a shaker without ice. Dry shake for 10 seconds. Add ice and shake vigorously. Strain into a chilled coupe glass. Garnish with raspberries.",
+      "ingredients": [
+        {"name": "Gin", "quantity": "2", "unit": "oz"},
+        {"name": "Fresh Lemon Juice", "quantity": "0.75", "unit": "oz"},
+        {"name": "Raspberry Syrup", "quantity": "0.5", "unit": "oz"},
+        {"name": "Egg White", "quantity": "1", "unit": "whole"},
+        {"name": "Raspberries", "quantity": "3", "unit": "pieces"}
+      ],
+      "spirit_types": ["Gin"]
+    },
+    {
+      "name": "Espresso Martini",
+      "instructions": "Add vodka, coffee liqueur, espresso, and simple syrup to a shaker with ice. Shake vigorously for 20 seconds. Strain into a chilled martini glass. Garnish with coffee beans.",
+      "ingredients": [
+        {"name": "Vodka", "quantity": "2", "unit": "oz"},
+        {"name": "Coffee Liqueur", "quantity": "0.5", "unit": "oz"},
+        {"name": "Fresh Espresso", "quantity": "1", "unit": "oz"},
+        {"name": "Simple Syrup", "quantity": "0.25", "unit": "oz"},
+        {"name": "Coffee Beans", "quantity": "3", "unit": "pieces"}
+      ],
+      "spirit_types": ["Vodka"]
+    },
+    {
+      "name": "Vesper",
+      "instructions": "Add gin, vodka, and Lillet Blanc to a mixing glass with ice. Stir well for 30 seconds. Strain into a chilled martini glass. Garnish with lemon twist.",
+      "ingredients": [
+        {"name": "Gin", "quantity": "3", "unit": "oz"},
+        {"name": "Vodka", "quantity": "1", "unit": "oz"},
+        {"name": "Lillet Blanc", "quantity": "0.5", "unit": "oz"},
+        {"name": "Lemon Twist", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Gin", "Vodka"]
+    },
+    {
+      "name": "Hanky Panky",
+      "instructions": "Add gin, sweet vermouth, and Fernet-Branca to a mixing glass with ice. Stir well. Strain into a chilled coupe glass. Garnish with orange twist.",
+      "ingredients": [
+        {"name": "Gin", "quantity": "1.5", "unit": "oz"},
+        {"name": "Sweet Vermouth", "quantity": "1.5", "unit": "oz"},
+        {"name": "Fernet-Branca", "quantity": "2", "unit": "dashes"},
+        {"name": "Orange Twist", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Gin"]
+    },
+    {
+      "name": "Southside",
+      "instructions": "Muddle mint leaves in a shaker. Add gin, lime juice, and simple syrup with ice. Shake well. Double strain into a chilled coupe glass. Garnish with mint leaf.",
+      "ingredients": [
+        {"name": "Gin", "quantity": "2", "unit": "oz"},
+        {"name": "Fresh Lime Juice", "quantity": "0.75", "unit": "oz"},
+        {"name": "Simple Syrup", "quantity": "0.75", "unit": "oz"},
+        {"name": "Mint Leaves", "quantity": "6", "unit": "leaves"},
+        {"name": "Mint Leaf", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Gin"]
+    },
+    {
+      "name": "Zombie",
+      "instructions": "Add white rum, dark rum, spiced rum, lime juice, grapefruit juice, and syrups to a shaker with ice. Shake well. Strain into a tiki mug with crushed ice. Garnish with mint and pineapple.",
+      "ingredients": [
+        {"name": "White Rum", "quantity": "1.5", "unit": "oz"},
+        {"name": "Dark Rum", "quantity": "1", "unit": "oz"},
+        {"name": "Spiced Rum", "quantity": "1", "unit": "oz"},
+        {"name": "Fresh Lime Juice", "quantity": "1", "unit": "oz"},
+        {"name": "Grapefruit Juice", "quantity": "1", "unit": "oz"},
+        {"name": "Cinnamon Syrup", "quantity": "0.5", "unit": "oz"},
+        {"name": "Grenadine", "quantity": "0.5", "unit": "oz"},
+        {"name": "Mint Sprig", "quantity": "1", "unit": "sprig"},
+        {"name": "Pineapple Wedge", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["White Rum", "Dark Rum", "Spiced Rum"]
+    },
+    {
+      "name": "Caipirinha",
+      "instructions": "Muddle lime wedges with sugar in a rocks glass. Fill with crushed ice and add cachaça. Stir well. Garnish with lime wheel.",
+      "ingredients": [
+        {"name": "Cachaça", "quantity": "2", "unit": "oz"},
+        {"name": "Lime Wedges", "quantity": "4", "unit": "pieces"},
+        {"name": "Sugar", "quantity": "2", "unit": "tsp"},
+        {"name": "Lime Wheel", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["White Rum"]
+    },
+    {
+      "name": "Tequila Sunrise",
+      "instructions": "Fill a highball glass with ice. Add tequila and orange juice, stir gently. Slowly pour grenadine down the side to create sunrise effect. Garnish with orange slice and cherry.",
+      "ingredients": [
+        {"name": "Tequila", "quantity": "2", "unit": "oz"},
+        {"name": "Orange Juice", "quantity": "4", "unit": "oz"},
+        {"name": "Grenadine", "quantity": "0.5", "unit": "oz"},
+        {"name": "Orange Slice", "quantity": "1", "unit": "piece"},
+        {"name": "Maraschino Cherry", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Tequila"]
+    },
+    {
+      "name": "El Presidente",
+      "instructions": "Add white rum, dry vermouth, orange curaçao, and grenadine to a mixing glass with ice. Stir well. Strain into a chilled coupe glass. Garnish with orange twist.",
+      "ingredients": [
+        {"name": "White Rum", "quantity": "1.5", "unit": "oz"},
+        {"name": "Dry Vermouth", "quantity": "1.5", "unit": "oz"},
+        {"name": "Orange Curaçao", "quantity": "0.25", "unit": "oz"},
+        {"name": "Grenadine", "quantity": "1", "unit": "tsp"},
+        {"name": "Orange Twist", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["White Rum"]
+    },
+    {
+      "name": "Paper Plane",
+      "instructions": "Add bourbon, Aperol, Amaro Nonino, and lemon juice to a shaker with ice. Shake well. Strain into a chilled coupe glass. No garnish needed.",
+      "ingredients": [
+        {"name": "Bourbon", "quantity": "0.75", "unit": "oz"},
+        {"name": "Aperol", "quantity": "0.75", "unit": "oz"},
+        {"name": "Amaro Nonino", "quantity": "0.75", "unit": "oz"},
+        {"name": "Fresh Lemon Juice", "quantity": "0.75", "unit": "oz"}
+      ],
+      "spirit_types": ["Bourbon"]
+    },
+    {
+      "name": "Suffering Bastard",
+      "instructions": "Add bourbon, gin, lime juice, and bitters to a shaker with ice. Shake well. Strain into a Collins glass with ice. Top with ginger beer. Garnish with mint and cucumber.",
+      "ingredients": [
+        {"name": "Bourbon", "quantity": "1", "unit": "oz"},
+        {"name": "Gin", "quantity": "1", "unit": "oz"},
+        {"name": "Fresh Lime Juice", "quantity": "0.5", "unit": "oz"},
+        {"name": "Angostura Bitters", "quantity": "2", "unit": "dashes"},
+        {"name": "Ginger Beer", "quantity": "4", "unit": "oz"},
+        {"name": "Mint Sprig", "quantity": "1", "unit": "sprig"},
+        {"name": "Cucumber Slice", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Bourbon", "Gin"]
+    },
+    {
+      "name": "Brandy Alexander",
+      "instructions": "Add cognac, crème de cacao, and heavy cream to a shaker with ice. Shake vigorously. Strain into a chilled coupe glass. Garnish with grated nutmeg.",
+      "ingredients": [
+        {"name": "Cognac", "quantity": "1.5", "unit": "oz"},
+        {"name": "Crème de Cacao", "quantity": "1", "unit": "oz"},
+        {"name": "Heavy Cream", "quantity": "1", "unit": "oz"},
+        {"name": "Nutmeg", "quantity": "1", "unit": "pinch"}
+      ],
+      "spirit_types": ["Cognac"]
+    },
+    {
+      "name": "Whiskey Smash",
+      "instructions": "Muddle lemon wedges and mint in a shaker. Add bourbon and simple syrup with ice. Shake well. Strain into a rocks glass with crushed ice. Garnish with mint sprig.",
+      "ingredients": [
+        {"name": "Bourbon", "quantity": "2", "unit": "oz"},
+        {"name": "Lemon Wedges", "quantity": "3", "unit": "pieces"},
+        {"name": "Simple Syrup", "quantity": "0.75", "unit": "oz"},
+        {"name": "Mint Leaves", "quantity": "6", "unit": "leaves"},
+        {"name": "Mint Sprig", "quantity": "1", "unit": "sprig"}
+      ],
+      "spirit_types": ["Bourbon"]
+    },
+    {
+      "name": "Pornstar Martini",
+      "instructions": "Add vanilla vodka, passion fruit liqueur, passion fruit purée, lime juice, and simple syrup to a shaker with ice. Shake well. Strain into a chilled martini glass. Serve with a shot of champagne on the side. Garnish with passion fruit half.",
+      "ingredients": [
+        {"name": "Vanilla Vodka", "quantity": "2", "unit": "oz"},
+        {"name": "Passion Fruit Liqueur", "quantity": "0.5", "unit": "oz"},
+        {"name": "Passion Fruit Purée", "quantity": "1", "unit": "oz"},
+        {"name": "Fresh Lime Juice", "quantity": "0.5", "unit": "oz"},
+        {"name": "Simple Syrup", "quantity": "0.25", "unit": "oz"},
+        {"name": "Champagne", "quantity": "1", "unit": "oz"},
+        {"name": "Passion Fruit Half", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Vodka", "Champagne"]
+    },
+    {
+      "name": "Amaretto Sour",
+      "instructions": "Add amaretto, bourbon, lemon juice, and simple syrup to a shaker with ice. Shake well. Strain into a rocks glass with ice. Garnish with cherry and orange slice.",
+      "ingredients": [
+        {"name": "Amaretto", "quantity": "1.5", "unit": "oz"},
+        {"name": "Bourbon", "quantity": "0.75", "unit": "oz"},
+        {"name": "Fresh Lemon Juice", "quantity": "1", "unit": "oz"},
+        {"name": "Simple Syrup", "quantity": "0.5", "unit": "oz"},
+        {"name": "Maraschino Cherry", "quantity": "1", "unit": "piece"},
+        {"name": "Orange Slice", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Bourbon"]
+    },
+    {
+      "name": "Irish Coffee",
+      "instructions": "Preheat a glass mug with hot water. Discard water and add sugar and hot coffee. Stir to dissolve. Add Irish whiskey. Top with lightly whipped cream by pouring over the back of a spoon.",
+      "ingredients": [
+        {"name": "Irish Whiskey", "quantity": "1.5", "unit": "oz"},
+        {"name": "Hot Coffee", "quantity": "6", "unit": "oz"},
+        {"name": "Brown Sugar", "quantity": "2", "unit": "tsp"},
+        {"name": "Heavy Cream", "quantity": "2", "unit": "oz"}
+      ],
+      "spirit_types": ["Irish Whiskey"]
+    },
+    {
+      "name": "Hot Toddy",
+      "instructions": "Add bourbon, honey, and lemon juice to a mug. Fill with hot water and stir. Garnish with lemon wheel and cinnamon stick.",
+      "ingredients": [
+        {"name": "Bourbon", "quantity": "2", "unit": "oz"},
+        {"name": "Honey", "quantity": "1", "unit": "tbsp"},
+        {"name": "Fresh Lemon Juice", "quantity": "0.5", "unit": "oz"},
+        {"name": "Hot Water", "quantity": "6", "unit": "oz"},
+        {"name": "Lemon Wheel", "quantity": "1", "unit": "piece"},
+        {"name": "Cinnamon Stick", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Bourbon"]
+    },
+    {
+      "name": "Singapore Sling",
+      "instructions": "Add gin, cherry liqueur, Bénédictine, lime juice, and grenadine to a shaker with ice. Shake well. Strain into a Collins glass with ice. Top with soda water and pineapple juice. Garnish with pineapple and cherry.",
+      "ingredients": [
+        {"name": "Gin", "quantity": "1.5", "unit": "oz"},
+        {"name": "Cherry Liqueur", "quantity": "0.5", "unit": "oz"},
+        {"name": "Bénédictine", "quantity": "0.25", "unit": "oz"},
+        {"name": "Fresh Lime Juice", "quantity": "0.5", "unit": "oz"},
+        {"name": "Grenadine", "quantity": "0.25", "unit": "oz"},
+        {"name": "Pineapple Juice", "quantity": "2", "unit": "oz"},
+        {"name": "Soda Water", "quantity": "1", "unit": "oz"},
+        {"name": "Pineapple Wedge", "quantity": "1", "unit": "piece"},
+        {"name": "Maraschino Cherry", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Gin"]
+    },
+    {
+      "name": "Long Island Iced Tea",
+      "instructions": "Add vodka, rum, gin, tequila, triple sec, lemon juice, and simple syrup to a shaker with ice. Shake well. Strain into a Collins glass with ice. Top with cola. Garnish with lemon wheel.",
+      "ingredients": [
+        {"name": "Vodka", "quantity": "0.5", "unit": "oz"},
+        {"name": "White Rum", "quantity": "0.5", "unit": "oz"},
+        {"name": "Gin", "quantity": "0.5", "unit": "oz"},
+        {"name": "Tequila", "quantity": "0.5", "unit": "oz"},
+        {"name": "Triple Sec", "quantity": "0.5", "unit": "oz"},
+        {"name": "Fresh Lemon Juice", "quantity": "1", "unit": "oz"},
+        {"name": "Simple Syrup", "quantity": "0.75", "unit": "oz"},
+        {"name": "Cola", "quantity": "2", "unit": "oz"},
+        {"name": "Lemon Wheel", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Vodka", "White Rum", "Gin", "Tequila"]
+    },
+    {
+      "name": "Pimm's Cup",
+      "instructions": "Fill a Collins glass with ice. Add Pimm's No. 1 and lemon juice. Top with ginger ale or lemonade. Stir gently. Garnish with cucumber, strawberry, mint, and orange slice.",
+      "ingredients": [
+        {"name": "Pimm's No. 1", "quantity": "2", "unit": "oz"},
+        {"name": "Fresh Lemon Juice", "quantity": "0.5", "unit": "oz"},
+        {"name": "Ginger Ale", "quantity": "4", "unit": "oz"},
+        {"name": "Cucumber Slice", "quantity": "3", "unit": "pieces"},
+        {"name": "Strawberry", "quantity": "1", "unit": "piece"},
+        {"name": "Mint Sprig", "quantity": "1", "unit": "sprig"},
+        {"name": "Orange Slice", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Gin"]
+    },
+    {
+      "name": "Ramos Gin Fizz",
+      "instructions": "Add gin, lemon juice, lime juice, simple syrup, cream, egg white, and orange flower water to a shaker without ice. Dry shake for 1 minute. Add ice and shake vigorously for another minute. Strain into a Collins glass. Top with soda water. No garnish.",
+      "ingredients": [
+        {"name": "Gin", "quantity": "2", "unit": "oz"},
+        {"name": "Fresh Lemon Juice", "quantity": "0.5", "unit": "oz"},
+        {"name": "Fresh Lime Juice", "quantity": "0.5", "unit": "oz"},
+        {"name": "Simple Syrup", "quantity": "1", "unit": "oz"},
+        {"name": "Heavy Cream", "quantity": "1", "unit": "oz"},
+        {"name": "Egg White", "quantity": "1", "unit": "whole"},
+        {"name": "Orange Flower Water", "quantity": "3", "unit": "dashes"},
+        {"name": "Soda Water", "quantity": "2", "unit": "oz"}
+      ],
+      "spirit_types": ["Gin"]
+    },
+    {
+      "name": "Kir Royale",
+      "instructions": "Pour crème de cassis into a champagne flute. Top with champagne. Stir gently. Garnish with lemon twist.",
+      "ingredients": [
+        {"name": "Crème de Cassis", "quantity": "0.5", "unit": "oz"},
+        {"name": "Champagne", "quantity": "5", "unit": "oz"},
+        {"name": "Lemon Twist", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Champagne"]
+    },
+    {
+      "name": "Bellini",
+      "instructions": "Pour white peach purée into a champagne flute. Top with prosecco. Stir gently. Garnish with peach slice.",
+      "ingredients": [
+        {"name": "White Peach Purée", "quantity": "2", "unit": "oz"},
+        {"name": "Prosecco", "quantity": "4", "unit": "oz"},
+        {"name": "Peach Slice", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Champagne"]
+    },
+    {
+      "name": "Mimosa",
+      "instructions": "Pour orange juice into a champagne flute. Top with champagne. Stir gently. Garnish with orange twist.",
+      "ingredients": [
+        {"name": "Fresh Orange Juice", "quantity": "3", "unit": "oz"},
+        {"name": "Champagne", "quantity": "3", "unit": "oz"},
+        {"name": "Orange Twist", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Champagne"]
+    },
+    {
+      "name": "Stinger",
+      "instructions": "Add cognac and white crème de menthe to a mixing glass with ice. Stir well. Strain into a chilled coupe glass. Garnish with mint leaf.",
+      "ingredients": [
+        {"name": "Cognac", "quantity": "2", "unit": "oz"},
+        {"name": "White Crème de Menthe", "quantity": "1", "unit": "oz"},
+        {"name": "Mint Leaf", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Cognac"]
+    },
+    {
+      "name": "Grasshopper",
+      "instructions": "Add crème de menthe, white crème de cacao, and heavy cream to a shaker with ice. Shake well. Strain into a chilled coupe glass. Garnish with grated chocolate.",
+      "ingredients": [
+        {"name": "Green Crème de Menthe", "quantity": "1", "unit": "oz"},
+        {"name": "White Crème de Cacao", "quantity": "1", "unit": "oz"},
+        {"name": "Heavy Cream", "quantity": "1", "unit": "oz"},
+        {"name": "Grated Chocolate", "quantity": "1", "unit": "pinch"}
+      ],
+      "spirit_types": ["Brandy"]
+    },
+    {
+      "name": "White Russian",
+      "instructions": "Add vodka and coffee liqueur to a rocks glass with ice. Stir gently. Float heavy cream on top. Do not stir.",
+      "ingredients": [
+        {"name": "Vodka", "quantity": "2", "unit": "oz"},
+        {"name": "Coffee Liqueur", "quantity": "1", "unit": "oz"},
+        {"name": "Heavy Cream", "quantity": "1", "unit": "oz"}
+      ],
+      "spirit_types": ["Vodka"]
+    },
+    {
+      "name": "Black Russian",
+      "instructions": "Add vodka and coffee liqueur to a rocks glass with ice. Stir gently. No garnish.",
+      "ingredients": [
+        {"name": "Vodka", "quantity": "2", "unit": "oz"},
+        {"name": "Coffee Liqueur", "quantity": "1", "unit": "oz"}
+      ],
+      "spirit_types": ["Vodka"]
+    },
+    {
+      "name": "Godfather",
+      "instructions": "Add scotch and amaretto to a rocks glass with ice. Stir gently. Garnish with orange twist.",
+      "ingredients": [
+        {"name": "Scotch", "quantity": "1.5", "unit": "oz"},
+        {"name": "Amaretto", "quantity": "0.75", "unit": "oz"},
+        {"name": "Orange Twist", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Scotch"]
+    },
+    {
+      "name": "Godmother",
+      "instructions": "Add vodka and amaretto to a rocks glass with ice. Stir gently. Garnish with lemon twist.",
+      "ingredients": [
+        {"name": "Vodka", "quantity": "1.5", "unit": "oz"},
+        {"name": "Amaretto", "quantity": "0.75", "unit": "oz"},
+        {"name": "Lemon Twist", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Vodka"]
+    },
+    {
+      "name": "Colorado Bulldog",
+      "instructions": "Add vodka and coffee liqueur to a rocks glass with ice. Top with heavy cream. Finish with a splash of cola. Stir gently.",
+      "ingredients": [
+        {"name": "Vodka", "quantity": "1.5", "unit": "oz"},
+        {"name": "Coffee Liqueur", "quantity": "1", "unit": "oz"},
+        {"name": "Heavy Cream", "quantity": "1", "unit": "oz"},
+        {"name": "Cola", "quantity": "1", "unit": "oz"}
+      ],
+      "spirit_types": ["Vodka"]
+    },
+    {
+      "name": "Vodka Martini",
+      "instructions": "Add vodka and dry vermouth to a mixing glass with ice. Stir for 30 seconds until well-chilled. Strain into a chilled martini glass. Garnish with lemon twist or olives.",
+      "ingredients": [
+        {"name": "Vodka", "quantity": "2.5", "unit": "oz"},
+        {"name": "Dry Vermouth", "quantity": "0.5", "unit": "oz"},
+        {"name": "Lemon Twist or Olives", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Vodka"]
+    },
+    {
+      "name": "Bloody Mary",
+      "instructions": "Add vodka, tomato juice, lemon juice, Worcestershire sauce, hot sauce, salt, and pepper to a shaker with ice. Roll (gently pour between shakers) to mix. Pour into a highball glass. Garnish with celery, lemon wedge, and olives.",
+      "ingredients": [
+        {"name": "Vodka", "quantity": "2", "unit": "oz"},
+        {"name": "Tomato Juice", "quantity": "4", "unit": "oz"},
+        {"name": "Fresh Lemon Juice", "quantity": "0.5", "unit": "oz"},
+        {"name": "Worcestershire Sauce", "quantity": "3", "unit": "dashes"},
+        {"name": "Hot Sauce", "quantity": "2", "unit": "dashes"},
+        {"name": "Salt", "quantity": "1", "unit": "pinch"},
+        {"name": "Black Pepper", "quantity": "1", "unit": "pinch"},
+        {"name": "Celery Stalk", "quantity": "1", "unit": "piece"},
+        {"name": "Lemon Wedge", "quantity": "1", "unit": "piece"},
+        {"name": "Olives", "quantity": "2", "unit": "pieces"}
+      ],
+      "spirit_types": ["Vodka"]
+    },
+    {
+      "name": "Screwdriver",
+      "instructions": "Fill a highball glass with ice. Add vodka and orange juice. Stir gently. Garnish with orange slice.",
+      "ingredients": [
+        {"name": "Vodka", "quantity": "2", "unit": "oz"},
+        {"name": "Orange Juice", "quantity": "5", "unit": "oz"},
+        {"name": "Orange Slice", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Vodka"]
+    },
+    {
+      "name": "Sea Breeze",
+      "instructions": "Fill a highball glass with ice. Add vodka, cranberry juice, and grapefruit juice. Stir gently. Garnish with lime wedge.",
+      "ingredients": [
+        {"name": "Vodka", "quantity": "1.5", "unit": "oz"},
+        {"name": "Cranberry Juice", "quantity": "3", "unit": "oz"},
+        {"name": "Grapefruit Juice", "quantity": "1.5", "unit": "oz"},
+        {"name": "Lime Wedge", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Vodka"]
+    },
+    {
+      "name": "Kamikaze",
+      "instructions": "Add vodka, triple sec, and lime juice to a shaker with ice. Shake well. Strain into a chilled shot glass or serve in a rocks glass with ice. Garnish with lime wheel.",
+      "ingredients": [
+        {"name": "Vodka", "quantity": "1.5", "unit": "oz"},
+        {"name": "Triple Sec", "quantity": "1", "unit": "oz"},
+        {"name": "Fresh Lime Juice", "quantity": "1", "unit": "oz"},
+        {"name": "Lime Wheel", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Vodka"]
+    },
+    {
+      "name": "Smoking Gun",
+      "instructions": "Add mezcal, lime juice, and agave syrup to a shaker with ice. Shake well. Strain into a rocks glass with ice. Garnish with lime wheel and chili salt rim.",
+      "ingredients": [
+        {"name": "Mezcal", "quantity": "2", "unit": "oz"},
+        {"name": "Fresh Lime Juice", "quantity": "0.75", "unit": "oz"},
+        {"name": "Agave Syrup", "quantity": "0.5", "unit": "oz"},
+        {"name": "Lime Wheel", "quantity": "1", "unit": "piece"},
+        {"name": "Chili Salt", "quantity": "1", "unit": "rim"}
+      ],
+      "spirit_types": ["Mezcal"]
+    },
+    {
+      "name": "Oaxaca Old Fashioned",
+      "instructions": "Add tequila, mezcal, agave syrup, and bitters to a mixing glass with ice. Stir well. Strain into a rocks glass with a large ice cube. Express orange peel over drink and garnish.",
+      "ingredients": [
+        {"name": "Tequila", "quantity": "1.5", "unit": "oz"},
+        {"name": "Mezcal", "quantity": "0.5", "unit": "oz"},
+        {"name": "Agave Syrup", "quantity": "0.5", "unit": "oz"},
+        {"name": "Angostura Bitters", "quantity": "2", "unit": "dashes"},
+        {"name": "Orange Peel", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Tequila", "Mezcal"]
+    },
+    {
+      "name": "Presbyterian",
+      "instructions": "Fill a highball glass with ice. Add bourbon. Top with equal parts ginger ale and soda water. Stir gently. Garnish with lemon twist.",
+      "ingredients": [
+        {"name": "Bourbon", "quantity": "2", "unit": "oz"},
+        {"name": "Ginger Ale", "quantity": "2", "unit": "oz"},
+        {"name": "Soda Water", "quantity": "2", "unit": "oz"},
+        {"name": "Lemon Twist", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Bourbon"]
+    },
+    {
+      "name": "Horse's Neck",
+      "instructions": "Place a long spiral of lemon peel in a highball glass. Fill with ice. Add brandy and top with ginger ale. Stir gently.",
+      "ingredients": [
+        {"name": "Brandy", "quantity": "2", "unit": "oz"},
+        {"name": "Ginger Ale", "quantity": "5", "unit": "oz"},
+        {"name": "Lemon Peel Spiral", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Brandy"]
+    },
+    {
+      "name": "Presbyterian Cocktail",
+      "instructions": "Fill a rocks glass with ice. Add rye whiskey, sweet vermouth, and Bénédictine. Stir well. Garnish with lemon twist.",
+      "ingredients": [
+        {"name": "Rye Whiskey", "quantity": "2", "unit": "oz"},
+        {"name": "Sweet Vermouth", "quantity": "0.5", "unit": "oz"},
+        {"name": "Bénédictine", "quantity": "0.25", "unit": "oz"},
+        {"name": "Lemon Twist", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Rye Whiskey"]
+    },
+    {
+      "name": "Brown Derby",
+      "instructions": "Add bourbon, grapefruit juice, and honey syrup to a shaker with ice. Shake well. Strain into a chilled coupe glass. Garnish with grapefruit twist.",
+      "ingredients": [
+        {"name": "Bourbon", "quantity": "2", "unit": "oz"},
+        {"name": "Fresh Grapefruit Juice", "quantity": "1", "unit": "oz"},
+        {"name": "Honey Syrup", "quantity": "0.5", "unit": "oz"},
+        {"name": "Grapefruit Twist", "quantity": "1", "unit": "piece"}
+      ],
+      "spirit_types": ["Bourbon"]
+    }
+  ]
+}
+
