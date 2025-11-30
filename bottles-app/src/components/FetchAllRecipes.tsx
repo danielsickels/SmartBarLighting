@@ -126,6 +126,7 @@ const FetchAllRecipes = ({ onEdit }: FetchAllRecipesProps) => {
         <SearchBar
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Search recipes..."
         />
       </div>
 

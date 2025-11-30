@@ -107,6 +107,7 @@ const FetchAllBottles = ({ onEdit }: FetchAllBottlesProps) => {
         <SearchBar
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Search bottles..."
         />
       </div>
 
