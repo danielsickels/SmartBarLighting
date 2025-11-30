@@ -1,11 +1,17 @@
 import getHeaders from "@/lib/utils";
 import { API_ENDPOINTS } from "@/lib/config";
 
+export interface Ingredient {
+  name: string;
+  quantity: string;
+  unit: string;
+}
+
 export interface Recipe {
   id: number;
   name: string;
   instructions: string;
-  ingredients: string;
+  ingredients: Ingredient[] | null;
   spirit_type_ids: number[];
   spirit_types: { id: number; name: string }[];
   bottles: { id: number; name: string }[];
@@ -14,7 +20,7 @@ export interface Recipe {
 export interface RecipeCreate {
   name: string;
   instructions: string;
-  ingredients: string;
+  ingredients: Ingredient[] | null;
   spirit_type_ids: number[];
 }
 

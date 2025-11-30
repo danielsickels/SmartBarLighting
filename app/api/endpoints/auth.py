@@ -5,6 +5,7 @@ from app.db.session import get_db
 from app.db.models.user import User
 from app.schemas.user import UserCreate, UserLogin, UserResponse, TokenResponse, RefreshTokenRequest
 from app.core.auth import hash_password, verify_password, create_access_token, create_refresh_token, verify_refresh_token
+from app.services.seed_service import SeedService
 from datetime import timedelta
 import logging
 
@@ -48,6 +49,15 @@ def register_user(user: UserCreate, db: Session = Depends(get_db)):
     db.refresh(new_user)
     
     logger.info(f"User registered successfully: {user.username} ({user.email})")
+    
+    # Seed the new user account with default recipes and spirit types
+    try:
+        seed_result = SeedService.seed_user_data(db, new_user.id)
+        logger.info(f"Seeded user {new_user.id} with {seed_result['spirit_types']} spirit types and {seed_result['recipes']} recipes")
+    except Exception as e:
+        logger.error(f"Failed to seed data for user {new_user.id}: {e}")
+        # Don't fail registration if seeding fails, just log the error
+    
     return new_user
 
 @router.post("/login", response_model=TokenResponse)

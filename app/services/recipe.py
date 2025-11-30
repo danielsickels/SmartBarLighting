@@ -12,11 +12,16 @@ class RecipeService:
         if len(spirit_types) != len(recipe_in.spirit_type_ids):
             raise ValueError("Some spirit type IDs do not exist in the database.")
 
+        # Convert ingredients to dict format for JSON storage
+        ingredients_data = None
+        if recipe_in.ingredients:
+            ingredients_data = [ing.model_dump() for ing in recipe_in.ingredients]
+
         # Create the Recipe object
         recipe = Recipe(
             name=recipe_in.name,
             instructions=recipe_in.instructions,
-            ingredients=recipe_in.ingredients,
+            ingredients=ingredients_data,
             spirit_types=spirit_types,  # Associating spirit type(s)
             user_id=user_id,
         )
@@ -53,7 +58,13 @@ class RecipeService:
             recipe.spirit_types = spirit_types
         
         # Update other fields
-        for field, value in recipe_in.dict(exclude_unset=True, exclude={'spirit_type_ids'}).items():
+        update_data = recipe_in.model_dump(exclude_unset=True, exclude={'spirit_type_ids'})
+        
+        # Convert ingredients to dict format if provided
+        if 'ingredients' in update_data and update_data['ingredients'] is not None:
+            update_data['ingredients'] = [ing.model_dump() for ing in recipe_in.ingredients]
+        
+        for field, value in update_data.items():
             setattr(recipe, field, value)
         
         db.commit()

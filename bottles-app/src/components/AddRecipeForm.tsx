@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
-import { addRecipe, updateRecipe, Recipe } from "../services/recipeService";
+import { addRecipe, updateRecipe, Recipe, Ingredient } from "../services/recipeService";
 import { fetchAllSpiritTypes, SpiritType } from "../services/spiritTypeService";
 
 interface AddRecipeFormProps {
@@ -43,36 +43,30 @@ const AddRecipeForm = ({ editRecipe, onEditComplete }: AddRecipeFormProps) => {
       setName(editRecipe.name);
       setInstructions(editRecipe.instructions);
       
-      // Parse ingredients back into spirit and custom ingredients
-      const ingredientsList = editRecipe.ingredients
-        .split(",")
-        .map((item) => item.trim())
-        .filter((item) => item.length > 0);
-
-      // Separate spirit ingredients and custom ingredients
+      // Parse structured ingredients into spirit and custom ingredients
       const spiritIngs: { spirit: SpiritType; measurement: string }[] = [];
       const customIngs: { name: string; measurement: string }[] = [];
 
-      ingredientsList.forEach((ingredient) => {
-        // Check if this is a spirit ingredient
-        const spiritMatch = editRecipe.spirit_types.find((st) =>
-          ingredient.startsWith(st.name + " - ")
-        );
+      if (editRecipe.ingredients && Array.isArray(editRecipe.ingredients)) {
+        editRecipe.ingredients.forEach((ingredient: Ingredient) => {
+          // Check if this ingredient matches a spirit type
+          const spiritMatch = editRecipe.spirit_types.find((st) =>
+            st.name.toLowerCase() === ingredient.name.toLowerCase()
+          );
 
-        if (spiritMatch) {
-          const measurement = ingredient.substring(spiritMatch.name.length + 3); // Remove "Name - "
-          const spiritType = allSpiritTypes.find((s) => s.id === spiritMatch.id);
-          if (spiritType) {
-            spiritIngs.push({ spirit: spiritType, measurement });
+          if (spiritMatch) {
+            const spiritType = allSpiritTypes.find((s) => s.id === spiritMatch.id);
+            if (spiritType) {
+              const measurement = `${ingredient.quantity} ${ingredient.unit}`;
+              spiritIngs.push({ spirit: spiritType, measurement });
+            }
+          } else {
+            // Custom ingredient
+            const measurement = `${ingredient.quantity} ${ingredient.unit}`;
+            customIngs.push({ name: ingredient.name, measurement });
           }
-        } else {
-          // Custom ingredient
-          const parts = ingredient.split(" - ");
-          const name = parts[0];
-          const measurement = parts[1] || "";
-          customIngs.push({ name, measurement });
-        }
-      });
+        });
+      }
 
       setSpiritIngredients(spiritIngs);
       setCustomIngredients(customIngs);
@@ -122,16 +116,48 @@ const AddRecipeForm = ({ editRecipe, onEditComplete }: AddRecipeFormProps) => {
 
     setSubmitting(true);
 
-    const spiritStrings = spiritIngredients.map(
-      (item) => `${item.spirit.name} - ${item.measurement}`
-    );
-    const customStrings = customIngredients.map(
-      (item) => `${item.name} - ${item.measurement}`
-    );
+    // Helper function to parse measurement into quantity and unit
+    const parseMeasurement = (measurement: string): { quantity: string; unit: string } => {
+      const trimmed = measurement.trim();
+      const parts = trimmed.split(/\s+/); // Split by whitespace
+      
+      if (parts.length >= 2) {
+        return { quantity: parts[0], unit: parts.slice(1).join(" ") };
+      } else if (parts.length === 1) {
+        // Try to extract number from string
+        const match = trimmed.match(/^([\d.\/]+)\s*(.*)$/);
+        if (match) {
+          return { quantity: match[1], unit: match[2] || "piece" };
+        }
+        return { quantity: trimmed, unit: "piece" };
+      }
+      return { quantity: "1", unit: "piece" };
+    };
+
+    // Convert to structured ingredients
+    const structuredIngredients: Ingredient[] = [
+      ...spiritIngredients.map((item) => {
+        const { quantity, unit } = parseMeasurement(item.measurement);
+        return {
+          name: item.spirit.name,
+          quantity,
+          unit,
+        };
+      }),
+      ...customIngredients.map((item) => {
+        const { quantity, unit } = parseMeasurement(item.measurement);
+        return {
+          name: item.name,
+          quantity,
+          unit,
+        };
+      }),
+    ];
+
     const payload = {
       name,
       instructions,
-      ingredients: [...spiritStrings, ...customStrings].join(", "),
+      ingredients: structuredIngredients,
       spirit_type_ids: spiritIngredients.map((item) => item.spirit.id),
     };
 

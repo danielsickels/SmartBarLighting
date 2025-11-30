@@ -1,8 +1,14 @@
+interface Ingredient {
+  name: string;
+  quantity: string;
+  unit: string;
+}
+
 interface RecipeDetailsProps {
   id: number;
   name: string;
   instructions: string;
-  ingredients: string;
+  ingredients: Ingredient[] | null;
   spirit_types: { id: number; name: string }[];
   onDelete: () => void;
   onEdit: () => void;
@@ -16,49 +22,32 @@ const RecipeDetails = ({
   onDelete,
   onEdit,
 }: RecipeDetailsProps) => {
-  // Parse ingredients from comma-separated string into array
-  const ingredientsList = ingredients
-    .split(",")
-    .map((item) => item.trim())
-    .filter((item) => item.length > 0);
-
-  // Debug logging
-  // console.log("Recipe:", name);
-  // console.log("Full ingredients list:", ingredientsList);
-  // console.log("Spirit types:", spirit_types);
+  // Convert structured ingredients to display format
+  const ingredientsList = ingredients || [];
 
   // Create spirits with measurements and filter out spirit ingredients from the ingredients list
   const spiritsWithMeasurements = spirit_types.map((spirit) => {
-    // Find the measurement for this spirit in the ingredients string (case-sensitive)
+    // Find the measurement for this spirit in the structured ingredients
     const spiritIngredient = ingredientsList.find((ingredient) =>
-      ingredient.startsWith(spirit.name + " - ")
+      ingredient.name.toLowerCase() === spirit.name.toLowerCase()
     );
 
     if (spiritIngredient) {
-      return spiritIngredient; // This includes the measurement
+      return `${spiritIngredient.name} - ${spiritIngredient.quantity} ${spiritIngredient.unit}`;
     } else {
       return spirit.name; // Fallback to just the name if no measurement found
     }
   });
 
-  // Filter out spirit ingredients from the ingredients list to show only custom ingredients
-  const customIngredients = ingredientsList.filter((ingredient) => {
-    const isSpirit = spirit_types.some((spirit) => {
-      const match = ingredient.startsWith(spirit.name + " - ");
-      // console.log(
-      //   `Checking "${ingredient}" against spirit "${spirit.name}": starts with "${spirit.name} - "? ${match}`
-      // );
-      return match;
-    });
-    // console.log(
-    //   `Final result - Ingredient "${ingredient}" is spirit:`,
-    //   isSpirit
-    // );
-    return !isSpirit;
-  });
-
-  // console.log("Custom ingredients found:", customIngredients);
-  // console.log("Spirits with measurements:", spiritsWithMeasurements);
+  // Filter out spirit ingredients to show only custom ingredients
+  const customIngredients = ingredientsList
+    .filter((ingredient) => {
+      const isSpirit = spirit_types.some((spirit) =>
+        spirit.name.toLowerCase() === ingredient.name.toLowerCase()
+      );
+      return !isSpirit;
+    })
+    .map((ingredient) => `${ingredient.name} - ${ingredient.quantity} ${ingredient.unit}`);
 
   const truncatedName = name.length > 64 ? name.substring(0, 64) + "..." : name;
 

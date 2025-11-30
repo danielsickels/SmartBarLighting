@@ -7,6 +7,7 @@ import FetchAllBottles from "../components/FetchAllBottles";
 import FetchAllRecipes from "../components/FetchAllRecipes";
 import AddRecipeForm from "../components/AddRecipeForm";
 import LogoutButton from "@/components/LogoutButton";
+import ScrollToTop from "@/components/ScrollToTop";
 import { Bottle } from "../services/bottleService";
 import { Recipe } from "../services/recipeService";
 
@@ -205,6 +206,8 @@ export default function Home() {
           <div className="p-4">{renderMainContent()}</div>
         </div>
         </div> {/* Close content wrapper */}
+        
+        <ScrollToTop scrollContainerRef={mainContentRef} />
       </div>
     </AuthGuard>
   );
