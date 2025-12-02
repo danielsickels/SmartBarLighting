@@ -4,12 +4,12 @@ import "./globals.css";
 import type { Viewport } from 'next'
  
 export const viewport: Viewport = {
-  width: 'device-width',
-  initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
-  // Also supported but less commonly used
-  // interactiveWidget: 'resizes-visual',
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+    viewportFit: 'cover',
+    themeColor: '#000000',
 }
 
 interface LayoutProps {
@@ -27,7 +27,12 @@ export default function Layout({ children }: LayoutProps) {
       <head>
         <title>Smart Bar</title>
       </head>
-      <body className="h-screen flex flex-col overflow-hidden">
+      <body className="flex flex-col" style={{ 
+        WebkitTapHighlightColor: 'transparent',
+        WebkitTouchCallout: 'none',
+        WebkitUserSelect: 'none',
+        touchAction: 'pan-y'
+      }}>
         {/* Toast Notifications */}
         <Toaster
           position="top-right"
