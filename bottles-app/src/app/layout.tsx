@@ -23,7 +23,7 @@ export default function Layout({ children }: LayoutProps) {
       <head>
         <title>Smart Bar</title>
       </head>
-      <body className="h-screen flex flex-col overflow-hidden">
+      <body className="h-screen flex flex-col overflow-auto scrollbar-hide">
         {/* Toast Notifications */}
         <Toaster
           position="top-right"
@@ -59,7 +59,7 @@ export default function Layout({ children }: LayoutProps) {
         </header> */}
 
         {/* Main content */}
-        <main className="flex-grow content">{children}</main>
+        <main className="flex-grow shrink center">{children}</main>
 
         {/* Footer */}
         {/* <footer className="bg-black text-white p-2 text-center fixed bottom-0 left-0 right-0 z-10">

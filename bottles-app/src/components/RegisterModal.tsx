@@ -107,11 +107,11 @@ const RegisterModal = ({ onClose, onRegisterSuccess }: RegisterModalProps) => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/80 z-50">
+    <div className="fixed inset-0 flex items-center justify-center bg-black/80 z-50 overflow-y-auto scrollbar-hide">
       <div className="bg-gradient-to-br from-amber-100 to-yellow-100 p-2 lg:p-6 lg:p-9 rounded-xl border-4 border-double border-amber-500 shadow-lg max-w-[95vw] sm:max-w-md lg:max-w-xl w-full">
         <h2 className="text-2xl lg:text-4xl font-bold mb-2 lg:mb-4 text-center text-amber-900">Register</h2>
         <div className="mb-2 lg:mb-4">
-          <label className="block text-amber-900 font-medium">Username</label>
+          <label className="block text-amber-900 text-sm font-medium">Username</label>
           <input
             type="text"
             value={username}
@@ -121,7 +121,7 @@ const RegisterModal = ({ onClose, onRegisterSuccess }: RegisterModalProps) => {
           />
         </div>
         <div className="mb-2 lg:mb-4">
-          <label className="block text-amber-900 font-medium">Email</label>
+          <label className="block text-amber-900 text-sm font-medium">Email</label>
           <input
             type="email"
             value={email}
@@ -131,7 +131,7 @@ const RegisterModal = ({ onClose, onRegisterSuccess }: RegisterModalProps) => {
           />
         </div>
         <div className="mb-2 lg:mb-4">
-          <label className="block text-amber-900 font-medium">Password</label>
+          <label className="block text-amber-900 text-sm font-medium">Password</label>
           <input
             type="password"
             value={password}
@@ -142,7 +142,7 @@ const RegisterModal = ({ onClose, onRegisterSuccess }: RegisterModalProps) => {
           />
         </div>
         <div className="mb-2 lg:mb-4">
-          <label className="block text-amber-900 font-medium">
+          <label className="block text-amber-900 text-sm font-medium">
             Confirm Password
           </label>
           <input
