@@ -9,6 +9,49 @@ body {
   @apply bg-gray-100 text-gray-800;
 }
 
+/* @media only screen and (orientation: portrait) {
+  body {
+      .shrink {
+          width: 95%;
+      }
+  }
+}
+
+@media only screen and (orientation: landscape) {
+  body {
+      .shrink {
+          width: 90%;
+      }
+  }
+}
+
+.center {
+  text-align: left;
+  margin: 0 auto;
+} */
+
+@supports(padding:max(0px)) {
+  body, header, footer {
+      padding-left: min(0vmin, env(safe-area-inset-left));
+      padding-right: min(0vmin, env(safe-area-inset-right));
+  }
+}
+
+.content {
+  padding: 20px;
+  padding-left: env(safe-area-inset-left); /* Apply safe area */
+  padding-right: env(safe-area-inset-right);
+}
+
+/*** There are four safe-area padding options:
+*
+*   padding: env(safe-area-inset-top)
+*           env(safe-area-inset-right)
+*           env(safe-area-inset-bottom)
+*           env(safe-area-inset-left);
+****/
+
+
 /* Hide scrollbar while allowing scrolling */
 .scrollbar-hide::-webkit-scrollbar {
   display: none; /* For Chrome, Safari, and Edge */

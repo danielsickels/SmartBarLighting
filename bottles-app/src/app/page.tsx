@@ -199,7 +199,7 @@ export default function Home() {
 
         {/* Main content */}
         <div
-          className={`flex-grow pt-8 pb-12 transition-all ${
+          className={`flex-grow pt-4 lg:pt-8 pb-12 transition-all ${
             isSidebarOpen ? "ml-0" : "md:ml-[25%]"
           } ${editingBottle || editingRecipe ? "relative z-[60]" : ""}`}
         >

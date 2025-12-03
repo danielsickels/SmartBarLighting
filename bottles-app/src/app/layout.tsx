@@ -13,7 +13,8 @@ export const metadata = {
 };
 
 export const viewport: Viewport = {
-  viewportFit: "contain",
+  initialScale: 1,
+  viewportFit: "cover",
 };
 
 export default function Layout({ children }: LayoutProps) {
@@ -58,7 +59,7 @@ export default function Layout({ children }: LayoutProps) {
         </header> */}
 
         {/* Main content */}
-        <main className="flex-grow">{children}</main>
+        <main className="flex-grow content">{children}</main>
 
         {/* Footer */}
         {/* <footer className="bg-black text-white p-2 text-center fixed bottom-0 left-0 right-0 z-10">
