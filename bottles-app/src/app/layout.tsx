@@ -1,16 +1,6 @@
 import { ReactNode } from "react";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
-import type { Viewport } from 'next'
- 
-export const viewport: Viewport = {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
-    viewportFit: 'cover',
-    themeColor: '#000000',
-}
 
 interface LayoutProps {
   children: ReactNode;
@@ -27,12 +17,7 @@ export default function Layout({ children }: LayoutProps) {
       <head>
         <title>Smart Bar</title>
       </head>
-      <body className="flex flex-col" style={{ 
-        WebkitTapHighlightColor: 'transparent',
-        WebkitTouchCallout: 'none',
-        WebkitUserSelect: 'none',
-        touchAction: 'pan-y'
-      }}>
+      <body className="h-screen flex flex-col overflow-hidden">
         {/* Toast Notifications */}
         <Toaster
           position="top-right"
