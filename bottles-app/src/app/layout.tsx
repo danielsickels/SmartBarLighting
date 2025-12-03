@@ -13,7 +13,7 @@ export const metadata = {
 };
 
 export const viewport: Viewport = {
-  viewportFit: "cover",
+  viewportFit: "contain",
 };
 
 export default function Layout({ children }: LayoutProps) {
