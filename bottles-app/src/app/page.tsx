@@ -132,7 +132,7 @@ export default function Home() {
             }}
           />
           {/* Sidebar dark overlay */}
-          <div className="absolute inset-0 bg-black/30 z-10" />
+          <div className="absolute inset-0 bg-black/30 z-70" />
           
           {/* Sidebar content wrapper - centers vertically */}
           <div className={`relative z-20 h-full flex items-center py-8 pb-20 md:pb-10 lg:pb-20 ${
@@ -184,7 +184,7 @@ export default function Home() {
             Add Recipe
           </button>
           <div className={`fixed bottom-4 left-4 ${
-            editingBottle || editingRecipe ? "z-[70] pointer-events-auto" : "z-20"
+            editingBottle || editingRecipe ? "z-[70] pointer-events-auto" : "z-60"
           }`}>
             <LogoutButton />
           </div>
