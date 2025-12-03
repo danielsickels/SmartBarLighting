@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
+import { Viewport } from 'next';
 
 interface LayoutProps {
   children: ReactNode;
@@ -9,6 +10,10 @@ interface LayoutProps {
 export const metadata = {
   title: "Smart Bar",
   description: "An intuitive app to manage bottles and recipes for your coctails!",
+};
+
+export const viewport: Viewport = {
+  viewportFit: "cover",
 };
 
 export default function Layout({ children }: LayoutProps) {
