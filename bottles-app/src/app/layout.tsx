@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
-
+ 
 interface LayoutProps {
   children: ReactNode;
 }
