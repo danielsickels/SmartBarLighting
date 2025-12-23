@@ -11,6 +11,7 @@ export const API_ENDPOINTS = {
     REFRESH: `${API_BASE_URL}/auth/refresh`,
   },
   BOTTLES: `${API_BASE_URL}/bottles`,
+  BOTTLE_IMPORT: `${API_BASE_URL}/bottles/import`,
   RECIPES: `${API_BASE_URL}/recipes`,
   SPIRIT_TYPES: `${API_BASE_URL}/spirit_types`,
 } as const;
