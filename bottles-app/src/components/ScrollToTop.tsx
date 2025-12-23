@@ -1,7 +1,7 @@
 import { useState, useEffect, RefObject } from "react";
 
 interface ScrollToTopProps {
-  scrollContainerRef?: RefObject<HTMLElement>;
+  scrollContainerRef?: RefObject<HTMLElement | null>;
 }
 
 const ScrollToTop = ({ scrollContainerRef }: ScrollToTopProps) => {
