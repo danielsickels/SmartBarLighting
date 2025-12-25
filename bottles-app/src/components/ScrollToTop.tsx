@@ -50,40 +50,38 @@ const ScrollToTop = ({ scrollContainerRef }: ScrollToTopProps) => {
     }
   };
 
+  if (!isVisible) return null;
+
   return (
-    <>
-      {isVisible && (
-        <button
-          onClick={scrollToTop}
-          className="fixed top-8 lg:top-auto lg:bottom-8 right-8 z-50 p-3 rounded-full bg-gradient-to-br from-amber-600 to-amber-800 text-white shadow-lg transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-amber-500"
-          style={{
-            boxShadow: '0 0 20px 3px rgba(245, 158, 11, 0.6)',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.boxShadow = '0 0 30px 5px rgba(245, 158, 11, 0.8)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.boxShadow = '0 0 20px 3px rgba(245, 158, 11, 0.6)';
-          }}
-          aria-label="Scroll to top"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={2.5}
-            stroke="currentColor"
-            className="w-6 h-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M4.5 15.75l7.5-7.5 7.5 7.5"
-            />
-          </svg>
-        </button>
-      )}
-    </>
+    <button
+      onClick={scrollToTop}
+      className="fixed top-8 lg:top-auto lg:bottom-8 right-8 z-50 p-3 rounded-full bg-gradient-to-br from-amber-600 to-amber-800 text-white shadow-lg transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-amber-500"
+      style={{
+        boxShadow: '0 0 20px 3px rgba(245, 158, 11, 0.6)',
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.boxShadow = '0 0 30px 5px rgba(245, 158, 11, 0.8)';
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.boxShadow = '0 0 20px 3px rgba(245, 158, 11, 0.6)';
+      }}
+      aria-label="Scroll to top"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={2.5}
+        stroke="currentColor"
+        className="w-6 h-6"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M4.5 15.75l7.5-7.5 7.5 7.5"
+        />
+      </svg>
+    </button>
   );
 };
 

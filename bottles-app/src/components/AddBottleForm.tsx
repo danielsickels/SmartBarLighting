@@ -14,6 +14,8 @@ import {
 } from "../services/barcodeService";
 import SpiritTypeSelect from "./SpiritTypeSelect";
 import BarcodeScanner from "./BarcodeScanner";
+import PageHeader from "./PageHeader";
+import ActionButton from "./ActionButton";
 import {
   fetchAllSpiritTypes,
   addSpiritType,
@@ -280,11 +282,7 @@ const AddBottleForm = ({ editBottle, onEditComplete }: AddBottleFormProps) => {
 
   return (
     <div className="flex flex-col items-center">
-      <h2 className="text-4xl font-bold mt-3 mb-4 text-center text-amber-500">
-        <span className="glow-charcoal">
-          {isEditMode ? "Edit Bottle" : "Add New Bottle"}
-        </span>
-      </h2>
+      <PageHeader title={isEditMode ? "Edit Bottle" : "Add New Bottle"} />
 
       {/* Import Options - only show when not editing */}
       {!isEditMode && (
@@ -495,21 +493,21 @@ const AddBottleForm = ({ editBottle, onEditComplete }: AddBottleFormProps) => {
         onChange={(e) => setName(e.target.value)}
         placeholder="Enter Bottle Name"
         maxLength={64}
-        className="border border-amber-500 rounded-lg px-4 py-2 my-2 w-full bg-gray-900 text-white placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:outline-none shadow-[0_0_10px_2px_rgba(255,191,0,0.5)]"
+        className="input-amber"
       />
       <input
         type="text"
         value={brand}
         onChange={(e) => setBrand(e.target.value)}
         placeholder="Enter Brand"
-        className="border border-amber-500 rounded-lg px-4 py-2 my-2 w-full bg-gray-900 text-white placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:outline-none shadow-[0_0_10px_2px_rgba(255,191,0,0.5)]"
+        className="input-amber"
       />
       <input
         type="text"
         value={flavorProfile}
         onChange={(e) => setFlavorProfile(e.target.value)}
         placeholder="Enter Flavor Profile"
-        className="border border-amber-500 rounded-lg px-4 py-2 my-2 w-full bg-gray-900 text-white placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:outline-none shadow-[0_0_10px_2px_rgba(255,191,0,0.5)]"
+        className="input-amber"
       />
       <SpiritTypeSelect
         selectedSpiritType={spiritType}
@@ -520,23 +518,17 @@ const AddBottleForm = ({ editBottle, onEditComplete }: AddBottleFormProps) => {
         value={capacity}
         onChange={(e) => setCapacity(e.target.value ? Number(e.target.value) : "")}
         placeholder="Enter Capacity (ml)"
-        className="border border-amber-500 rounded-lg px-4 py-2 my-2 w-full bg-gray-900 text-white placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:outline-none shadow-[0_0_10px_2px_rgba(255,191,0,0.5)]"
+        className="input-amber"
       />
 
-      <div className="flex gap-3">
-        <button
-          onClick={handleSubmit}
-          className="text-2xl bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 mt-4 rounded-lg focus:ring-2 focus:ring-amber-500 focus:outline-none shadow-[0_0_20px_3px_rgba(0,0,0,1)]"
-        >
+      <div className="flex gap-3 mt-4">
+        <ActionButton onClick={handleSubmit} variant="confirm" size="lg">
           {isEditMode ? "Update" : "Confirm"}
-        </button>
+        </ActionButton>
         {isEditMode && onEditComplete && (
-          <button
-            onClick={onEditComplete}
-            className="text-2xl bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 mt-4 rounded-lg focus:ring-2 focus:ring-amber-500 focus:outline-none shadow-[0_0_10px_2px_rgba(0,0,0,1)]"
-          >
+          <ActionButton onClick={onEditComplete} variant="cancel" size="lg">
             Cancel
-          </button>
+          </ActionButton>
         )}
       </div>
 

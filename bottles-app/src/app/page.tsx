@@ -54,29 +54,25 @@ export default function Home() {
         return <FetchAllBottles onEdit={handleEditBottle} />;
       case "addBottle":
         return (
-          <div className="max-w-4xl mx-auto">
-            <AddBottleForm
-              editBottle={editingBottle}
-              onEditComplete={() => {
-                setEditingBottle(null);
-                setActiveContent("fetchAll");
-              }}
-            />
-          </div>
+          <AddBottleForm
+            editBottle={editingBottle}
+            onEditComplete={() => {
+              setEditingBottle(null);
+              setActiveContent("fetchAll");
+            }}
+          />
         );
       case "fetchAllRecipes":
         return <FetchAllRecipes onEdit={handleEditRecipe} />;
       case "addRecipe":
         return (
-          <div className="max-w-4xl mx-auto">
-            <AddRecipeForm
-              editRecipe={editingRecipe}
-              onEditComplete={() => {
-                setEditingRecipe(null);
-                setActiveContent("fetchAllRecipes");
-              }}
-            />
-          </div>
+          <AddRecipeForm
+            editRecipe={editingRecipe}
+            onEditComplete={() => {
+              setEditingRecipe(null);
+              setActiveContent("fetchAllRecipes");
+            }}
+          />
         );
       default:
         return (

@@ -52,7 +52,7 @@ const SpiritTypeSelect = ({
         onChange={(e) => {
           if (e.target.value === "add") {
             setShowModal(true);
-            setErrorMessage(null); // Clear errors when opening modal
+            setErrorMessage(null);
           } else {
             const selectedType = e.target.value
               ? {
@@ -63,7 +63,7 @@ const SpiritTypeSelect = ({
             onSpiritTypeChange(selectedType);
           }
         }}
-        className="border border-amber-500 rounded-lg px-3 py-2 my-2 w-64 bg-gray-900 text-white focus:ring-2 focus:ring-amber-500 focus:outline-none shadow-[0_0_10px_2px_rgba(255,191,0,0.5)]"
+        className="input-amber-select"
       >
         <option value="" className="text-gray-400">
           Select Spirit Type

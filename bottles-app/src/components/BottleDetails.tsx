@@ -1,5 +1,6 @@
-import { Bottle } from "../services/bottleService";
 import { useState } from "react";
+import { Bottle } from "../services/bottleService";
+import ActionButton from "./ActionButton";
 
 interface BottleDetailsProps
   extends Omit<Bottle, "spirit_type" | "spirit_type_id"> {
@@ -35,7 +36,7 @@ const BottleDetails = ({
   const truncatedName = name.length > 64 ? name.substring(0, 64) + "..." : name;
 
   return (
-    <div className="border border-amber-500 p-4 rounded-lg bg-gray-900 flex flex-col w-full max-w-md mb-4 shadow-[0_0_10px_2px_rgba(255,191,0,0.5)] h-full">
+    <div className="card-amber flex flex-col w-full max-w-md mb-4 h-full">
       <div className="flex-1 text-white w-full">
         <div className="flex justify-center mb-3">
           <h3 className="font-bold text-lg text-amber-300 text-center break-all px-2">
@@ -64,42 +65,13 @@ const BottleDetails = ({
 
       <div className="flex gap-2 mt-2 w-full">
         {onEdit && (
-          <button
-            onClick={onEdit}
-            className="flex-1 text-amber-500 px-3 py-1 text-sm font-bold rounded border border-amber-500/30 transition-all focus:outline-none focus:ring-2 focus:ring-amber-500"
-            style={{
-              background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.05), rgba(217, 119, 6, 0.08))',
-              boxShadow: '0 0 8px 1px rgba(153, 102, 0, 0.2)',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.boxShadow = '0 0 15px 2px rgba(153, 102, 0, 0.35)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.boxShadow = '0 0 8px 1px rgba(153, 102, 0, 0.2)';
-            }}
-          >
+          <ActionButton onClick={onEdit} variant="edit">
             Edit
-          </button>
+          </ActionButton>
         )}
-        <button
-          onClick={handleDelete}
-          disabled={deleting}
-          className="flex-1 text-rose-400 px-3 py-1 text-sm font-bold rounded border border-rose-400/30 transition-all focus:outline-none focus:ring-2 focus:ring-amber-500 disabled:opacity-50"
-          style={{
-            background: 'linear-gradient(135deg, rgba(251, 113, 133, 0.05), rgba(225, 29, 72, 0.08))',
-            boxShadow: '0 0 8px 1px rgba(225, 29, 72, 0.2)',
-          }}
-          onMouseEnter={(e) => {
-            if (!deleting) {
-              e.currentTarget.style.boxShadow = '0 0 15px 2px rgba(225, 29, 72, 0.35)';
-            }
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.boxShadow = '0 0 8px 1px rgba(225, 29, 72, 0.2)';
-          }}
-        >
+        <ActionButton onClick={handleDelete} disabled={deleting} variant="delete">
           {deleting ? "Deleting..." : "Delete"}
-        </button>
+        </ActionButton>
       </div>
     </div>
   );
