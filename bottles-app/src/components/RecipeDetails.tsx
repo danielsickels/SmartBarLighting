@@ -1,3 +1,5 @@
+import ActionButton from "./ActionButton";
+
 interface Ingredient {
   name: string;
   quantity: string;
@@ -10,6 +12,7 @@ interface RecipeDetailsProps {
   instructions: string;
   ingredients: Ingredient[] | null;
   spirit_types: { id: number; name: string }[];
+  availabilityClassName?: string;
   onDelete: () => void;
   onEdit: () => void;
 }
@@ -19,31 +22,27 @@ const RecipeDetails = ({
   instructions,
   ingredients,
   spirit_types,
+  availabilityClassName = "",
   onDelete,
   onEdit,
 }: RecipeDetailsProps) => {
-  // Convert structured ingredients to display format
   const ingredientsList = ingredients || [];
 
-  // Create spirits with measurements and filter out spirit ingredients from the ingredients list
   const spiritsWithMeasurements = spirit_types.map((spirit) => {
-    // Find the measurement for this spirit in the structured ingredients
-    const spiritIngredient = ingredientsList.find((ingredient) =>
-      ingredient.name.toLowerCase() === spirit.name.toLowerCase()
+    const spiritIngredient = ingredientsList.find(
+      (ingredient) => ingredient.name.toLowerCase() === spirit.name.toLowerCase()
     );
 
     if (spiritIngredient) {
       return `${spiritIngredient.name} - ${spiritIngredient.quantity} ${spiritIngredient.unit}`;
-    } else {
-      return spirit.name; // Fallback to just the name if no measurement found
     }
+    return spirit.name;
   });
 
-  // Filter out spirit ingredients to show only custom ingredients
   const customIngredients = ingredientsList
     .filter((ingredient) => {
-      const isSpirit = spirit_types.some((spirit) =>
-        spirit.name.toLowerCase() === ingredient.name.toLowerCase()
+      const isSpirit = spirit_types.some(
+        (spirit) => spirit.name.toLowerCase() === ingredient.name.toLowerCase()
       );
       return !isSpirit;
     })
@@ -52,7 +51,9 @@ const RecipeDetails = ({
   const truncatedName = name.length > 64 ? name.substring(0, 64) + "..." : name;
 
   return (
-    <div className="flex flex-col w-full h-full">
+    <div
+      className={`border-4 p-4 rounded-lg bg-gray-900 shadow-md flex flex-col h-full ${availabilityClassName}`}
+    >
       <div className="flex-1 text-white w-full">
         <div className="flex justify-center mb-3">
           <h3 className="font-bold text-lg text-amber-300 text-center break-all px-2">
@@ -73,9 +74,7 @@ const RecipeDetails = ({
                 </span>
               ))
             ) : (
-              <span className="text-amber-300 text-sm italic">
-                No spirits used
-              </span>
+              <span className="text-amber-300 text-sm italic">No spirits used</span>
             )}
           </div>
         </div>
@@ -93,16 +92,9 @@ const RecipeDetails = ({
                 </span>
               ))
             ) : (
-              <span className="text-amber-300 text-sm italic">
-                No extra ingredients
-              </span>
+              <span className="text-amber-300 text-sm italic">No extra ingredients</span>
             )}
           </div>
-          {/* Debug info */}
-          {/* <div className="text-xs text-gray-400 mt-1">
-            Debug: Total ingredients: {ingredientsList.length}, Custom:{" "}
-            {customIngredients.length}
-          </div> */}
         </div>
 
         <div className="mb-3">
@@ -112,39 +104,14 @@ const RecipeDetails = ({
           </div>
         </div>
       </div>
+
       <div className="flex gap-2 mt-2 w-full">
-        <button
-          onClick={onEdit}
-          className="flex-1 text-amber-500 px-3 py-1 text-sm font-bold rounded border border-amber-500/30 transition-all focus:outline-none focus:ring-2 focus:ring-amber-500"
-          style={{
-            background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.05), rgba(217, 119, 6, 0.08))',
-            boxShadow: '0 0 8px 1px rgba(153, 102, 0, 0.2)',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.boxShadow = '0 0 15px 2px rgba(153, 102, 0, 0.35)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.boxShadow = '0 0 8px 1px rgba(153, 102, 0, 0.2)';
-          }}
-        >
+        <ActionButton onClick={onEdit} variant="edit">
           Edit
-        </button>
-        <button
-          onClick={onDelete}
-          className="flex-1 text-rose-400 px-3 py-1 text-sm font-bold rounded border border-rose-400/30 transition-all focus:outline-none focus:ring-2 focus:ring-amber-500"
-          style={{
-            background: 'linear-gradient(135deg, rgba(251, 113, 133, 0.05), rgba(225, 29, 72, 0.08))',
-            boxShadow: '0 0 8px 1px rgba(225, 29, 72, 0.2)',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.boxShadow = '0 0 15px 2px rgba(225, 29, 72, 0.35)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.boxShadow = '0 0 8px 1px rgba(225, 29, 72, 0.2)';
-          }}
-        >
+        </ActionButton>
+        <ActionButton onClick={onDelete} variant="delete">
           Delete
-        </button>
+        </ActionButton>
       </div>
     </div>
   );

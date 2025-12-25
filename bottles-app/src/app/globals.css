@@ -68,3 +68,25 @@ body {
   border-radius: 8px;
   text-shadow: none; /* Remove any shadow */
 }
+
+/* Common input styles */
+.input-amber {
+  @apply border border-amber-500 rounded-lg px-4 py-2 my-2 w-full bg-gray-900 text-white placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:outline-none;
+  box-shadow: 0 0 10px 2px rgba(255, 191, 0, 0.5);
+}
+
+.input-amber-select {
+  @apply border border-amber-500 rounded-lg px-3 py-2 my-2 w-64 bg-gray-900 text-white focus:ring-2 focus:ring-amber-500 focus:outline-none;
+  box-shadow: 0 0 10px 2px rgba(255, 191, 0, 0.5);
+}
+
+/* Common card styles */
+.card-amber {
+  @apply border border-amber-500 p-4 rounded-lg bg-gray-900;
+  box-shadow: 0 0 10px 2px rgba(255, 191, 0, 0.5);
+}
+
+.card-section {
+  @apply w-full border border-amber-500 rounded-lg px-4 py-2 my-4 bg-gray-900 text-white;
+  box-shadow: 0 0 10px 2px rgba(255, 191, 0, 0.5);
+}

@@ -5,6 +5,9 @@ from app.db.session import engine
 from app.db.base import Base
 from app.core.settings import settings
 
+# Import models to ensure they're registered with Base.metadata
+from app.db.models.barcode_registry import BarcodeRegistry  # noqa: F401
+
 # Create database tables
 Base.metadata.create_all(bind=engine)
 

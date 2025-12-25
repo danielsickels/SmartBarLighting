@@ -5,6 +5,7 @@ import LoadingSpinner from "./LoadingSpinner";
 import SearchBar from "./SearchBar";
 import ConfirmDialog from "./ConfirmDialog";
 import SpiritFilterButtons from "./SpiritFilterButtons";
+import PageHeader from "./PageHeader";
 import {
   fetchAllBottles,
   deleteBottle,
@@ -127,11 +128,8 @@ const FetchAllBottles = ({ onEdit }: FetchAllBottlesProps) => {
 
   return (
     <div className="flex flex-col items-center">
-      <h2 className="text-4xl font-bold mt-6 mb-8 text-center text-amber-500">
-        <span className="glow-charcoal">All Bottles</span>
-      </h2>
+      <PageHeader title="All Bottles" />
 
-      {/* Search Bar for filtering bottles */}
       <div className="w-full mb-4">
         <SearchBar
           value={searchQuery}

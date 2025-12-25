@@ -5,8 +5,8 @@ import SearchBar from "./SearchBar";
 import RecipeDetails from "./RecipeDetails";
 import ConfirmDialog from "./ConfirmDialog";
 import SpiritFilterButtons from "./SpiritFilterButtons";
+import PageHeader from "./PageHeader";
 import { fetchAllRecipes, deleteRecipe, Recipe } from "../services/recipeService";
-// import { fetchAllSpiritTypes, SpiritType } from "../services/spiritTypeService";
 import { fetchAllBottles } from "../services/bottleService";
 
 interface Bottle {
@@ -144,9 +144,7 @@ const FetchAllRecipes = ({ onEdit }: FetchAllRecipesProps) => {
 
   return (
     <div className="flex flex-col items-center text-white">
-      <h2 className="text-4xl font-bold mt-6 mb-8 text-center text-amber-500">
-        <span className="glow-charcoal">All Recipes</span>
-      </h2>
+      <PageHeader title="All Recipes" />
 
       <div className="w-full mb-4">
         <SearchBar
@@ -169,22 +167,17 @@ const FetchAllRecipes = ({ onEdit }: FetchAllRecipesProps) => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4 w-full">
         {filteredRecipes.length > 0 ? (
           filteredRecipes.map((recipe) => (
-            <div
+            <RecipeDetails
               key={recipe.id}
-              className={`border-4 p-4 rounded-lg bg-gray-900 shadow-md flex flex-col h-full ${getCardClassName(
-                recipe
-              )}`}
-            >
-              <RecipeDetails
-                id={recipe.id}
-                name={recipe.name}
-                ingredients={recipe.ingredients}
-                spirit_types={recipe.spirit_types}
-                instructions={recipe.instructions}
-                onEdit={() => onEdit?.(recipe)}
-                onDelete={() => handleDeleteClick(recipe.id, recipe.name)}
-              />
-            </div>
+              id={recipe.id}
+              name={recipe.name}
+              ingredients={recipe.ingredients}
+              spirit_types={recipe.spirit_types}
+              instructions={recipe.instructions}
+              availabilityClassName={getCardClassName(recipe)}
+              onEdit={() => onEdit?.(recipe)}
+              onDelete={() => handleDeleteClick(recipe.id, recipe.name)}
+            />
           ))
         ) : (
           <p className="text-2xl font-bold text-center col-span-full text-amber-600">

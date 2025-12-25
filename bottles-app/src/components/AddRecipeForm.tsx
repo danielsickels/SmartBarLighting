@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { addRecipe, updateRecipe, Recipe, Ingredient } from "../services/recipeService";
 import { fetchAllSpiritTypes, SpiritType } from "../services/spiritTypeService";
+import PageHeader from "./PageHeader";
+import ActionButton from "./ActionButton";
 
 interface AddRecipeFormProps {
   editRecipe?: Recipe | null;
@@ -234,9 +236,7 @@ const AddRecipeForm = ({ editRecipe, onEditComplete }: AddRecipeFormProps) => {
 
   return (
     <div className="flex flex-col items-center">
-      <h2 className="text-4xl font-bold mt-3 mb-4 text-center text-amber-500">
-        <span className="glow-charcoal">{isEditMode ? "Edit Recipe" : "Add New Recipe"}</span>
-      </h2>
+      <PageHeader title={isEditMode ? "Edit Recipe" : "Add New Recipe"} />
 
       <input
         type="text"
@@ -244,10 +244,10 @@ const AddRecipeForm = ({ editRecipe, onEditComplete }: AddRecipeFormProps) => {
         onChange={(e) => setName(e.target.value)}
         placeholder="Enter Recipe Name"
         maxLength={64}
-        className="border border-amber-500 rounded-lg px-4 py-2 my-2 w-full bg-gray-900 text-white placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:outline-none shadow-[0_0_10px_2px_rgba(255,191,0,0.5)]"
+        className="input-amber"
       />
 
-      <div className="w-full border border-amber-500 rounded-lg px-4 py-2 my-4 bg-gray-900 text-white shadow-[0_0_10px_2px_rgba(255,191,0,0.5)]">
+      <div className="card-section">
         <p className="font-bold text-amber-500 mb-1">Select Spirits:</p>
         <div className="max-h-48 overflow-y-auto scrollbar-hide">
           {allSpiritTypes.map((spirit) => {
@@ -269,7 +269,7 @@ const AddRecipeForm = ({ editRecipe, onEditComplete }: AddRecipeFormProps) => {
                   <input
                     type="text"
                     placeholder="Measurement"
-                    className="border border-amber-500 rounded-lg px-2 py-1 ml-2 w-32 bg-gray-900 text-white text-center placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:outline-none shadow-[0_0_10px_2px_rgba(255,191,0,0.5)]"
+                    className="input-amber !my-0 !w-32 text-center"
                     value={
                       spiritIngredients.find(
                         (item) => item.spirit.id === spirit.id
@@ -286,7 +286,7 @@ const AddRecipeForm = ({ editRecipe, onEditComplete }: AddRecipeFormProps) => {
         </div>
       </div>
 
-      <div className="w-full border border-amber-500 rounded-lg px-4 py-2 my-4 bg-gray-900 text-white shadow-[0_0_10px_2px_rgba(255,191,0,0.5)]">
+      <div className="card-section">
         <p className="font-bold text-amber-500 mb-2">Add Custom Ingredients:</p>
         <div className="flex items-center mb-2">
           <input
@@ -294,7 +294,7 @@ const AddRecipeForm = ({ editRecipe, onEditComplete }: AddRecipeFormProps) => {
             value={newCustomIngredient}
             onChange={(e) => setNewCustomIngredient(e.target.value)}
             placeholder="Ingredient Name"
-            className="border border-amber-500 rounded-lg px-2 py-1 flex-grow bg-gray-900 text-white placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:outline-none shadow-[0_0_5px_2px_rgba(255,191,0,0.5)]"
+            className="input-amber !my-0 flex-grow"
           />
           <button
             onClick={handleAddCustomIngredient}
@@ -319,7 +319,7 @@ const AddRecipeForm = ({ editRecipe, onEditComplete }: AddRecipeFormProps) => {
               <input
                 type="text"
                 placeholder="Measurement"
-                className="border border-amber-500 rounded-lg px-2 py-1 ml-2 w-32 bg-gray-900 text-white text-center placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:outline-none shadow-[0_0_10px_2px_rgba(255,191,0,0.5)]"
+                className="input-amber !my-0 !w-32 text-center"
                 value={item.measurement}
                 onChange={(e) =>
                   updateCustomMeasurement(item.name, e.target.value)
@@ -335,26 +335,22 @@ const AddRecipeForm = ({ editRecipe, onEditComplete }: AddRecipeFormProps) => {
         onChange={handleInstructionsChange}
         onKeyDown={handleInstructionsKeyDown}
         placeholder="Enter Instructions"
-        className="border border-amber-500 rounded-lg px-4 py-2 my-2 w-full h-24 bg-gray-900 text-white placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:outline-none shadow-[0_0_10px_2px_rgba(255,191,0,0.5)]"
+        className="input-amber h-24"
       />
 
-      <div className="flex gap-3">
-        <button
+      <div className="flex gap-3 mt-4">
+        <ActionButton
           onClick={handleSubmit}
-          className={`text-2xl bg-emerald-700 text-white px-4 py-2 mt-4 rounded-lg ${
-            submitting ? "opacity-50 cursor-not-allowed" : "hover:bg-emerald-800"
-          } focus:ring-2 focus:ring-amber-500 focus:outline-none shadow-[0_0_20px_3px_rgba(0,0,0,1)]`}
+          variant="confirm"
+          size="lg"
           disabled={submitting}
         >
           {submitting ? "Submitting..." : isEditMode ? "Update Recipe" : "Add Recipe"}
-        </button>
+        </ActionButton>
         {isEditMode && onEditComplete && (
-          <button
-            onClick={onEditComplete}
-            className="text-2xl bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 mt-4 rounded-lg focus:ring-2 focus:ring-amber-500 focus:outline-none shadow-[0_0_20px_3px_rgba(0,0,0,1)]"
-          >
+          <ActionButton onClick={onEditComplete} variant="cancel" size="lg">
             Cancel
-          </button>
+          </ActionButton>
         )}
       </div>
     </div>

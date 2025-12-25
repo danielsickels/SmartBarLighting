@@ -19,6 +19,19 @@ export interface BottleCreate {
   capacity_ml: number;
 }
 
+export interface BottleImportResult {
+  success: boolean;
+  // Bottle data (only present if success=true)
+  name?: string;
+  brand?: string;
+  flavor_profile?: string;
+  capacity_ml?: number;
+  spirit_type?: string;
+  // LLM response info
+  llm_response?: string;
+  error?: string;
+}
+
 export const fetchBottle = async (id: number): Promise<Bottle | null> => {
   try {
     const headers = await getHeaders();
@@ -133,4 +146,22 @@ export const fetchAllBottles = async (
     console.error("Error fetching all bottles:", error);
     throw error;
   }
+};
+
+export const importBottleFromImage = async (
+  imageBase64: string
+): Promise<BottleImportResult> => {
+  const headers = await getHeaders();
+  const res = await fetch(API_ENDPOINTS.BOTTLE_IMPORT, {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ image_base64: imageBase64 }),
+  });
+
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.detail || "Failed to analyze bottle image");
+  }
+
+  return await res.json();
 };
