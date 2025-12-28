@@ -9,9 +9,9 @@ class Settings(BaseSettings):
     SECRET_KEY: str
     H_ALGORITHM: str
     
-    # URLs
-    BACKEND_URL: str
-    FRONTEND_URL: str
+    # URLs (optional - production URLs are hardcoded in CORS)
+    BACKEND_URL: str | None = None
+    FRONTEND_URL: str | None = None
     
     # Ollama AI Configuration
     OLLAMA_HOST: str

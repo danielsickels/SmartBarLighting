@@ -14,8 +14,10 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 allowed_origins = [
-    settings.FRONTEND_URL,  # Development: http://localhost:3000
-    "https://barapp.dannysickels.com",  # Production frontend
+    origin for origin in [
+        settings.FRONTEND_URL,  # Development: http://localhost:3000
+        "https://barapp.dannysickels.com",  # Production frontend
+    ] if origin is not None
 ]
 
 app.add_middleware(
