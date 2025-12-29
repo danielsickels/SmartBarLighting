@@ -46,7 +46,7 @@ IMPORT_BOTTLE_TOOL = {
                 },
                 "flavor_profile": {
                     "type": "string",
-                    "description": "Flavor notes and characteristics (e.g. 'smooth, vanilla, oak' or 'citrus, herbal, bitter')"
+                    "description": "Flavor notes and characteristics (Be direct, attempt to research the bottle, and do not state anything except flavor notes like e.g. 'smooth, vanilla, oak' or 'citrus, herbal, bitter')"
                 },
                 "capacity_ml": {
                     "type": "integer",
@@ -160,7 +160,7 @@ class OllamaService:
         messages = [
             {
                 "role": "user",
-                "content": "Analyze this bottle image and extract the bottle information to import it into a database. Use the import_bottle tool to submit the extracted data.",
+                "content": "Deeply analyze this bottle image and extract the bottle information to import it into a database. Use the import_bottle tool to submit the extracted data.",
                 "images": [image_base64]
             }
         ]
