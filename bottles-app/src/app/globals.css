@@ -39,6 +39,29 @@ body {
   scrollbar-width: none; /* For Firefox */
 }
 
+/* Amber themed scrollbar */
+.scrollbar-amber::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.scrollbar-amber::-webkit-scrollbar-track {
+  background: rgba(31, 41, 55, 0.5); /* Dark gray track */
+  border-radius: 4px;
+}
+.scrollbar-amber::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #f59e0b, #d97706); /* Amber gradient */
+  border-radius: 4px;
+  box-shadow: 0 0 6px rgba(245, 158, 11, 0.4);
+}
+.scrollbar-amber::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #fbbf24, #f59e0b); /* Lighter amber on hover */
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.6);
+}
+.scrollbar-amber {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #f59e0b rgba(31, 41, 55, 0.5); /* Firefox: thumb track */
+}
+
 .glow-charcoal {
   text-shadow: 0 0 12px #000000,
     /* First layer: Medium-sized glow */ 0 0 24px #000000,

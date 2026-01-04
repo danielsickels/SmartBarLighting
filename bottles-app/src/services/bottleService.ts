@@ -9,6 +9,8 @@ export interface Bottle {
   spirit_type_id: number;
   spirit_type?: { id: number; name: string };
   capacity_ml: number;
+  image_url: string | null;
+  barcode: string | null;
 }
 
 export interface BottleCreate {
@@ -17,6 +19,8 @@ export interface BottleCreate {
   flavor_profile?: string;
   spirit_type_id: number;
   capacity_ml: number;
+  image_url?: string;
+  barcode?: string;
 }
 
 export interface BottleImportResult {

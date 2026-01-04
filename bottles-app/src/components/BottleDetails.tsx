@@ -15,6 +15,8 @@ const BottleDetails = ({
   flavor_profile,
   capacity_ml,
   spirit_type,
+  image_url,
+  barcode,
   onDelete,
   onEdit,
 }: BottleDetailsProps) => {
@@ -34,12 +36,34 @@ const BottleDetails = ({
   };
 
   const truncatedName = name.length > 64 ? name.substring(0, 64) + "..." : name;
+  
+  // Determine if name is long enough to need smaller text (likely 3+ lines)
+  // Heuristic: if word count > 5 or character count > 35, use smaller text
+  const wordCount = truncatedName.split(/\s+/).length;
+  const isLongName = wordCount > 5 || truncatedName.length > 35;
 
   return (
-    <div className="card-amber flex flex-col w-full max-w-md mb-4 h-full">
+    <div className="card-amber flex flex-col w-full max-w-md mb-4 h-full relative">
+      {/* Bottle Image - Centered at top with restricted size */}
+      {image_url && (
+        <div className="flex justify-center mb-3 -mt-1">
+          <div className="w-24 h-24 rounded-lg overflow-hidden border border-amber-500/30 bg-gray-800 flex-shrink-0">
+            <img
+              src={image_url}
+              alt={name}
+              className="w-full h-full object-cover"
+            />
+          </div>
+        </div>
+      )}
+
       <div className="flex-1 text-white w-full">
         <div className="flex justify-center mb-3">
-          <h3 className="font-bold text-lg text-amber-300 text-center break-all px-2">
+          <h3 
+            className={`font-bold text-amber-300 text-center break-words px-2 ${
+              isLongName ? "text-base" : "text-lg"
+            }`}
+          >
             {truncatedName}
           </h3>
         </div>
@@ -72,6 +96,38 @@ const BottleDetails = ({
         <ActionButton onClick={handleDelete} disabled={deleting} variant="delete">
           {deleting ? "Deleting..." : "Delete"}
         </ActionButton>
+      </div>
+
+      {/* Barcode - Bottom left corner, very small but readable */}
+      <div className="absolute bottom-2 left-2 flex items-center gap-1 opacity-50 hover:opacity-100 transition-opacity">
+        {barcode ? (
+          <>
+            <svg 
+              className="w-3 h-3 text-gray-400" 
+              fill="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path d="M2 4h2v16H2V4zm4 0h1v16H6V4zm3 0h2v16H9V4zm4 0h1v16h-1V4zm3 0h2v16h-2V4zm4 0h2v16h-2V4z"/>
+            </svg>
+            <span className="text-[10px] font-mono text-gray-400 tracking-tight">
+              {barcode}
+            </span>
+          </>
+        ) : (
+          <>
+            {/* Faded barcode placeholder */}
+            <svg 
+              className="w-3 h-3 text-gray-600" 
+              fill="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path d="M2 4h2v16H2V4zm4 0h1v16H6V4zm3 0h2v16H9V4zm4 0h1v16h-1V4zm3 0h2v16h-2V4zm4 0h2v16h-2V4z" opacity="0.4"/>
+            </svg>
+            <span className="text-[9px] text-gray-600 italic">
+              no barcode
+            </span>
+          </>
+        )}
       </div>
     </div>
   );

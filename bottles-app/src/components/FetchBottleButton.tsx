@@ -96,11 +96,13 @@ const FetchBottleButton = () => {
               key={bottle.id}
               id={bottle.id}
               name={bottle.name}
-              brand={bottle.brand || "N/A"} // Default if brand is null
-              flavor_profile={bottle.flavor_profile || "N/A"} // Default if flavor profile is null
-              spirit_type={bottle.spirit_type?.name || "Unknown"} // Display spirit type name if available
+              brand={bottle.brand || "N/A"}
+              flavor_profile={bottle.flavor_profile || "N/A"}
+              spirit_type={bottle.spirit_type?.name || "Unknown"}
               capacity_ml={bottle.capacity_ml}
-              onDelete={() => handleDelete(bottle.id)} // Pass delete handler as prop
+              image_url={bottle.image_url}
+              barcode={bottle.barcode}
+              onDelete={() => handleDelete(bottle.id)}
             />
           ))}
         </div>
