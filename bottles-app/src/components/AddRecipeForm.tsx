@@ -249,7 +249,7 @@ const AddRecipeForm = ({ editRecipe, onEditComplete }: AddRecipeFormProps) => {
 
       <div className="card-section">
         <p className="font-bold text-amber-500 mb-1">Select Spirits:</p>
-        <div className="max-h-48 overflow-y-auto scrollbar-hide">
+        <div className="max-h-48 overflow-y-auto scrollbar-amber">
           {allSpiritTypes.map((spirit) => {
             const isSelected = spiritIngredients.some(
               (item) => item.spirit.id === spirit.id

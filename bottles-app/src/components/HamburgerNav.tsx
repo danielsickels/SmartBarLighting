@@ -69,7 +69,7 @@ export default function HamburgerNav({
   return (
     <div ref={menuRef} className={`fixed top-4 left-4 right-4 sm:right-auto z-[80] ${disabled ? "pointer-events-none" : ""}`}>
       {/* Top row: Hamburger + Nav Items */}
-      <div className="flex flex-wrap items-center gap-2 sm:gap-2 md:gap-2.5 lg:gap-3">
+      <div className="flex flex-nowrap sm:flex-wrap items-stretch sm:items-center gap-1.5 sm:gap-2 md:gap-2.5 lg:gap-3">
         {/* Hamburger Button */}
         <button
           onClick={() => setIsOpen(!isOpen)}
@@ -99,7 +99,7 @@ export default function HamburgerNav({
             key={item.id}
             onClick={() => handleNavClick(item.id)}
             style={getNavItemStyle(index)}
-            className={`px-2.5 py-1.5 text-xs sm:px-3 sm:py-2 sm:text-sm md:px-3.5 md:py-2 md:text-sm lg:px-4 lg:py-2.5 lg:text-base rounded-lg font-semibold transition-colors whitespace-nowrap ${
+            className={`flex-1 sm:flex-initial min-w-0 px-1.5 py-2 text-xs sm:px-3 sm:py-2 sm:text-sm md:px-3.5 md:py-2 md:text-sm lg:px-4 lg:py-2.5 lg:text-base rounded-lg font-semibold transition-colors text-center leading-tight sm:whitespace-nowrap ${
               activeContent === item.id
                 ? "bg-amber-600 text-gray-900 shadow-[0_0_12px_3px_rgba(217,119,6,0.7)] sm:shadow-[0_0_14px_3px_rgba(217,119,6,0.7)] lg:shadow-[0_0_18px_4px_rgba(217,119,6,0.7)]"
                 : "bg-gray-900/95 text-amber-500 shadow-[0_0_8px_2px_rgba(153,102,0,0.5)] hover:shadow-[0_0_12px_3px_rgba(153,102,0,0.7)] lg:shadow-[0_0_10px_2px_rgba(153,102,0,0.5)] lg:hover:shadow-[0_0_15px_3px_rgba(153,102,0,0.7)]"
