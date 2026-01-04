@@ -63,7 +63,9 @@ const AddBottleForm = ({ editBottle, onEditComplete }: AddBottleFormProps) => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [importResult, setImportResult] = useState<BottleImportResult | null>(null);
+  const [aiAnalysisSkipped, setAiAnalysisSkipped] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const fileInputNoAiRef = useRef<HTMLInputElement>(null);
 
   const isEditMode = !!editBottle;
 
@@ -73,7 +75,8 @@ const AddBottleForm = ({ editBottle, onEditComplete }: AddBottleFormProps) => {
       case "scan":
         return !!scannedBarcode || barcodeSkipped;
       case "photo":
-        return !!imagePreview && importResult?.success === true;
+        // Photo is complete if: AI analyzed successfully OR AI was skipped but we have an image
+        return (!!imagePreview && importResult?.success === true) || (!!imagePreview && aiAnalysisSkipped);
       case "review":
         return !!name && !!spiritType && !!capacity;
       default:
@@ -242,6 +245,36 @@ const AddBottleForm = ({ editBottle, onEditComplete }: AddBottleFormProps) => {
     []
   );
 
+  // Handle photo file selection WITHOUT AI analysis
+  const handleFileSelectNoAi = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0];
+      if (!file) return;
+
+      if (!file.type.startsWith("image/")) {
+        toast.error("Please select an image file");
+        return;
+      }
+
+      if (file.size > 10 * 1024 * 1024) {
+        toast.error("Image must be less than 10MB");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64 = reader.result as string;
+        setImagePreview(base64);
+        setAiAnalysisSkipped(true);
+        setImportResult(null);
+        toast.success("📸 Photo saved! Fill in the details manually.");
+        setCurrentStep("review");
+      };
+      reader.readAsDataURL(file);
+    },
+    []
+  );
+
   const handleDrop = useCallback(
     (event: React.DragEvent<HTMLDivElement>) => {
       event.preventDefault();
@@ -272,6 +305,7 @@ const AddBottleForm = ({ editBottle, onEditComplete }: AddBottleFormProps) => {
     setIsAnalyzing(false);
     setImagePreview(null);
     setImportResult(null);
+    setAiAnalysisSkipped(false);
     setName("");
     setBrand("");
     setFlavorProfile("");
@@ -279,6 +313,9 @@ const AddBottleForm = ({ editBottle, onEditComplete }: AddBottleFormProps) => {
     setCapacity("");
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
+    }
+    if (fileInputNoAiRef.current) {
+      fileInputNoAiRef.current.value = "";
     }
   };
 
@@ -300,8 +337,12 @@ const AddBottleForm = ({ editBottle, onEditComplete }: AddBottleFormProps) => {
   const clearPhoto = () => {
     setImagePreview(null);
     setImportResult(null);
+    setAiAnalysisSkipped(false);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
+    }
+    if (fileInputNoAiRef.current) {
+      fileInputNoAiRef.current.value = "";
     }
   };
 
@@ -309,7 +350,9 @@ const AddBottleForm = ({ editBottle, onEditComplete }: AddBottleFormProps) => {
   const handleSubmit = async () => {
     // Validate required elements (barcode is optional if skipped)
     // In edit mode, image is already saved with the bottle
-    if (!isEditMode && (!imagePreview || !importResult?.success)) {
+    // Photo is valid if: AI analyzed OR AI skipped with image
+    const hasValidPhoto = (imagePreview && importResult?.success) || (imagePreview && aiAnalysisSkipped);
+    if (!isEditMode && !hasValidPhoto) {
       toast.error("Please capture a photo of the bottle");
       setCurrentStep("photo");
       return;
@@ -577,6 +620,29 @@ const AddBottleForm = ({ editBottle, onEditComplete }: AddBottleFormProps) => {
                   🔄
                 </button>
               </div>
+            ) : imagePreview && aiAnalysisSkipped ? (
+              <div className="flex items-start gap-4 p-4 bg-blue-900/20 rounded-xl border border-blue-500/30">
+                <img
+                  src={imagePreview}
+                  alt="Bottle"
+                  className="h-24 w-24 object-cover rounded-lg border border-blue-500/30 flex-shrink-0"
+                />
+                <div className="flex-1">
+                  <p className="text-blue-400 font-medium flex items-center gap-2">
+                    <span>📸</span> Photo Saved (Manual Entry)
+                  </p>
+                  <p className="text-gray-400 text-sm mt-1">
+                    AI analysis was skipped. Fill in the bottle details manually in the next step.
+                  </p>
+                </div>
+                <button
+                  onClick={clearPhoto}
+                  className="text-gray-400 hover:text-white p-2 hover:bg-gray-700 rounded-lg transition-colors"
+                  title="Take a different photo"
+                >
+                  🔄
+                </button>
+              </div>
             ) : isAnalyzing ? (
               <div className="border border-amber-500/30 rounded-xl p-8 text-center bg-gray-800/50">
                 {imagePreview && (
@@ -606,8 +672,19 @@ const AddBottleForm = ({ editBottle, onEditComplete }: AddBottleFormProps) => {
                       <p className="text-red-300 text-sm mt-1">{importResult.error}</p>
                     )}
                     <p className="text-gray-500 text-xs mt-2">
-                      Try a clearer image of the bottle label
+                      Try a clearer image, or skip AI and enter details manually
                     </p>
+                    <button
+                      onClick={() => {
+                        setAiAnalysisSkipped(true);
+                        setImportResult(null);
+                        toast.success("📸 Using photo without AI. Fill in details manually.");
+                        setCurrentStep("review");
+                      }}
+                      className="mt-2 text-blue-400 hover:text-blue-300 text-sm underline"
+                    >
+                      Skip AI → Enter manually
+                    </button>
                   </div>
                   <button
                     onClick={clearPhoto}
@@ -618,28 +695,57 @@ const AddBottleForm = ({ editBottle, onEditComplete }: AddBottleFormProps) => {
                 </div>
               </div>
             ) : (
-              <div
-                onDrop={handleDrop}
-                onDragOver={handleDragOver}
-                onClick={() => fileInputRef.current?.click()}
-                className="border-2 border-dashed border-amber-500/50 rounded-xl p-8 text-center hover:border-amber-500 hover:bg-amber-500/5 transition-all cursor-pointer"
-              >
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  capture="environment"
-                  onChange={handleFileSelect}
-                  className="hidden"
-                />
-                <div className="text-5xl mb-4">📸</div>
-                <h3 className="text-xl font-bold text-amber-400 mb-2">Capture Bottle Photo</h3>
-                <p className="text-gray-400 mb-2">
-                  Take a photo of the bottle label so our AI can extract the details.
-                </p>
-                <p className="text-gray-500 text-sm">
-                  Tap to open camera or drop an image
-                </p>
+              <div className="space-y-3">
+                {/* Option 1: Photo with AI Analysis */}
+                <div
+                  onDrop={handleDrop}
+                  onDragOver={handleDragOver}
+                  onClick={() => fileInputRef.current?.click()}
+                  className="border-2 border-dashed border-amber-500/50 rounded-xl p-6 text-center hover:border-amber-500 hover:bg-amber-500/5 transition-all cursor-pointer"
+                >
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    capture="environment"
+                    onChange={handleFileSelect}
+                    className="hidden"
+                  />
+                  <div className="text-4xl mb-3">✨📸</div>
+                  <h3 className="text-lg font-bold text-amber-400 mb-1">Photo + AI Analysis</h3>
+                  <p className="text-gray-400 text-sm">
+                    AI will extract bottle details automatically
+                  </p>
+                </div>
+
+                {/* Divider */}
+                <div className="flex items-center gap-3">
+                  <div className="flex-1 h-px bg-gray-700" />
+                  <span className="text-gray-500 text-xs">or</span>
+                  <div className="flex-1 h-px bg-gray-700" />
+                </div>
+
+                {/* Option 2: Photo without AI */}
+                <div
+                  onClick={() => fileInputNoAiRef.current?.click()}
+                  className="border-2 border-dashed border-blue-500/30 rounded-xl p-4 text-center hover:border-blue-500/50 hover:bg-blue-500/5 transition-all cursor-pointer"
+                >
+                  <input
+                    ref={fileInputNoAiRef}
+                    type="file"
+                    accept="image/*"
+                    capture="environment"
+                    onChange={handleFileSelectNoAi}
+                    className="hidden"
+                  />
+                  <div className="flex items-center justify-center gap-3">
+                    <span className="text-2xl">📸</span>
+                    <div className="text-left">
+                      <h3 className="text-sm font-medium text-blue-400">Photo Only (Skip AI)</h3>
+                      <p className="text-gray-500 text-xs">Enter details manually</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
 
@@ -678,11 +784,23 @@ const AddBottleForm = ({ editBottle, onEditComplete }: AddBottleFormProps) => {
                         <img
                           src={imagePreview}
                           alt="Bottle"
-                          className="w-24 h-24 object-cover rounded-lg border-2 border-amber-500/30 group-hover:border-amber-500 transition-colors"
+                          className={`w-24 h-24 object-cover rounded-lg border-2 transition-colors ${
+                            importResult?.success 
+                              ? "border-emerald-500/30 group-hover:border-emerald-500"
+                              : aiAnalysisSkipped
+                                ? "border-blue-500/30 group-hover:border-blue-500"
+                                : "border-amber-500/30 group-hover:border-amber-500"
+                          }`}
                         />
                         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 rounded-lg transition-colors flex items-center justify-center">
                           <span className="opacity-0 group-hover:opacity-100 text-white text-xs">Change</span>
                         </div>
+                        {/* AI status badge */}
+                        {aiAnalysisSkipped && (
+                          <div className="absolute -top-1 -right-1 bg-blue-500 text-white text-[8px] px-1.5 py-0.5 rounded-full font-medium">
+                            Manual
+                          </div>
+                        )}
                       </div>
                     ) : (
                       <div className="w-24 h-24 rounded-lg border-2 border-dashed border-red-500/50 bg-red-900/10 flex items-center justify-center">
@@ -744,10 +862,12 @@ const AddBottleForm = ({ editBottle, onEditComplete }: AddBottleFormProps) => {
                   <div className={`flex items-center gap-1.5 text-xs px-2 py-1 rounded-full ${
                     imagePreview && importResult?.success 
                       ? "bg-emerald-900/30 text-emerald-400" 
-                      : "bg-red-900/30 text-red-400"
+                      : imagePreview && aiAnalysisSkipped
+                        ? "bg-blue-900/30 text-blue-400"
+                        : "bg-red-900/30 text-red-400"
                   }`}>
-                    <span>{imagePreview && importResult?.success ? "✓" : "✗"}</span>
-                    <span>Photo</span>
+                    <span>{imagePreview && (importResult?.success || aiAnalysisSkipped) ? "✓" : "✗"}</span>
+                    <span>{imagePreview && importResult?.success ? "AI Analyzed" : imagePreview && aiAnalysisSkipped ? "Manual" : "Photo"}</span>
                   </div>
                   <div className={`flex items-center gap-1.5 text-xs px-2 py-1 rounded-full ${
                     scannedBarcode 
