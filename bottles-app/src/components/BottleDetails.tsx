@@ -36,6 +36,11 @@ const BottleDetails = ({
   };
 
   const truncatedName = name.length > 64 ? name.substring(0, 64) + "..." : name;
+  
+  // Determine if name is long enough to need smaller text (likely 3+ lines)
+  // Heuristic: if word count > 5 or character count > 35, use smaller text
+  const wordCount = truncatedName.split(/\s+/).length;
+  const isLongName = wordCount > 5 || truncatedName.length > 35;
 
   return (
     <div className="card-amber flex flex-col w-full max-w-md mb-4 h-full relative">
@@ -54,7 +59,11 @@ const BottleDetails = ({
 
       <div className="flex-1 text-white w-full">
         <div className="flex justify-center mb-3">
-          <h3 className="font-bold text-lg text-amber-300 text-center break-all px-2">
+          <h3 
+            className={`font-bold text-amber-300 text-center break-words px-2 ${
+              isLongName ? "text-base" : "text-lg"
+            }`}
+          >
             {truncatedName}
           </h3>
         </div>
