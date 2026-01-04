@@ -54,6 +54,13 @@ const BarcodeScanner = ({ onScan, onError, onClose }: BarcodeScannerProps) => {
   useEffect(() => {
     isMountedRef.current = true;
     
+    // Detect if we're likely on a mobile device
+    const isMobileDevice = () => {
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      );
+    };
+
     const startScanner = async () => {
       // Prevent multiple simultaneous start attempts
       if (isStartingRef.current || scannerRef.current) {
@@ -78,24 +85,86 @@ const BarcodeScanner = ({ onScan, onError, onClose }: BarcodeScannerProps) => {
 
         scannerRef.current = scanner;
 
-        await scanner.start(
-          { facingMode: "environment" },
-          {
-            fps: 10,
-            qrbox: { width: 250, height: 150 },
-            aspectRatio: 1.777,
-          },
-          (decodedText) => {
-            // Prevent duplicate scans
-            if (decodedText !== lastScannedRef.current && isMountedRef.current) {
-              lastScannedRef.current = decodedText;
-              onScan(decodedText);
-            }
-          },
-          () => {
-            // Ignore scan failures (happens continuously while scanning)
+        const scanConfig = {
+          fps: 10,
+          qrbox: { width: 250, height: 150 },
+          aspectRatio: 1.777,
+        };
+
+        const onScanSuccess = (decodedText: string) => {
+          // Prevent duplicate scans
+          if (decodedText !== lastScannedRef.current && isMountedRef.current) {
+            lastScannedRef.current = decodedText;
+            onScan(decodedText);
           }
-        );
+        };
+
+        const onScanFailure = () => {
+          // Ignore scan failures (happens continuously while scanning)
+        };
+
+        // Try different camera selection strategies
+        let started = false;
+
+        // Strategy 1: On mobile devices, try facingMode: "environment" first (rear camera)
+        if (isMobileDevice()) {
+          try {
+            await scanner.start(
+              { facingMode: "environment" },
+              scanConfig,
+              onScanSuccess,
+              onScanFailure
+            );
+            started = true;
+          } catch {
+            console.warn("facingMode 'environment' failed, trying fallback...");
+          }
+        }
+
+        // Strategy 2: On desktop or if mobile strategy failed, enumerate cameras and use the first one
+        if (!started) {
+          try {
+            const cameras = await Html5Qrcode.getCameras();
+            if (cameras && cameras.length > 0) {
+              // Prefer cameras with "back" or "rear" in the label (for mobile fallback)
+              // Otherwise use the first available camera (typical for desktop)
+              const preferredCamera = cameras.find(
+                (cam) => cam.label.toLowerCase().includes("back") || 
+                         cam.label.toLowerCase().includes("rear") ||
+                         cam.label.toLowerCase().includes("environment")
+              ) || cameras[0];
+
+              await scanner.start(
+                preferredCamera.id,
+                scanConfig,
+                onScanSuccess,
+                onScanFailure
+              );
+              started = true;
+            }
+          } catch (camErr) {
+            console.warn("Camera enumeration/start failed:", camErr);
+          }
+        }
+
+        // Strategy 3: Last resort - try without any constraint (let browser pick)
+        if (!started) {
+          try {
+            await scanner.start(
+              { facingMode: "user" },
+              scanConfig,
+              onScanSuccess,
+              onScanFailure
+            );
+            started = true;
+          } catch {
+            console.warn("facingMode 'user' also failed");
+          }
+        }
+
+        if (!started) {
+          throw new Error("No camera could be started with any strategy");
+        }
 
         if (isMountedRef.current) {
           setIsScanning(true);
@@ -153,28 +222,40 @@ const BarcodeScanner = ({ onScan, onError, onClose }: BarcodeScannerProps) => {
     onClose();
   };
 
+  // Handle touch events for iOS compatibility
+  const handleTouchClose = (e: React.TouchEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    handleClose();
+  };
+
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/90">
       {/* Scanner container */}
       <div className="relative bg-gray-900 rounded-xl overflow-hidden max-w-lg w-full">
-        {/* Header */}
-        <div className="flex justify-between items-center p-4 border-b border-gray-700">
+        {/* Header - z-20 ensures it stays above the scanner elements */}
+        <div className="relative z-20 flex justify-between items-center p-4 border-b border-gray-700 bg-gray-900">
           <h3 className="text-xl font-bold text-amber-500">
             📷 Scan Barcode
           </h3>
           <button
             onClick={handleClose}
-            className="text-gray-400 hover:text-white text-2xl transition-colors"
+            onTouchEnd={handleTouchClose}
+            className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-400 hover:text-white active:text-white active:bg-gray-700 text-2xl transition-colors rounded-lg touch-manipulation"
+            style={{ WebkitTapHighlightColor: 'transparent' }}
+            aria-label="Close scanner"
           >
             ✕
           </button>
         </div>
 
-        {/* Scanner view */}
-        <div className="relative">
+        {/* Scanner view - z-10 keeps it below the header */}
+        <div className="relative z-10">
+          {/* Container with strict containment to prevent library elements from overflowing */}
           <div
             id={scannerContainerId}
             className="w-full aspect-video bg-black"
+            style={{ contain: 'layout', overflow: 'hidden' }}
           />
 
           {/* Scanning indicator */}
@@ -249,8 +330,8 @@ const BarcodeScanner = ({ onScan, onError, onClose }: BarcodeScannerProps) => {
           )}
         </div>
 
-        {/* Instructions */}
-        <div className="p-4 border-t border-gray-700">
+        {/* Instructions - z-20 ensures it stays above the scanner elements */}
+        <div className="relative z-20 p-4 border-t border-gray-700 bg-gray-900">
           <p className="text-gray-400 text-sm text-center">
             Point your camera at a barcode on the bottle
           </p>
