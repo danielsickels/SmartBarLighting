@@ -13,6 +13,8 @@ class BottleBase(BaseModel):
     flavor_profile: Optional[str] = None  # Flavor profile (e.g., sweet, bitter)
     capacity_ml: Optional[int] = None  # Capacity in milliliters
     spirit_type_id: int  # Reference to spirit type ID
+    image_url: Optional[str] = None  # Base64 image data URL
+    barcode: Optional[str] = None  # Barcode number
 
 class BottleCreate(BottleBase):
     pass
@@ -23,6 +25,8 @@ class BottleUpdate(BottleBase):
     flavor_profile: Optional[str] = None
     capacity_ml: Optional[int] = None
     spirit_type_id: Optional[int] = None
+    image_url: Optional[str] = None
+    barcode: Optional[str] = None
 
 class BottleResponse(BottleBase):
     id: int

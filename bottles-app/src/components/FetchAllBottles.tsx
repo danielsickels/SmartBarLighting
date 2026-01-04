@@ -156,10 +156,12 @@ const FetchAllBottles = ({ onEdit }: FetchAllBottlesProps) => {
               key={bottle.id}
               id={bottle.id}
               name={bottle.name}
-              brand={bottle.brand || "N/A"} // Display 'N/A' if brand is missing
-              flavor_profile={bottle.flavor_profile || "N/A"} // Display 'N/A' if flavor profile is missing
-              spirit_type={bottle.spirit_type?.name || "Unknown"} // Display spirit type name or 'Unknown'
+              brand={bottle.brand || "N/A"}
+              flavor_profile={bottle.flavor_profile || "N/A"}
+              spirit_type={bottle.spirit_type?.name || "Unknown"}
               capacity_ml={bottle.capacity_ml}
+              image_url={bottle.image_url}
+              barcode={bottle.barcode}
               onEdit={() => onEdit?.(bottle)}
               onDelete={() => handleDeleteClick(bottle.id, bottle.name)}
             />

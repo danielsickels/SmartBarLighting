@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import LoadingSpinner from "./LoadingSpinner";
 import SearchBar from "./SearchBar";
@@ -8,6 +8,7 @@ import SpiritFilterButtons from "./SpiritFilterButtons";
 import PageHeader from "./PageHeader";
 import { fetchAllRecipes, deleteRecipe, Recipe } from "../services/recipeService";
 import { fetchAllBottles } from "../services/bottleService";
+import { fetchAllSpiritTypes, SpiritType } from "../services/spiritTypeService";
 
 interface Bottle {
   id: number;
@@ -22,6 +23,7 @@ const FetchAllRecipes = ({ onEdit }: FetchAllRecipesProps) => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>([]);
   const [bottles, setBottles] = useState<Bottle[]>([]);
+  const [allSpiritTypes, setAllSpiritTypes] = useState<SpiritType[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -36,29 +38,20 @@ const FetchAllRecipes = ({ onEdit }: FetchAllRecipesProps) => {
     recipeName: "",
   });
 
-  // Extract unique spirit types from recipes
-  const availableSpiritTypes = useMemo(() => {
-    const spiritMap = new Map();
-    recipes.forEach((recipe) => {
-      recipe.spirit_types.forEach((spirit) => {
-        spiritMap.set(spirit.id, spirit);
-      });
-    });
-    return Array.from(spiritMap.values()).sort((a, b) => a.name.localeCompare(b.name));
-  }, [recipes]);
-
   useEffect(() => {
     const fetchRecipesAndData = async () => {
       setLoading(true);
       setError(null);
       try {
-        const [recipesData, bottlesData] = await Promise.all([
+        const [recipesData, bottlesData, spiritTypesData] = await Promise.all([
           fetchAllRecipes(),
           fetchAllBottles(),
+          fetchAllSpiritTypes(),
         ]);
 
         setRecipes(recipesData);
         setBottles(bottlesData);
+        setAllSpiritTypes(spiritTypesData.sort((a, b) => a.name.localeCompare(b.name)));
         setFilteredRecipes(recipesData); // Show all recipes by default
       } catch (err) {
         console.error("Error fetching data:", err);
@@ -154,9 +147,9 @@ const FetchAllRecipes = ({ onEdit }: FetchAllRecipesProps) => {
         />
       </div>
 
-      {/* Spirit Type Filter Buttons */}
+      {/* Spirit Type Filter Buttons - Shows ALL spirit types */}
       <SpiritFilterButtons
-        spiritTypes={availableSpiritTypes}
+        spiritTypes={allSpiritTypes}
         selectedSpiritIds={selectedSpiritIds}
         onToggleSpirit={handleToggleSpirit}
       />
