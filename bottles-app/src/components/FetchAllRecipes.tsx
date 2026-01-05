@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import toast from "react-hot-toast";
 import LoadingSpinner from "./LoadingSpinner";
 import SearchBar from "./SearchBar";
@@ -7,13 +7,8 @@ import ConfirmDialog from "./ConfirmDialog";
 import SpiritFilterButtons from "./SpiritFilterButtons";
 import PageHeader from "./PageHeader";
 import { fetchAllRecipes, deleteRecipe, Recipe } from "../services/recipeService";
-import { fetchAllBottles } from "../services/bottleService";
+import { fetchAllBottles, Bottle } from "../services/bottleService";
 import { fetchAllSpiritTypes, SpiritType } from "../services/spiritTypeService";
-
-interface Bottle {
-  id: number;
-  spirit_type_id: number; // Link between bottles and spirit types
-}
 
 interface FetchAllRecipesProps {
   onEdit?: (recipe: Recipe) => void;
@@ -21,7 +16,6 @@ interface FetchAllRecipesProps {
 
 const FetchAllRecipes = ({ onEdit }: FetchAllRecipesProps) => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>([]);
   const [bottles, setBottles] = useState<Bottle[]>([]);
   const [allSpiritTypes, setAllSpiritTypes] = useState<SpiritType[]>([]);
   const [loading, setLoading] = useState(false);
@@ -52,7 +46,6 @@ const FetchAllRecipes = ({ onEdit }: FetchAllRecipesProps) => {
         setRecipes(recipesData);
         setBottles(bottlesData);
         setAllSpiritTypes(spiritTypesData.sort((a, b) => a.name.localeCompare(b.name)));
-        setFilteredRecipes(recipesData); // Show all recipes by default
       } catch (err) {
         console.error("Error fetching data:", err);
         setError("Failed to fetch recipes or bottles");
@@ -64,9 +57,14 @@ const FetchAllRecipes = ({ onEdit }: FetchAllRecipesProps) => {
     fetchRecipesAndData();
   }, []);
 
-  useEffect(() => {
+  // Derive filtered recipes from state using useMemo instead of useEffect + separate state
+  const filteredRecipes = useMemo(() => {
+    if (!searchQuery && selectedSpiritIds.length === 0) {
+      return recipes;
+    }
+
     const regex = new RegExp(searchQuery, "i");
-    const filtered = recipes.filter((recipe) => {
+    return recipes.filter((recipe) => {
       // Search filter
       const matchesSearch =
         searchQuery === "" ||
@@ -80,7 +78,6 @@ const FetchAllRecipes = ({ onEdit }: FetchAllRecipesProps) => {
 
       return matchesSearch && matchesSpirit;
     });
-    setFilteredRecipes(filtered);
   }, [searchQuery, recipes, selectedSpiritIds]);
 
   const handleToggleSpirit = (spiritId: number) => {
@@ -109,9 +106,6 @@ const FetchAllRecipes = ({ onEdit }: FetchAllRecipesProps) => {
     try {
       await deleteRecipe(recipeId);
       setRecipes((prevRecipes) =>
-        prevRecipes.filter((recipe) => recipe.id !== recipeId)
-      );
-      setFilteredRecipes((prevRecipes) =>
         prevRecipes.filter((recipe) => recipe.id !== recipeId)
       );
       toast.success("Recipe deleted successfully", { id: toastId });

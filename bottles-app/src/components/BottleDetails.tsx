@@ -43,7 +43,7 @@ const BottleDetails = ({
   const isLongName = wordCount > 5 || truncatedName.length > 35;
 
   return (
-    <div className="card-amber flex flex-col w-full max-w-md mb-4 h-full relative">
+    <div className="card-amber flex flex-col w-full max-w-md mb-4 h-full">
       {/* Bottle Image - Centered at top with restricted size */}
       {image_url && (
         <div className="flex justify-center mb-3 -mt-1">
@@ -83,11 +83,27 @@ const BottleDetails = ({
           <strong className="text-amber-600">Capacity:</strong>{" "}
           <span className="text-amber-300">{capacity_ml} ml</span>
         </p>
+        
+        {/* Barcode - Below capacity */}
+        <p className="flex items-center gap-1.5 mt-1">
+          <svg 
+            className="w-3.5 h-3.5 text-amber-600" 
+            fill="currentColor" 
+            viewBox="0 0 24 24"
+          >
+            <path d="M2 4h2v16H2V4zm4 0h1v16H6V4zm3 0h2v16H9V4zm4 0h1v16h-1V4zm3 0h2v16h-2V4zm4 0h2v16h-2V4z"/>
+          </svg>
+          {barcode ? (
+            <span className="text-amber-300/70 font-mono text-sm">{barcode}</span>
+          ) : (
+            <span className="text-gray-500 italic text-sm">none</span>
+          )}
+        </p>
       </div>
 
       {error && <div className="text-red-500 mt-2">{error}</div>}
 
-      <div className="flex gap-2 mt-2 w-full">
+      <div className="flex gap-2 mt-3 w-full">
         {onEdit && (
           <ActionButton onClick={onEdit} variant="edit">
             Edit
@@ -96,38 +112,6 @@ const BottleDetails = ({
         <ActionButton onClick={handleDelete} disabled={deleting} variant="delete">
           {deleting ? "Deleting..." : "Delete"}
         </ActionButton>
-      </div>
-
-      {/* Barcode - Bottom left corner, very small but readable */}
-      <div className="absolute bottom-2 left-2 flex items-center gap-1 opacity-50 hover:opacity-100 transition-opacity">
-        {barcode ? (
-          <>
-            <svg 
-              className="w-3 h-3 text-gray-400" 
-              fill="currentColor" 
-              viewBox="0 0 24 24"
-            >
-              <path d="M2 4h2v16H2V4zm4 0h1v16H6V4zm3 0h2v16H9V4zm4 0h1v16h-1V4zm3 0h2v16h-2V4zm4 0h2v16h-2V4z"/>
-            </svg>
-            <span className="text-[10px] font-mono text-gray-400 tracking-tight">
-              {barcode}
-            </span>
-          </>
-        ) : (
-          <>
-            {/* Faded barcode placeholder */}
-            <svg 
-              className="w-3 h-3 text-gray-600" 
-              fill="currentColor" 
-              viewBox="0 0 24 24"
-            >
-              <path d="M2 4h2v16H2V4zm4 0h1v16H6V4zm3 0h2v16H9V4zm4 0h1v16h-1V4zm3 0h2v16h-2V4zm4 0h2v16h-2V4z" opacity="0.4"/>
-            </svg>
-            <span className="text-[9px] text-gray-600 italic">
-              no barcode
-            </span>
-          </>
-        )}
       </div>
     </div>
   );

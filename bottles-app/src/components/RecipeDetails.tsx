@@ -1,10 +1,6 @@
+import { useMemo } from "react";
 import ActionButton from "./ActionButton";
-
-interface Ingredient {
-  name: string;
-  quantity: string;
-  unit: string;
-}
+import { Ingredient } from "../services/recipeService";
 
 interface RecipeDetailsProps {
   id: number;
@@ -26,27 +22,32 @@ const RecipeDetails = ({
   onDelete,
   onEdit,
 }: RecipeDetailsProps) => {
-  const ingredientsList = ingredients || [];
+  // Memoize derived arrays to prevent recalculation on every render
+  const { spiritsWithMeasurements, customIngredients } = useMemo(() => {
+    const ingredientsList = ingredients || [];
 
-  const spiritsWithMeasurements = spirit_types.map((spirit) => {
-    const spiritIngredient = ingredientsList.find(
-      (ingredient) => ingredient.name.toLowerCase() === spirit.name.toLowerCase()
-    );
-
-    if (spiritIngredient) {
-      return `${spiritIngredient.name} - ${spiritIngredient.quantity} ${spiritIngredient.unit}`;
-    }
-    return spirit.name;
-  });
-
-  const customIngredients = ingredientsList
-    .filter((ingredient) => {
-      const isSpirit = spirit_types.some(
-        (spirit) => spirit.name.toLowerCase() === ingredient.name.toLowerCase()
+    const spiritsWithMeasurements = spirit_types.map((spirit) => {
+      const spiritIngredient = ingredientsList.find(
+        (ingredient) => ingredient.name.toLowerCase() === spirit.name.toLowerCase()
       );
-      return !isSpirit;
-    })
-    .map((ingredient) => `${ingredient.name} - ${ingredient.quantity} ${ingredient.unit}`);
+
+      if (spiritIngredient) {
+        return `${spiritIngredient.name} - ${spiritIngredient.quantity} ${spiritIngredient.unit}`;
+      }
+      return spirit.name;
+    });
+
+    const customIngredients = ingredientsList
+      .filter((ingredient) => {
+        const isSpirit = spirit_types.some(
+          (spirit) => spirit.name.toLowerCase() === ingredient.name.toLowerCase()
+        );
+        return !isSpirit;
+      })
+      .map((ingredient) => `${ingredient.name} - ${ingredient.quantity} ${ingredient.unit}`);
+
+    return { spiritsWithMeasurements, customIngredients };
+  }, [ingredients, spirit_types]);
 
   const truncatedName = name.length > 64 ? name.substring(0, 64) + "..." : name;
 
