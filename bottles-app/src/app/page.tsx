@@ -123,7 +123,7 @@ export default function Home() {
 
         {/* Main content */}
         <main
-          className={`relative z-20 w-full px-4 sm:px-6 lg:px-8 pt-20 pb-12 ${
+          className={`relative z-20 w-full px-4 sm:px-6 lg:px-8 pt-24 md:pt-24 lg:pt-20 pb-16 sm:pb-16 lg:pb-12 ${
             isEditing ? "relative z-[60]" : ""
           }`}
         >
