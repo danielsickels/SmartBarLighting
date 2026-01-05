@@ -1,7 +1,4 @@
-interface SpiritType {
-  id: number;
-  name: string;
-}
+import { SpiritType } from "../services/spiritTypeService";
 
 interface SpiritFilterButtonsProps {
   spiritTypes: SpiritType[];
@@ -28,25 +25,7 @@ const SpiritFilterButtons = ({
             <button
               key={spirit.id}
               onClick={() => onToggleSpirit(spirit.id)}
-              className={`px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-medium rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                isSelected
-                  ? "bg-emerald-700 text-emerald-100 hover:bg-emerald-600 focus:ring-emerald-500 shadow-[0_0_10px_2px_rgba(16,185,129,0.4)]"
-                  : "bg-amber-700 text-amber-100 hover:bg-amber-600 focus:ring-amber-500 shadow-[0_0_10px_2px_rgba(245,158,11,0.4)]"
-              }`}
-              onMouseEnter={(e) => {
-                if (isSelected) {
-                  e.currentTarget.style.boxShadow = '0 0 15px 3px rgba(16, 185, 129, 0.6)';
-                } else {
-                  e.currentTarget.style.boxShadow = '0 0 15px 3px rgba(245, 158, 11, 0.6)';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (isSelected) {
-                  e.currentTarget.style.boxShadow = '0 0 10px 2px rgba(16, 185, 129, 0.4)';
-                } else {
-                  e.currentTarget.style.boxShadow = '0 0 10px 2px rgba(245, 158, 11, 0.4)';
-                }
-              }}
+              className={`spirit-filter-btn ${isSelected ? "spirit-filter-btn-selected" : "spirit-filter-btn-default"}`}
             >
               {spirit.name}
             </button>

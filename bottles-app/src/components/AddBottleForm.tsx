@@ -67,7 +67,23 @@ const AddBottleForm = ({ editBottle, onEditComplete }: AddBottleFormProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const fileInputNoAiRef = useRef<HTMLInputElement>(null);
 
+  // Cache spirit types to avoid multiple fetches
+  const [cachedSpiritTypes, setCachedSpiritTypes] = useState<SpiritType[]>([]);
+
   const isEditMode = !!editBottle;
+
+  // Fetch spirit types once on mount
+  useEffect(() => {
+    const loadSpiritTypes = async () => {
+      try {
+        const types = await fetchAllSpiritTypes();
+        setCachedSpiritTypes(types);
+      } catch (error) {
+        console.error("Error fetching spirit types:", error);
+      }
+    };
+    loadSpiritTypes();
+  }, []);
 
   // Check completion status for each step
   const isStepComplete = (step: StepKey): boolean => {
@@ -134,10 +150,9 @@ const AddBottleForm = ({ editBottle, onEditComplete }: AddBottleFormProps) => {
         setFlavorProfile(result.data.flavor_profile || "");
         setCapacity(result.data.capacity_ml || "");
         
-        // Try to match spirit type
+        // Try to match spirit type using cached data
         if (result.data.spirit_type_name) {
-          const spiritTypes = await fetchAllSpiritTypes();
-          const matchedType = spiritTypes.find(
+          const matchedType = cachedSpiritTypes.find(
             (st) => st.name.toLowerCase() === result.data!.spirit_type_name!.toLowerCase()
           );
           if (matchedType) {
@@ -162,7 +177,7 @@ const AddBottleForm = ({ editBottle, onEditComplete }: AddBottleFormProps) => {
       setBarcodeFound(false);
       setCurrentStep("photo");
     }
-  }, []);
+  }, [cachedSpiritTypes]);
 
   // Handle photo file selection
   const handleFileSelect = useCallback(
@@ -202,8 +217,8 @@ const AddBottleForm = ({ editBottle, onEditComplete }: AddBottleFormProps) => {
             setCapacity(result.capacity_ml || "");
 
             if (result.spirit_type) {
-              const spiritTypes = await fetchAllSpiritTypes();
-              const matchedType = spiritTypes.find(
+              // Use cached spirit types instead of fetching again
+              const matchedType = cachedSpiritTypes.find(
                 (st) => st.name.toLowerCase() === result.spirit_type!.toLowerCase()
               );
 
@@ -213,6 +228,8 @@ const AddBottleForm = ({ editBottle, onEditComplete }: AddBottleFormProps) => {
                 try {
                   const newType = await addSpiritType({ name: result.spirit_type });
                   setSpiritType(newType);
+                  // Update cache with new type
+                  setCachedSpiritTypes(prev => [...prev, newType]);
                   toast.success(`Created new spirit type: ${result.spirit_type}`);
                 } catch {
                   toast.error(`Spirit type "${result.spirit_type}" not found. Please select manually.`);
@@ -242,7 +259,7 @@ const AddBottleForm = ({ editBottle, onEditComplete }: AddBottleFormProps) => {
       };
       reader.readAsDataURL(file);
     },
-    []
+    [cachedSpiritTypes]
   );
 
   // Handle photo file selection WITHOUT AI analysis

@@ -18,7 +18,6 @@ interface FetchAllBottlesProps {
 
 const FetchAllBottles = ({ onEdit }: FetchAllBottlesProps) => {
   const [bottles, setBottles] = useState<Bottle[]>([]);
-  const [filteredBottles, setFilteredBottles] = useState<Bottle[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -52,7 +51,6 @@ const FetchAllBottles = ({ onEdit }: FetchAllBottlesProps) => {
       try {
         const allBottles = await fetchAllBottles();
         setBottles(allBottles);
-        setFilteredBottles(allBottles);
       } catch {
         setError("Failed to fetch bottles");
       } finally {
@@ -63,9 +61,14 @@ const FetchAllBottles = ({ onEdit }: FetchAllBottlesProps) => {
     fetchBottles();
   }, []);
 
-  useEffect(() => {
+  // Derive filtered bottles from state using useMemo instead of useEffect + separate state
+  const filteredBottles = useMemo(() => {
+    if (!searchQuery && selectedSpiritIds.length === 0) {
+      return bottles;
+    }
+
     const regex = new RegExp(searchQuery, "i");
-    const filtered = bottles.filter((bottle) => {
+    return bottles.filter((bottle) => {
       // Search filter
       const matchesSearch =
         regex.test(bottle.name) ||
@@ -80,7 +83,6 @@ const FetchAllBottles = ({ onEdit }: FetchAllBottlesProps) => {
 
       return matchesSearch && matchesSpirit;
     });
-    setFilteredBottles(filtered);
   }, [searchQuery, bottles, selectedSpiritIds]);
 
   const handleToggleSpirit = (spiritId: number) => {
@@ -100,7 +102,7 @@ const FetchAllBottles = ({ onEdit }: FetchAllBottlesProps) => {
     });
   };
 
-  // Delete a specific bottle and update the displayed lists
+  // Delete a specific bottle and update the displayed list
   const handleDeleteConfirm = async () => {
     const bottleId = confirmDialog.bottleId;
     if (!bottleId) return;
@@ -112,9 +114,6 @@ const FetchAllBottles = ({ onEdit }: FetchAllBottlesProps) => {
       await deleteBottle(bottleId);
       setBottles((prevBottles) =>
         prevBottles.filter((bottle) => bottle.id !== bottleId)
-      );
-      setFilteredBottles((prevFiltered) =>
-        prevFiltered.filter((bottle) => bottle.id !== bottleId)
       );
       toast.success("Bottle deleted successfully", { id: toastId });
     } catch {
