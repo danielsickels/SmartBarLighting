@@ -13,7 +13,7 @@ class BottleBase(BaseModel):
     flavor_profile: Optional[str] = None  # Flavor profile (e.g., sweet, bitter)
     capacity_ml: Optional[int] = None  # Capacity in milliliters
     spirit_type_id: int  # Reference to spirit type ID
-    image_url: Optional[str] = None  # Base64 image data URL
+    image_url: Optional[str] = None  # MinIO object storage URL for bottle image
     barcode: Optional[str] = None  # Barcode number
 
 class BottleCreate(BottleBase):
@@ -33,3 +33,16 @@ class BottleResponse(BottleBase):
     spirit_type: Optional[SpiritTypeResponse]  # Include nested spirit type object
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class ImageUploadRequest(BaseModel):
+    """Request schema for uploading an image to MinIO"""
+    image_base64: str  # Base64 encoded image data (with or without data URL prefix)
+
+
+class ImageUploadResponse(BaseModel):
+    """Response schema for image upload"""
+    success: bool
+    url: Optional[str] = None  # Public URL of the uploaded image
+    object_name: Optional[str] = None  # MinIO object name/path
+    error: Optional[str] = None

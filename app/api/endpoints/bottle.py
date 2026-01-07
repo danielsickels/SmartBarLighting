@@ -3,7 +3,13 @@ from sqlalchemy.orm import Session
 from typing import List, Optional
 
 from app.db.session import get_db
-from app.schemas.bottle import BottleCreate, BottleUpdate, BottleResponse
+from app.schemas.bottle import (
+    BottleCreate, 
+    BottleUpdate, 
+    BottleResponse,
+    ImageUploadRequest,
+    ImageUploadResponse
+)
 from app.schemas.bottle_import import BottleImportRequest, BottleImportResponse
 from app.services.bottle import BottleService
 from app.services.ollama import ollama_service
@@ -120,4 +126,39 @@ async def import_bottle_from_image(
         return BottleImportResponse(
             success=False,
             error=f"Error analyzing bottle image: {str(e)}"
+        )
+
+
+@router.post("/upload-image", response_model=ImageUploadResponse)
+async def upload_bottle_image(
+    request: ImageUploadRequest,
+    current_user: User = Depends(get_current_user),
+):
+    """
+    Upload a bottle image to MinIO object storage.
+    
+    Returns the public URL that can be used when creating or updating a bottle.
+    The image is stored in MinIO and organized by user ID.
+    
+    This endpoint is useful for:
+    - Uploading an image before creating a bottle
+    - Pre-uploading images for the AI import flow
+    - Getting a URL to store with the bottle record
+    """
+    try:
+        result = BottleService.upload_bottle_image(
+            image_base64=request.image_base64,
+            user_id=current_user.id
+        )
+        
+        return ImageUploadResponse(
+            success=result.success,
+            url=result.url,
+            object_name=result.object_name,
+            error=result.error
+        )
+    except Exception as e:
+        return ImageUploadResponse(
+            success=False,
+            error=f"Error uploading image: {str(e)}"
         )

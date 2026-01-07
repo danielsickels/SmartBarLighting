@@ -36,6 +36,13 @@ export interface BottleImportResult {
   error?: string;
 }
 
+export interface ImageUploadResult {
+  success: boolean;
+  url?: string;  // Public URL of the uploaded image in MinIO
+  object_name?: string;  // MinIO object path
+  error?: string;
+}
+
 export const fetchBottle = async (id: number): Promise<Bottle | null> => {
   try {
     const headers = await getHeaders();
@@ -165,6 +172,31 @@ export const importBottleFromImage = async (
   if (!res.ok) {
     const error = await res.json();
     throw new Error(error.detail || "Failed to analyze bottle image");
+  }
+
+  return await res.json();
+};
+
+/**
+ * Upload a bottle image to MinIO object storage.
+ * Returns a public URL that can be used when creating or updating a bottle.
+ * 
+ * @param imageBase64 - Base64 encoded image data (with or without data URL prefix)
+ * @returns ImageUploadResult with the public URL of the uploaded image
+ */
+export const uploadBottleImage = async (
+  imageBase64: string
+): Promise<ImageUploadResult> => {
+  const headers = await getHeaders();
+  const res = await fetch(API_ENDPOINTS.BOTTLE_UPLOAD_IMAGE, {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ image_base64: imageBase64 }),
+  });
+
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.detail || "Failed to upload image");
   }
 
   return await res.json();
