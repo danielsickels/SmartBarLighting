@@ -12,6 +12,7 @@ export const API_ENDPOINTS = {
   },
   BOTTLES: `${API_BASE_URL}/bottles`,
   BOTTLE_IMPORT: `${API_BASE_URL}/bottles/import`,
+  BOTTLE_UPLOAD_IMAGE: `${API_BASE_URL}/bottles/upload-image`,
   BARCODE: {
     LOOKUP: `${API_BASE_URL}/barcode/lookup`,
     REGISTER: `${API_BASE_URL}/barcode/register`,

@@ -4,6 +4,7 @@ import {
   addBottle,
   updateBottle,
   importBottleFromImage,
+  uploadBottleImage,
   Bottle,
   BottleImportResult,
 } from "../services/bottleService";
@@ -61,7 +62,9 @@ const AddBottleForm = ({ editBottle, onEditComplete }: AddBottleFormProps) => {
 
   // Photo import state
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);  // Local preview (base64)
+  const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);  // MinIO URL
   const [importResult, setImportResult] = useState<BottleImportResult | null>(null);
   const [aiAnalysisSkipped, setAiAnalysisSkipped] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -117,9 +120,10 @@ const AddBottleForm = ({ editBottle, onEditComplete }: AddBottleFormProps) => {
         });
       }
       
-      // Pre-fill image if exists
+      // Pre-fill image if exists (it's now a MinIO URL, not base64)
       if (editBottle.image_url) {
         setImagePreview(editBottle.image_url);
+        setUploadedImageUrl(editBottle.image_url);  // Already a MinIO URL
         setImportResult({ success: true }); // Mark as already analyzed
       }
       
@@ -202,37 +206,49 @@ const AddBottleForm = ({ editBottle, onEditComplete }: AddBottleFormProps) => {
 
         setImagePreview(base64);
         setIsAnalyzing(true);
+        setIsUploading(true);
         setImportResult(null);
+        setUploadedImageUrl(null);
 
         const toastId = toast.loading("🔍 AI is analyzing your bottle...");
 
         try {
-          const result = await importBottleFromImage(base64Data);
-          setImportResult(result);
+          const uploadPromise = uploadBottleImage(base64Data);
+          
+          const aiResult = await importBottleFromImage(base64Data);
+          setImportResult(aiResult);
+          
+          const uploadResult = await uploadPromise;
+          
+          if (uploadResult.success && uploadResult.url) {
+            setUploadedImageUrl(uploadResult.url);
+          } else {
+            console.error("Image upload failed:", uploadResult.error);
+          }
 
-          if (result.success) {
-            setName(result.name || "");
-            setBrand(result.brand || "");
-            setFlavorProfile(result.flavor_profile || "");
-            setCapacity(result.capacity_ml || "");
+          if (aiResult.success) {
+            setName(aiResult.name || "");
+            setBrand(aiResult.brand || "");
+            setFlavorProfile(aiResult.flavor_profile || "");
+            setCapacity(aiResult.capacity_ml || "");
 
-            if (result.spirit_type) {
+            if (aiResult.spirit_type) {
               // Use cached spirit types instead of fetching again
               const matchedType = cachedSpiritTypes.find(
-                (st) => st.name.toLowerCase() === result.spirit_type!.toLowerCase()
+                (st) => st.name.toLowerCase() === aiResult.spirit_type!.toLowerCase()
               );
 
               if (matchedType) {
                 setSpiritType(matchedType);
               } else {
                 try {
-                  const newType = await addSpiritType({ name: result.spirit_type });
+                  const newType = await addSpiritType({ name: aiResult.spirit_type });
                   setSpiritType(newType);
                   // Update cache with new type
                   setCachedSpiritTypes(prev => [...prev, newType]);
-                  toast.success(`Created new spirit type: ${result.spirit_type}`);
+                  toast.success(`Created new spirit type: ${aiResult.spirit_type}`);
                 } catch {
-                  toast.error(`Spirit type "${result.spirit_type}" not found. Please select manually.`);
+                  toast.error(`Spirit type "${aiResult.spirit_type}" not found. Please select manually.`);
                 }
               }
             }
@@ -241,7 +257,7 @@ const AddBottleForm = ({ editBottle, onEditComplete }: AddBottleFormProps) => {
             // Auto-advance to review
             setCurrentStep("review");
           } else {
-            toast.error(result.error || "Failed to analyze bottle", { id: toastId });
+            toast.error(aiResult.error || "Failed to analyze bottle", { id: toastId });
           }
         } catch (error) {
           console.error("Error analyzing bottle:", error);
@@ -255,6 +271,7 @@ const AddBottleForm = ({ editBottle, onEditComplete }: AddBottleFormProps) => {
           );
         } finally {
           setIsAnalyzing(false);
+          setIsUploading(false);
         }
       };
       reader.readAsDataURL(file);
@@ -264,7 +281,7 @@ const AddBottleForm = ({ editBottle, onEditComplete }: AddBottleFormProps) => {
 
   // Handle photo file selection WITHOUT AI analysis
   const handleFileSelectNoAi = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
+    async (event: React.ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0];
       if (!file) return;
 
@@ -279,13 +296,37 @@ const AddBottleForm = ({ editBottle, onEditComplete }: AddBottleFormProps) => {
       }
 
       const reader = new FileReader();
-      reader.onloadend = () => {
+      reader.onloadend = async () => {
         const base64 = reader.result as string;
+        const base64Data = base64.split(",")[1];
+        
         setImagePreview(base64);
         setAiAnalysisSkipped(true);
         setImportResult(null);
-        toast.success("📸 Photo saved! Fill in the details manually.");
-        setCurrentStep("review");
+        setIsUploading(true);
+        setUploadedImageUrl(null);
+
+        const toastId = toast.loading("📸 Uploading photo...");
+
+        try {
+          // Upload image to MinIO
+          const uploadResult = await uploadBottleImage(base64Data);
+          
+          if (uploadResult.success && uploadResult.url) {
+            setUploadedImageUrl(uploadResult.url);
+            toast.success("📸 Photo uploaded! Fill in the details manually.", { id: toastId });
+          } else {
+            console.error("Image upload failed:", uploadResult.error);
+            toast.success("📸 Photo saved! Fill in the details manually.", { id: toastId });
+            // Continue even if upload fails - backend will handle base64
+          }
+        } catch (error) {
+          console.error("Error uploading image:", error);
+          toast.success("📸 Photo saved! Fill in the details manually.", { id: toastId });
+        } finally {
+          setIsUploading(false);
+          setCurrentStep("review");
+        }
       };
       reader.readAsDataURL(file);
     },
@@ -320,7 +361,9 @@ const AddBottleForm = ({ editBottle, onEditComplete }: AddBottleFormProps) => {
     setBarcodeFound(false);
     setBarcodeSkipped(false);
     setIsAnalyzing(false);
+    setIsUploading(false);
     setImagePreview(null);
+    setUploadedImageUrl(null);
     setImportResult(null);
     setAiAnalysisSkipped(false);
     setName("");
@@ -353,8 +396,10 @@ const AddBottleForm = ({ editBottle, onEditComplete }: AddBottleFormProps) => {
   // Clear just the photo
   const clearPhoto = () => {
     setImagePreview(null);
+    setUploadedImageUrl(null);
     setImportResult(null);
     setAiAnalysisSkipped(false);
+    setIsUploading(false);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -380,13 +425,17 @@ const AddBottleForm = ({ editBottle, onEditComplete }: AddBottleFormProps) => {
       return;
     }
 
+    // Use uploaded MinIO URL if available, otherwise fall back to base64 preview
+    // (backend will handle base64 upload if MinIO URL is not available)
+    const imageUrl = uploadedImageUrl || imagePreview || undefined;
+    
     const bottleData = {
       name,
       brand: brand || "",
       flavor_profile: flavorProfile || "",
       spirit_type_id: spiritType.id,
       capacity_ml: Number(capacity),
-      image_url: imagePreview || undefined,
+      image_url: imageUrl,
       barcode: scannedBarcode || undefined, // Will be undefined if skipped
     };
 
@@ -660,7 +709,7 @@ const AddBottleForm = ({ editBottle, onEditComplete }: AddBottleFormProps) => {
                   🔄
                 </button>
               </div>
-            ) : isAnalyzing ? (
+            ) : isAnalyzing || isUploading ? (
               <div className="border border-amber-500/30 rounded-xl p-8 text-center bg-gray-800/50">
                 {imagePreview && (
                   <img
@@ -670,7 +719,9 @@ const AddBottleForm = ({ editBottle, onEditComplete }: AddBottleFormProps) => {
                   />
                 )}
                 <div className="inline-block animate-spin rounded-full h-10 w-10 border-4 border-amber-500 border-t-transparent mb-4" />
-                <p className="text-amber-400 text-lg">AI is analyzing the bottle...</p>
+                <p className="text-amber-400 text-lg">
+                  {isAnalyzing ? "AI is analyzing the bottle..." : "Uploading image..."}
+                </p>
                 <p className="text-gray-500 text-sm mt-1">This may take a few seconds</p>
               </div>
             ) : importResult && !importResult.success ? (
